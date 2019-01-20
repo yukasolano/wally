@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Wally</title>
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="container">
+		<h1> Investimentos</h1>
+		<div id="produtos">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Corretora</th>
+						<th>Instituição</th>
+						<th>Tipo de investimetno</th>
+						<th>Tipo de rentabilidade</th>
+						<th>Valor aplicado</th>
+						<th>Taxa</th>
+						<th>Data de aplicação</th>
+						<th>Vencimento</th>		
+					</tr>
+				</thead>
+					<tr th:each="produto : ${produtos}">
+						<td><span th:text="${produto.corretora}"></span></td>
+						<td><span th:text="${produto.instituicao}"></span></td>
+						<td><span th:text="${produto.tipoInvestimento}"></span></td>
+						<td><span th:text="${produto.tipoRentabilidade}"></span></td>
+						<td><span th:text="${produto.valorAplicado}"></span></td>		
+						<td><span th:text="${produto.taxa}"></span></td>
+						<td><span th:text="${produto.dtAplicacao}"></span></td>
+						<td><span th:text="${produto.vencimento}"></span></td>
+					</tr>
+			</table>
+		</div>
+
+		<hr/>
+		
+	</div>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>
