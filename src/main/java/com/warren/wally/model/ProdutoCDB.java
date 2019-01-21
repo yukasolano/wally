@@ -18,13 +18,45 @@ public class ProdutoCDB implements IProduto{
 		this.calc = calc;
 	}
 
+	private String instituicao;
+	private String corretora;
+
+	public String getInstituicao() {
+		return instituicao;
+	}
+
+	public void setInstituicao(String instituicao) {
+		this.instituicao = instituicao;
+	}
+
+	public String getCorretora() {
+		return corretora;
+	}
+
+	public void setCorretora(String corretora) {
+		this.corretora = corretora;
+	}
+
 	private LocalDate dtAplicacao;
 	private LocalDate dtVencimento;
 	private double valorAplicado;
 	private double taxa;
 	
+	public double getValorAplicado() { return valorAplicado;}
+	public LocalDate getVencimento() { return dtVencimento;}
+	public LocalDate getDtAplicacao() { return dtAplicacao;}
+	
+	public double getTaxa() { return taxa;}
 	private double VPLiquido = 0.0;
 	private long du = 0;
+	
+	public TipoInvestimento getTipoInvestimento() {
+		return TipoInvestimento.CBD;
+	}
+	
+	public TipoRentabilidade getTipoRentabilidade() {
+		return calc.getTipoRentabilidade();
+	}
 	
 	
 	@Override

@@ -12,5 +12,10 @@ public class CalculadoraPre implements Calculadora{
 		return valorAplicado*fte;
 	}
 
+	@Override
+	public TipoRentabilidade getTipoRentabilidade() {
+		return TipoRentabilidade.PRE;
+	}
+
 }
 

@@ -1,6 +1,10 @@
 package com.warren.wally.model;
 
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,9 +30,14 @@ public class ProdutoController {
     @RequestMapping("produtos")
     public String produtos(Model model){
 
-        Iterable<ProdutoEntity> produtos = repository.findAll();
+    	List<IProduto> produtos = new ArrayList<>();
+        repository.findAll().forEach(entity -> {
+        	IProduto produto = ProdutoFactory.getProduto(entity);
+        	produto.calculaAccrual(LocalDate.now());
+        	produtos.add(produto);
+        });
         model.addAttribute("produtos", produtos);
-
+        model.addAttribute("hoje", LocalDate.now());
         return "produtos";
     }
     

@@ -14,4 +14,12 @@ public interface IProduto {
 	
 	double getTaxaMensalLiquida();
 	
+	TipoInvestimento getTipoInvestimento();
+	
+	TipoRentabilidade getTipoRentabilidade();
+	
+	public String getInstituicao();
+
+	public String getCorretora();
+
 }
