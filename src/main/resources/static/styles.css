@@ -10,6 +10,23 @@
 .header{
 	display: flex;
 	flex-direction: row;
-	align-items: center;
+	align-items: middle;
 	justify-content: space-between;
+}
+
+.container{
+	padding: 1em 0;
+}
+
+.secao{
+	padding-top: 2em;
+}
+
+.secao h2{
+	padding-bottom: 1em;
+}
+
+#add-produto{
+	background-color: #ccccff
+	
 }

@@ -51,7 +51,7 @@ public class ProdutoCDB implements IProduto{
 	private long du = 0;
 	
 	public TipoInvestimento getTipoInvestimento() {
-		return TipoInvestimento.CBD;
+		return TipoInvestimento.CDB;
 	}
 	
 	public TipoRentabilidade getTipoRentabilidade() {

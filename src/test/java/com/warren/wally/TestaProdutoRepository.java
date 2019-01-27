@@ -30,13 +30,13 @@ public class TestaProdutoRepository {
         produto.setInstituicao("FIBRA");
         produto.setValorAplicado(6000.12);
         produto.setTaxa(12.21);
-        produto.setTipoInvestimento(TipoInvestimento.CBD);
+        produto.setTipoInvestimento(TipoInvestimento.CDB);
         produto.setTipoRentabilidade(TipoRentabilidade.PRE);
         produto.setDtAplicacao(LocalDate.of(2017, 12, 01));
         produto.setVencimento(LocalDate.of(2018, 12, 01));
         repository.save(produto);
         
-        List<ProdutoEntity> produtosFromDB = repository.findByTipoInvestimento(TipoInvestimento.CBD);
+        List<ProdutoEntity> produtosFromDB = repository.findByTipoInvestimento(TipoInvestimento.CDB);
         ProdutoEntity produtoFromDB = produtosFromDB.get(0);
         assertEquals(produto.getCorretora(), produtoFromDB.getCorretora());
         assertEquals(produto.getDtAplicacao(), produtoFromDB.getDtAplicacao());

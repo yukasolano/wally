@@ -21,13 +21,13 @@ public class TestaProdutoFactory {
 		entity.setInstituicao("FIBRA");
 		entity.setValorAplicado(6000.12);
 		entity.setTaxa(12.21);
-		entity.setTipoInvestimento(TipoInvestimento.CBD);
+		entity.setTipoInvestimento(TipoInvestimento.CDB);
 		entity.setTipoRentabilidade(TipoRentabilidade.PRE);
 		entity.setDtAplicacao(LocalDate.of(2017, 12, 01));
 		entity.setVencimento(LocalDate.of(2018, 12, 01));
         
         IProduto produto = ProdutoFactory.getProduto(entity);
-        assertEquals(TipoInvestimento.CBD, produto.getTipoInvestimento());
+        assertEquals(TipoInvestimento.CDB, produto.getTipoInvestimento());
         assertEquals(TipoRentabilidade.PRE, produto.getTipoRentabilidade());
         
 	}

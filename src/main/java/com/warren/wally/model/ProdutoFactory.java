@@ -5,7 +5,10 @@ import com.warren.wally.repository.ProdutoEntity;
 public class ProdutoFactory {
 	
 	public static IProduto getProduto(ProdutoEntity entity) {
-		if(entity.getTipoInvestimento().equals(TipoInvestimento.CBD)) {
+		
+		if(entity.getTipoInvestimento() == null) { return null;}
+		
+		if(entity.getTipoInvestimento().equals(TipoInvestimento.CDB)) {
 			ProdutoCDB produto = new ProdutoCDB(entity.getDtAplicacao(), 
 					entity.getVencimento(), entity.getValorAplicado(), entity.getTaxa());
 			produto.setCorretora(entity.getCorretora());
