@@ -6,6 +6,12 @@ public class CalculadoraFactory {
 		if(tipoRentabilidade.equals(TipoRentabilidade.PRE)) {
 			return new CalculadoraPre();
 		}
+		if(tipoRentabilidade.equals(TipoRentabilidade.IPCA)) {
+			return new CalculadoraIPCA();
+		}
+		if(tipoRentabilidade.equals(TipoRentabilidade.CDI)) {
+			return new CalculadoraCDI();
+		}
 		return null;
 	}
 }

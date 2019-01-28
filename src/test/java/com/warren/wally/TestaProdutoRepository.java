@@ -29,7 +29,7 @@ public class TestaProdutoRepository {
         produto.setCorretora("EASYNVEST");
         produto.setInstituicao("FIBRA");
         produto.setValorAplicado(6000.12);
-        produto.setTaxa(12.21);
+        produto.setTaxa(0.1221);
         produto.setTipoInvestimento(TipoInvestimento.CDB);
         produto.setTipoRentabilidade(TipoRentabilidade.PRE);
         produto.setDtAplicacao(LocalDate.of(2017, 12, 01));

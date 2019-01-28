@@ -62,9 +62,11 @@ public class ProdutoCDB implements IProduto{
 	@Override
 	public void calculaAccrual(LocalDate hoje) {
 		du = new BussinessDaysCalendar().getDu(dtAplicacao, hoje);
-		double VPBruto = calc.calculaVPBruto(valorAplicado, taxa, dtAplicacao, hoje);
-		double ir = new Leao().getIR(VPBruto-valorAplicado, dtAplicacao, hoje);
-		VPLiquido = VPBruto - ir;
+		if(calc != null) {		
+			double VPBruto = calc.calculaVPBruto(valorAplicado, taxa, dtAplicacao, hoje);
+			double ir = new Leao().getIR(VPBruto-valorAplicado, dtAplicacao, hoje);
+			VPLiquido = VPBruto - ir;
+		}
 	}
 	
 	@Override

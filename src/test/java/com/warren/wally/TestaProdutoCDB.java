@@ -17,7 +17,7 @@ public class TestaProdutoCDB {
 	private LocalDate hoje;
 	@Before
 	public void inicializa() {
-		produto = new ProdutoCDB(LocalDate.of(2017,12,01), LocalDate.of(2022,11,07), 6000, 12.21);
+		produto = new ProdutoCDB(LocalDate.of(2017,12,01), LocalDate.of(2022,11,07), 6000, 0.1221);
 		produto.setCalc(new CalculadoraPre());
 		hoje = LocalDate.of(2019, 01, 18);
 		produto.calculaAccrual(hoje);
