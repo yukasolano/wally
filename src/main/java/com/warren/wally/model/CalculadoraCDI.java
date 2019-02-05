@@ -1028,7 +1028,6 @@ public class CalculadoraCDI implements Calculadora{
 		cdiHistorico.add(new DataValor("06/12/2018",6.40));
 		cdiHistorico.add(new DataValor("07/12/2018",6.40));
 		cdiHistorico.add(new DataValor("10/12/2018",6.40));
-		cdiHistorico.add(new DataValor("10/12/2018",6.40));
 		cdiHistorico.add(new DataValor("11/12/2018",6.40));
 		cdiHistorico.add(new DataValor("12/12/2018",6.40));
 		cdiHistorico.add(new DataValor("13/12/2018",6.40));
@@ -1065,6 +1064,5 @@ public class CalculadoraCDI implements Calculadora{
 		cdiHistorico.add(new DataValor("29/01/2019",6.40));
 		cdiHistorico.add(new DataValor("30/01/2019",6.40));
 		cdiHistorico.add(new DataValor("31/01/2019",6.40));
-
 	}
 }
