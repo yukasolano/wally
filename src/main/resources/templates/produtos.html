@@ -1,12 +1,64 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Wally</title>
-<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-<link href="styles.css" rel="stylesheet" />
-</head>
-<body>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<title>Wally</title>
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+		<!-- Bootstrap core CSS -->
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<!-- Material Design Bootstrap -->
+		<link href="css/mdb.min.css" rel="stylesheet">
+		<!-- Your custom styles (optional) -->
+		<link href="css/styles.css" rel="stylesheet">
+	</head>
+	<body>
+		<!--Navbar-->
+		<nav class="navbar navbar-expand-lg navbar-dark mdb-color">
+
+		  <!-- Navbar brand -->
+		  <a class="navbar-brand" href="/">Wally</a>
+
+		  <!-- Collapse button -->
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+			aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		  </button>
+
+		  <!-- Collapsible content -->
+		  <div class="collapse navbar-collapse" id="basicExampleNav">
+
+			<!-- Links -->
+			<ul class="navbar-nav mr-auto">
+			  <li class="nav-item">
+				<a class="nav-link" href="/">Dashboard</a>
+			  </li>
+			  <li class="nav-item active">
+				<a class="nav-link" href="produtos">Investimentos<span class="sr-only">(current)</span></a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="#">Cadastro</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="#">Dados de mercado</a>
+			  </li>
+
+			</ul>
+			<!-- Links -->
+
+			<form class="form-inline">
+			  <div class="md-form my-0">
+				<input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+			  </div>
+			</form>
+		  </div>
+		  <!-- Collapsible content -->
+
+		</nav>
+		<!--/.Navbar-->
+		
 	<div class="container">
 		<div class="data header">
 			<span th:text="${hoje}"></span>
@@ -134,5 +186,16 @@
 	   $(this).next('.custom-file-label').addClass("selected").html(fileName); 
 	});
   </script>
+  <!-- SCRIPTS -->
+		<!-- JQuery -->
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+		<!-- Bootstrap tooltips -->
+		<script type="text/javascript" src="js/popper.min.js"></script>
+		<!-- Bootstrap core JavaScript -->
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<!-- MDB core JavaScript -->
+		<script type="text/javascript" src="js/mdb.js"></script>
+		
+		<script type="text/javascript" src="js/script.js"></script>
 </body>
 </html>

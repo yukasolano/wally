@@ -1,21 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<title>Wally</title>
-		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+		<!-- Bootstrap core CSS -->
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<!-- Material Design Bootstrap -->
+		<link href="css/mdb.min.css" rel="stylesheet">
+		<!-- Your custom styles (optional) -->
+		<link href="css/styles.css" rel="stylesheet">
 	</head>
 	<body>
+		<!--Navbar-->
+		<nav class="navbar navbar-expand-lg navbar-dark mdb-color">
+
+		  <!-- Navbar brand -->
+		  <a class="navbar-brand" href="/">Wally</a>
+
+		  <!-- Collapse button -->
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+			aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		  </button>
+
+		  <!-- Collapsible content -->
+		  <div class="collapse navbar-collapse" id="basicExampleNav">
+
+			<!-- Links -->
+			<ul class="navbar-nav mr-auto">
+			  <li class="nav-item active">
+				<a class="nav-link" href="/">Dashboard
+				  <span class="sr-only">(current)</span>
+				</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="produtos">Investimentos</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="#">Cadastro</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="#">Dados de mercado</a>
+			  </li>
+
+			</ul>
+			<!-- Links -->
+
+			<form class="form-inline">
+			  <div class="md-form my-0">
+				<input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+			  </div>
+			</form>
+		  </div>
+		  <!-- Collapsible content -->
+
+		</nav>
+		<!--/.Navbar-->
+	
 		<div class="container">
-			<div class="jumbotron" align="center" style="margin-top: 50px;">
-				<h1>Seja bem-vindo ao Wally</h1>
-				<div align="center">
-					<a href="produtos" class="btn btn-lg btn-primary">Listar produtos</a>
+			<div class="row">
+				<div class="col">
+					<div class="card" align="center" >
+						<div class="card-header text-white blue-gradient">
+						<p>Total do patrimônio</p>
+							<h1 class="display-4"><small>R$</small> <strong>10.000,00</strong></h1>
+						</div>
+						
+						<div class="card-body text-center mb-3">
+						<table id="tablePreview" class="table table-borderless table-sm">
+						  <tbody>
+						    <tr>
+						      <td>Variação no mês</td>
+						      <td>1%</td>					   
+						    </tr>
+						    <tr>			
+						      <td>Variação no ano</td>
+						      <td>10%</td>						      
+						    </tr>						    
+						  </tbody>
+						</table>
+						</div>
+					</div>
+				</div>
+				<div class="col-7">
+					<div class="card">
+						<div class="card-header">Tipo de investimento</div>
+						<div class="card-body">				
+						  <canvas id="tipoInvestimento"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<div class="card">
+						<div class="card-header">Evolução do patrimônio</div>
+						<div class="card-body">	
+						 <canvas id="evolucao"></canvas>
+						</div>			
+					</div>
+				</div>
+			</div>
+			<div class="row" >
+				<div class="col">
+					<div class="card">
+						<div class="card-header">Instituições de Renda Fixa</div>
+						<div class="card-body">	
+							<canvas id="rendaFixa"></canvas>
+						</div>			
+					</div>
+				</div>
+				<div class="col">
+					<div class="card">
+						<div class="card-header">Cotas de Renda Variável</div>
+						<div class="card-body">
+						  <canvas id="rendaVariavel"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<div class="card">
+						<div class="card-header">Liquidez</div>
+						<div class="card-body">	
+						 <canvas id="liquidez"></canvas>
+						</div>			
+					</div>
 				</div>
 			</div>
 		</div>
-		<script
-			src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-		<script src="bootstrap/js/bootstrap.min.js"></script>
+		<!-- SCRIPTS -->
+		<!-- JQuery -->
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+		<!-- Bootstrap tooltips -->
+		<script type="text/javascript" src="js/popper.min.js"></script>
+		<!-- Bootstrap core JavaScript -->
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<!-- MDB core JavaScript -->
+		<script type="text/javascript" src="js/mdb.js"></script>
+		
+		<script type="text/javascript" src="js/script.js"></script>
 	</body>
 </html>
