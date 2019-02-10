@@ -44,7 +44,7 @@ public class TestaProdutoCDB {
 	public void testCalculoIPCA() {
 		ProdutoCDB produto = new ProdutoCDB(LocalDate.of(2018,10,23), LocalDate.of(2024,12,15), 1386.69, 0.07);
 		produto.setCalc(new CalculadoraIPCA());
-		LocalDate hoje = LocalDate.of(2018, 12, 10);
+		LocalDate hoje = LocalDate.of(2018, 12, 28);
 		produto.calculaAccrual(hoje);
 		assertEquals(1400.18, produto.getValorPresente(), 0.01);
 		assertEquals(0.97, produto.getRentabilidadeLiquida()*100, 0.01);

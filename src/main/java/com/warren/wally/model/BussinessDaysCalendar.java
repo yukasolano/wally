@@ -12,8 +12,7 @@ public class BussinessDaysCalendar {
 	ArrayList<LocalDate> holidays = new ArrayList<LocalDate>();
 	
 	public long getDu(LocalDate start, LocalDate end) {
-		int count  = 0;
-		
+		long count  = 0;
 		if(start.isAfter(end)) { return -1;}
 		if(start.isEqual(end)) { return 0; }
 		

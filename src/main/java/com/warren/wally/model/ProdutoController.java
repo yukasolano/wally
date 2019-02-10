@@ -1,6 +1,5 @@
 package com.warren.wally.model;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -33,117 +32,124 @@ import org.springframework.web.multipart.MultipartFile;
 import com.warren.wally.repository.ProdutoEntity;
 import com.warren.wally.repository.ProdutoRepository;
 
-
-
-
 @Controller
 public class ProdutoController {
 
 	@Autowired
 	private ProdutoRepository repository;
+	
+	@Autowired
+	private Portfolio portfolio;
 
 
+	@Autowired
+	private MultiPortfolio multiportfolio;
+	
 	@RequestMapping("/")
-    public String index(){
-        return "index";
-    }
-
-    @RequestMapping("produtos")
-    public String produtos(Model model){
-
-    	List<IProduto> produtos = new ArrayList<>();
-        repository.findAll().forEach(entity -> {
-        	IProduto produto = ProdutoFactory.getProduto(entity);
-        	if(produto != null) {
-        		produto.calculaAccrual(LocalDate.now());
-        		produtos.add(produto);
-        	}
-        });
-        model.addAttribute("produtos", produtos);
-        model.addAttribute("hoje", LocalDate.now());
-        return "produtos";
-    }
-    
-    @RequestMapping(value= "salvar", method = RequestMethod.POST)
-    public String salvar(
-    		@RequestParam(value = "corretora", required=false) String corretora, 
-    		@RequestParam(value="instituicao", required=false) String instituicao, 
-    		@RequestParam(value="tipoInvestimento", required=false) String tipoInvestimento,
-    		@RequestParam(value="tipoRentabilidade", required=false) String tipoRentabilidade,
-    		@RequestParam(value="vencimento", required=false) String vencimento,
-    		@RequestParam(value="dtAplicacao", required=false) String dtAplicacao,
-    		@RequestParam(value="taxa", required=false, defaultValue="0.0") double taxa,
-    		@RequestParam(value = "valorAplicado",required=false, defaultValue="0.0") double valorAplicado,
-    		@RequestParam(value="arquivo", required=false) MultipartFile arquivo,
-            Model model ){
-
-    	
-    	if(arquivo != null) {
-    		leArquivo(arquivo);
-    	} else {	
-    		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    		 		
-    		ProdutoEntity novoProduto = new ProdutoEntity();
-    		novoProduto.setCorretora(corretora);
-    		novoProduto.setInstituicao(instituicao);
-    		novoProduto.setTipoInvestimento(TipoInvestimento.valueOf(tipoInvestimento));
-    		novoProduto.setTipoRentabilidade(TipoRentabilidade.valueOf(tipoRentabilidade));
-    		novoProduto.setVencimento(LocalDate.parse(vencimento, dtf));
-    		novoProduto.setDtAplicacao(LocalDate.parse(dtAplicacao, dtf));
-    		novoProduto.setTaxa(taxa);
-    		novoProduto.setValorAplicado(valorAplicado);
-    		repository.save(novoProduto);
-    	}
-        
-        List<IProduto> produtos = new ArrayList<>();
-        repository.findAll().forEach(entity -> {
-        	IProduto produto = ProdutoFactory.getProduto(entity);
-        	if(produto != null) {
-        		produto.calculaAccrual(LocalDate.now());
-        		produtos.add(produto);
-        	}
-        });
-        model.addAttribute("produtos", produtos);
-        model.addAttribute("hoje", LocalDate.now());
-
-        return "produtos";
-    }
-    
-    
-    private void leArquivo(MultipartFile file){
-	    try {
-	    	
-	    	XSSFWorkbook wb = new XSSFWorkbook(new File(file.getOriginalFilename()));
-	        XSSFSheet sheet = wb.getSheetAt(0);
-	        int rows = sheet.getPhysicalNumberOfRows();
-    
-	        for(int r = 1; r < rows; r++) {
-	        	XSSFRow row = sheet.getRow(r);
-	            if(row != null) {
-	            	String instituicao = row.getCell(0).getStringCellValue();
-	            	LocalDate vencimento = row.getCell(2).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-	            	TipoInvestimento tipoInvestimento = TipoInvestimento.valueOf(row.getCell(3).getStringCellValue());
-	            	TipoRentabilidade tipoRentabilidade = TipoRentabilidade.valueOf(row.getCell(4).getStringCellValue());
-	            	double taxa = row.getCell(5).getNumericCellValue();
-	            	String corretora = row.getCell(6).getStringCellValue();
-	            	LocalDate dtAplicacao = row.getCell(7).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-	            	double valorAplicado = row.getCell(8).getNumericCellValue();
-	            	
-	        		ProdutoEntity novoProduto = new ProdutoEntity();
-	        		novoProduto.setCorretora(corretora);
-	        		novoProduto.setInstituicao(instituicao);
-	        		novoProduto.setTipoInvestimento(tipoInvestimento);
-	        		novoProduto.setTipoRentabilidade(tipoRentabilidade);
-	        		novoProduto.setVencimento(vencimento);
-	        		novoProduto.setDtAplicacao(dtAplicacao);
-	        		novoProduto.setTaxa(taxa);
-	        		novoProduto.setValorAplicado(valorAplicado);
-	        		repository.save(novoProduto);        	                
-	            }
-	        }
-	    } catch(Exception ioe) {
-	        ioe.printStackTrace();
-	    }
+	public String index(Model model) {
 		
-    }
+		model.addAttribute("variacaoMensal", multiportfolio.getVariacaoMensal(LocalDate.now()));
+		model.addAttribute("variacaoAnual", multiportfolio.getVariacaoAnual(LocalDate.now()));
+		model.addAttribute("patrimonioTotal", portfolio.getAccrual(LocalDate.now()));
+		model.addAttribute("proporcoes", portfolio.getProporcoes());
+		return "index";
+	}
+
+	@RequestMapping("produtos")
+	public String produtos(Model model) {
+
+		List<IProduto> produtos = new ArrayList<>();
+		repository.findAll().forEach(entity -> {
+			IProduto produto = ProdutoFactory.getProduto(entity);
+			if (produto != null) {
+				produto.calculaAccrual(LocalDate.now());
+				produtos.add(produto);
+			}
+		});
+		model.addAttribute("produtos", produtos);
+		model.addAttribute("hoje", LocalDate.now());
+		return "produtos";
+	}
+
+	@RequestMapping(value = "salvar", method = RequestMethod.POST)
+	public String salvar(@RequestParam(value = "corretora", required = false) String corretora,
+			@RequestParam(value = "instituicao", required = false) String instituicao,
+			@RequestParam(value = "tipoInvestimento", required = false) String tipoInvestimento,
+			@RequestParam(value = "tipoRentabilidade", required = false) String tipoRentabilidade,
+			@RequestParam(value = "vencimento", required = false) String vencimento,
+			@RequestParam(value = "dtAplicacao", required = false) String dtAplicacao,
+			@RequestParam(value = "taxa", required = false, defaultValue = "0.0") double taxa,
+			@RequestParam(value = "valorAplicado", required = false, defaultValue = "0.0") double valorAplicado,
+			@RequestParam(value = "arquivo", required = false) MultipartFile arquivo, Model model) {
+
+		if (arquivo != null) {
+			leArquivo(arquivo);
+		} else {
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+			ProdutoEntity novoProduto = new ProdutoEntity();
+			novoProduto.setCorretora(corretora);
+			novoProduto.setInstituicao(instituicao);
+			novoProduto.setTipoInvestimento(TipoInvestimento.valueOf(tipoInvestimento));
+			novoProduto.setTipoRentabilidade(TipoRentabilidade.valueOf(tipoRentabilidade));
+			novoProduto.setVencimento(LocalDate.parse(vencimento, dtf));
+			novoProduto.setDtAplicacao(LocalDate.parse(dtAplicacao, dtf));
+			novoProduto.setTaxa(taxa);
+			novoProduto.setValorAplicado(valorAplicado);
+			repository.save(novoProduto);
+		}
+
+		List<IProduto> produtos = new ArrayList<>();
+		repository.findAll().forEach(entity -> {
+			IProduto produto = ProdutoFactory.getProduto(entity);
+			if (produto != null) {
+				produto.calculaAccrual(LocalDate.now());
+				produtos.add(produto);
+			}
+		});
+		model.addAttribute("produtos", produtos);
+		model.addAttribute("hoje", LocalDate.now());
+
+		return "produtos";
+	}
+
+	private void leArquivo(MultipartFile file) {
+		try {
+
+			XSSFWorkbook wb = new XSSFWorkbook(new File(file.getOriginalFilename()));
+			XSSFSheet sheet = wb.getSheetAt(0);
+			int rows = sheet.getPhysicalNumberOfRows();
+
+			for (int r = 1; r < rows; r++) {
+				XSSFRow row = sheet.getRow(r);
+				if (row != null) {
+					String instituicao = row.getCell(0).getStringCellValue();
+					LocalDate vencimento = row.getCell(2).getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
+							.toLocalDate();
+					TipoInvestimento tipoInvestimento = TipoInvestimento.valueOf(row.getCell(3).getStringCellValue());
+					TipoRentabilidade tipoRentabilidade = TipoRentabilidade
+							.valueOf(row.getCell(4).getStringCellValue());
+					double taxa = row.getCell(5).getNumericCellValue();
+					String corretora = row.getCell(6).getStringCellValue();
+					LocalDate dtAplicacao = row.getCell(7).getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
+							.toLocalDate();
+					double valorAplicado = row.getCell(8).getNumericCellValue();
+
+					ProdutoEntity novoProduto = new ProdutoEntity();
+					novoProduto.setCorretora(corretora);
+					novoProduto.setInstituicao(instituicao);
+					novoProduto.setTipoInvestimento(tipoInvestimento);
+					novoProduto.setTipoRentabilidade(tipoRentabilidade);
+					novoProduto.setVencimento(vencimento);
+					novoProduto.setDtAplicacao(dtAplicacao);
+					novoProduto.setTaxa(taxa);
+					novoProduto.setValorAplicado(valorAplicado);
+					repository.save(novoProduto);
+				}
+			}
+		} catch (Exception ioe) {
+			ioe.printStackTrace();
+		}
+
+	}
 }

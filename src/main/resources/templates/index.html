@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -67,7 +67,7 @@
 					<div class="card" align="center" >
 						<div class="card-header text-white blue-gradient">
 						<p>Total do patrimônio</p>
-							<h1 class="display-4"><small>R$</small> <strong>10.000,00</strong></h1>
+							<h1 class="display-4"><small>R$</small> <strong th:text="${#numbers.formatDecimal(patrimonioTotal, 0, 'COMMA', 2, 'POINT')}"></strong></h1>
 						</div>
 						
 						<div class="card-body text-center mb-3">
@@ -75,11 +75,11 @@
 						  <tbody>
 						    <tr>
 						      <td>Variação no mês</td>
-						      <td>1%</td>					   
+						      <td><span th:text="${#numbers.formatDecimal(variacaoMensal*100, 0, 'COMMA', 2, 'POINT')}+'%'"></span></td>					   
 						    </tr>
 						    <tr>			
 						      <td>Variação no ano</td>
-						      <td>10%</td>						      
+						      <td><span th:text="${#numbers.formatDecimal(variacaoAnual*100, 0, 'COMMA', 2, 'POINT')}+'%'"></span></td>					      
 						    </tr>						    
 						  </tbody>
 						</table>
@@ -143,7 +143,10 @@
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 		<!-- MDB core JavaScript -->
 		<script type="text/javascript" src="js/mdb.js"></script>
-		
 		<script type="text/javascript" src="js/script.js"></script>
+		<script type="text/javascript">	
+			createProporcoes([[${proporcoes}]]);			
+		</script>
+		
 	</body>
 </html>

@@ -1,20 +1,27 @@
 
-  //doughnut
-
-new Chart(document.getElementById("tipoInvestimento").getContext('2d'), {
-	type: 'doughnut',
-	data: {
-		labels: ["Red", "Green", "Yellow", "Grey", "Dark Grey"],
-		datasets: [{
-			data: [300, 50, 100, 40, 120],
-		    backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
-		    hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
-		}]
-    },
-    options: {
-      responsive: true
-    }
-});
+function createProporcoes(proporcoes){
+	var proporcoesValores = [];
+	for (var key in proporcoes) {
+	    if (proporcoes.hasOwnProperty(key)) {
+	    	proporcoesValores.push(proporcoes[key]);
+	    }
+	}
+	console.log(proporcoes);
+	new Chart(document.getElementById("tipoInvestimento").getContext('2d'), {
+		type: 'doughnut',
+		data: {
+			labels: Object.keys(proporcoes),
+			datasets: [{
+				data: proporcoesValores,
+			    backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C"],
+			    hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870"]
+			}]
+	    },
+	    options: {
+	      responsive: true
+	    }
+	});
+}
   
 
 new Chart(document.getElementById("rendaVariavel").getContext('2d'), {
