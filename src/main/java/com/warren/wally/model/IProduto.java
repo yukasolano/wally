@@ -21,5 +21,7 @@ public interface IProduto {
 	public String getInstituicao();
 
 	public String getCorretora();
+	
+	public String getAnoVencimento();
 
 }

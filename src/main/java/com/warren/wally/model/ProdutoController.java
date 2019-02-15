@@ -37,21 +37,21 @@ public class ProdutoController {
 
 	@Autowired
 	private ProdutoRepository repository;
-	
-	@Autowired
-	private Portfolio portfolio;
-
 
 	@Autowired
 	private MultiPortfolio multiportfolio;
 	
 	@RequestMapping("/")
 	public String index(Model model) {
+		GraficoTransformador graficoTransformador = new GraficoTransformador();
 		
-		model.addAttribute("variacaoMensal", multiportfolio.getVariacaoMensal(LocalDate.now()));
-		model.addAttribute("variacaoAnual", multiportfolio.getVariacaoAnual(LocalDate.now()));
-		model.addAttribute("patrimonioTotal", portfolio.getAccrual(LocalDate.now()));
-		model.addAttribute("proporcoes", portfolio.getProporcoes());
+		multiportfolio.inicializa();
+		Portfolio portfolio = new Portfolio(multiportfolio.getProdutos(), LocalDate.now());
+		model.addAttribute("variacao", multiportfolio.calculaVariacoes(LocalDate.now()));
+		model.addAttribute("patrimonioTotal", portfolio.getAccrual());
+		model.addAttribute("proporcoes", graficoTransformador.transforma(portfolio.getProporcoes()));
+		model.addAttribute("instituicoes", graficoTransformador.transforma(portfolio.getPorInstituicoes(), true));
+		model.addAttribute("liquidez", graficoTransformador.transforma(portfolio.getLiquidez(), true));
 		return "index";
 	}
 

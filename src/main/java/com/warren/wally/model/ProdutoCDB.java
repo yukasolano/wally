@@ -46,6 +46,10 @@ public class ProdutoCDB implements IProduto{
 	public LocalDate getVencimento() { return dtVencimento;}
 	public LocalDate getDtAplicacao() { return dtAplicacao;}
 	
+	public String getAnoVencimento() {
+		return Integer.valueOf(this.dtVencimento.getYear()).toString();
+	}
+	
 	public double getTaxa() { return taxa;}
 	private double VPLiquido = 0.0;
 	private long du = 0;

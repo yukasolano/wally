@@ -70,19 +70,21 @@
 							<h1 class="display-4"><small>R$</small> <strong th:text="${#numbers.formatDecimal(patrimonioTotal, 0, 'COMMA', 2, 'POINT')}"></strong></h1>
 						</div>
 						
-						<div class="card-body text-center mb-3">
-						<table id="tablePreview" class="table table-borderless table-sm">
-						  <tbody>
-						    <tr>
-						      <td>Variação no mês</td>
-						      <td><span th:text="${#numbers.formatDecimal(variacaoMensal*100, 0, 'COMMA', 2, 'POINT')}+'%'"></span></td>					   
-						    </tr>
-						    <tr>			
-						      <td>Variação no ano</td>
-						      <td><span th:text="${#numbers.formatDecimal(variacaoAnual*100, 0, 'COMMA', 2, 'POINT')}+'%'"></span></td>					      
-						    </tr>						    
-						  </tbody>
-						</table>
+						<div class="card-body text-right">
+							<table id="tabelaVariacao" class="table table-borderless table-sm">
+							  <tbody>
+							    <tr>
+							      <td>Variação no mês</td>
+							      <td><span th:text="${#numbers.formatDecimal(variacao.mensalPorcentagem*100, 0, 'COMMA', 2, 'POINT')}+'%'"></span></td>
+							      <td><span th:text="${#numbers.formatDecimal(variacao.mensalAbsoluto, 0, 'COMMA', 2, 'POINT')}"></span></td>					   
+							    </tr>
+							    <tr>			
+							      <td>Variação no ano</td>
+							      <td><span th:text="${#numbers.formatDecimal(variacao.anualPorcentagem*100, 0, 'COMMA', 2, 'POINT')}+'%'"></span></td>	
+							      <td><span th:text="${#numbers.formatDecimal(variacao.anualAbsoluto, 0, 'COMMA', 2, 'POINT')}"></span></td>					      
+							    </tr>						    
+							  </tbody>
+							</table>
 						</div>
 					</div>
 				</div>
@@ -145,7 +147,9 @@
 		<script type="text/javascript" src="js/mdb.js"></script>
 		<script type="text/javascript" src="js/script.js"></script>
 		<script type="text/javascript">	
-			createProporcoes([[${proporcoes}]]);			
+			createProporcoes([(${proporcoes})]);
+			createPorInstituicoes([(${instituicoes})]);
+			createLiquidez([(${liquidez})]);
 		</script>
 		
 	</body>

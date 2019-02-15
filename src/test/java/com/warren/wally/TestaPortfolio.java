@@ -15,6 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.warren.wally.model.IProduto;
 import com.warren.wally.model.Portfolio;
 import com.warren.wally.model.ProdutoCDB;
+import com.warren.wally.model.ProdutoFactory;
+import com.warren.wally.repository.ProdutoRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WallyApplication.class})
@@ -22,12 +24,28 @@ public class TestaPortfolio {
 
 	
 	@Autowired
-	public Portfolio portfolio;
+	private ProdutoRepository repository;
 	
 	@Test
 	public void test() {
+		
+			
+		List<IProduto> produtos = new ArrayList<>();
+		repository.findAll().forEach(entity -> {
+			IProduto produto = ProdutoFactory.getProduto(entity);
+			try {
+				if (produto != null) {
+					produtos.add(produto);
+				}
+
+			} catch (Exception exp) {
+				System.out.println(exp);
+			}
+		});
+		
 		LocalDate hoje = LocalDate.of(2018, 12, 10);
-		assertEquals(60123.097, portfolio.getAccrual(hoje), 0.01);
+		Portfolio portfolio = new Portfolio(produtos, hoje);
+		assertEquals(60123.097, portfolio.getAccrual(), 0.01);
 	}
 
 }
