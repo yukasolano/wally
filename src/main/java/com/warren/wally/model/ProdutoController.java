@@ -1,23 +1,12 @@
 package com.warren.wally.model;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.sl.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -40,14 +29,16 @@ public class ProdutoController {
 
 	@Autowired
 	private MultiPortfolio multiportfolio;
-	
+
+	private LocalDate data = LocalDate.of(2018, 12, 10); // LocalDate.now();
+
 	@RequestMapping("/")
 	public String index(Model model) {
 		GraficoTransformador graficoTransformador = new GraficoTransformador();
-		
+
 		multiportfolio.inicializa();
-		Portfolio portfolio = new Portfolio(multiportfolio.getProdutos(), LocalDate.now());
-		model.addAttribute("variacao", multiportfolio.calculaVariacoes(LocalDate.now()));
+		Portfolio portfolio = new Portfolio(multiportfolio.getProdutos(), data);
+		model.addAttribute("variacao", multiportfolio.calculaVariacoes(data));
 		model.addAttribute("patrimonioTotal", portfolio.getAccrual());
 		model.addAttribute("proporcoes", graficoTransformador.transforma(portfolio.getProporcoes()));
 		model.addAttribute("instituicoes", graficoTransformador.transforma(portfolio.getPorInstituicoes(), true));
@@ -57,17 +48,16 @@ public class ProdutoController {
 
 	@RequestMapping("produtos")
 	public String produtos(Model model) {
-
-		List<IProduto> produtos = new ArrayList<>();
+		List<Produto> produtos = new ArrayList<>();
 		repository.findAll().forEach(entity -> {
-			IProduto produto = ProdutoFactory.getProduto(entity);
+			Produto produto = ProdutoFactory.getProduto(entity);
 			if (produto != null) {
-				produto.calculaAccrual(LocalDate.now());
+				produto.calculaAccrual(data);
 				produtos.add(produto);
 			}
 		});
 		model.addAttribute("produtos", produtos);
-		model.addAttribute("hoje", LocalDate.now());
+		model.addAttribute("hoje", data);
 		return "produtos";
 	}
 
@@ -99,16 +89,16 @@ public class ProdutoController {
 			repository.save(novoProduto);
 		}
 
-		List<IProduto> produtos = new ArrayList<>();
+		List<Produto> produtos = new ArrayList<>();
 		repository.findAll().forEach(entity -> {
-			IProduto produto = ProdutoFactory.getProduto(entity);
+			Produto produto = ProdutoFactory.getProduto(entity);
 			if (produto != null) {
-				produto.calculaAccrual(LocalDate.now());
+				produto.calculaAccrual(data);
 				produtos.add(produto);
 			}
 		});
 		model.addAttribute("produtos", produtos);
-		model.addAttribute("hoje", LocalDate.now());
+		model.addAttribute("hoje", data);
 
 		return "produtos";
 	}

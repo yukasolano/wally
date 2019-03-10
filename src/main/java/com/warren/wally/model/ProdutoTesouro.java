@@ -2,15 +2,15 @@ package com.warren.wally.model;
 
 import java.time.LocalDate;
 
-public class ProdutoCDB extends Produto {
+public class ProdutoTesouro extends Produto {
 
-	public ProdutoCDB(LocalDate dtAplicacao, LocalDate dtVencimento, double valorAplicado, double taxa) {
+	public ProdutoTesouro(LocalDate dtAplicacao, LocalDate dtVencimento, double valorAplicado, double taxa) {
 		super(dtAplicacao, dtVencimento, valorAplicado, taxa);
 	}
 
 	@Override
 	public TipoInvestimento getTipoInvestimento() {
-		return TipoInvestimento.CDB;
+		return TipoInvestimento.TESOURO;
 	}
 
 	@Override
@@ -33,5 +33,4 @@ public class ProdutoCDB extends Produto {
 			System.out.println(VPLiquido);
 		}
 	}
-
 }

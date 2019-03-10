@@ -9,10 +9,11 @@ public class GraficoTransformador {
 
 	private Cores cores = new Cores();
 
-	public String transforma(Map<Object, Double> dados) {
+	public String transforma(Map<String, Double> dados) {
 		return transforma(dados, false);
 	}
-	public String transforma(Map<Object, Double> dados, boolean coresClaras) {
+
+	public String transforma(Map<String, Double> dados, boolean coresClaras) {
 		GraficoDados graficoDados = new GraficoDados();
 
 		dados.forEach((key, value) -> {
@@ -20,7 +21,7 @@ public class GraficoTransformador {
 			graficoDados.addValor(Math.floor(value * 100) / 100.0);
 		});
 
-		if(coresClaras) {
+		if (coresClaras) {
 			graficoDados.setCores(cores.getCoresBorda(dados.size()));
 			graficoDados.setCoresSecundarias(cores.getCoresClaras(dados.size()));
 		} else {

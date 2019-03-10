@@ -1,12 +1,12 @@
 package com.warren.wally;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDate;
 
 import org.junit.Test;
 
-import com.warren.wally.model.IProduto;
+import com.warren.wally.model.Produto;
 import com.warren.wally.model.ProdutoFactory;
 import com.warren.wally.model.TipoInvestimento;
 import com.warren.wally.model.TipoRentabilidade;
@@ -26,7 +26,7 @@ public class TestaProdutoFactory {
 		entity.setDtAplicacao(LocalDate.of(2017, 12, 01));
 		entity.setVencimento(LocalDate.of(2018, 12, 01));
         
-        IProduto produto = ProdutoFactory.getProduto(entity);
+        Produto produto = ProdutoFactory.getProduto(entity);
         assertEquals(TipoInvestimento.CDB, produto.getTipoInvestimento());
         assertEquals(TipoRentabilidade.PRE, produto.getTipoRentabilidade());
         

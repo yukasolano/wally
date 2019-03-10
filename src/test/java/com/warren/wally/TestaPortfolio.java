@@ -12,9 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.warren.wally.model.IProduto;
 import com.warren.wally.model.Portfolio;
-import com.warren.wally.model.ProdutoCDB;
+import com.warren.wally.model.Produto;
 import com.warren.wally.model.ProdutoFactory;
 import com.warren.wally.repository.ProdutoRepository;
 
@@ -30,9 +29,9 @@ public class TestaPortfolio {
 	public void test() {
 		
 			
-		List<IProduto> produtos = new ArrayList<>();
+		List<Produto> produtos = new ArrayList<>();
 		repository.findAll().forEach(entity -> {
-			IProduto produto = ProdutoFactory.getProduto(entity);
+			Produto produto = ProdutoFactory.getProduto(entity);
 			try {
 				if (produto != null) {
 					produtos.add(produto);

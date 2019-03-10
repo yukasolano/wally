@@ -15,9 +15,9 @@ public class MultiPortfolio {
 	@Autowired
 	private ProdutoRepository repository;
 
-	private List<IProduto> produtos;
+	private List<Produto> produtos;
 
-	public List<IProduto> getProdutos() {
+	public List<Produto> getProdutos() {
 		return produtos;
 	}
 
@@ -28,7 +28,7 @@ public class MultiPortfolio {
 	public void recuperaProdutos() {
 		produtos = new ArrayList<>();
 		repository.findAll().forEach(entity -> {
-			IProduto produto = ProdutoFactory.getProduto(entity);
+			Produto produto = ProdutoFactory.getProduto(entity);
 			try {
 				if (produto != null) {
 					produtos.add(produto);
