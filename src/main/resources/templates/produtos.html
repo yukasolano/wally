@@ -1,201 +1,214 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta http-equiv="x-ua-compatible" content="ie=edge">
-		<title>Wally</title>
-		<!-- Font Awesome -->
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
-		<!-- Bootstrap core CSS -->
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<!-- Material Design Bootstrap -->
-		<link href="css/mdb.min.css" rel="stylesheet">
-		<!-- Your custom styles (optional) -->
-		<link href="css/styles.css" rel="stylesheet">
-	</head>
-	<body>
-		<!--Navbar-->
-		<nav class="navbar navbar-expand-lg navbar-dark mdb-color">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title>Wally</title>
+	<!-- Font Awesome -->
+	<link rel="stylesheet"
+		href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+	<!-- Bootstrap core CSS -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<!-- Material Design Bootstrap -->
+	<link href="css/mdb.min.css" rel="stylesheet">
+	<link href="css/addons/datatables.min.css" rel="stylesheet">
+	<!-- Your custom styles (optional) -->
+	<link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+	<!--Navbar-->
+	<nav class="navbar navbar-expand-lg navbar-dark mdb-color">
 
-		  <!-- Navbar brand -->
-		  <a class="navbar-brand" href="/">Wally</a>
+		<!-- Navbar brand -->
+		<a class="navbar-brand" href="/">Wally</a>
 
-		  <!-- Collapse button -->
-		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
-			aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+		<!-- Collapse button -->
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#basicExampleNav" aria-controls="basicExampleNav"
+			aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
-		  </button>
+		</button>
 
-		  <!-- Collapsible content -->
-		  <div class="collapse navbar-collapse" id="basicExampleNav">
+		<!-- Collapsible content -->
+		<div class="collapse navbar-collapse" id="basicExampleNav">
 
 			<!-- Links -->
 			<ul class="navbar-nav mr-auto">
-			  <li class="nav-item">
-				<a class="nav-link" href="/">Dashboard</a>
-			  </li>
-			  <li class="nav-item active">
-				<a class="nav-link" href="produtos">Investimentos<span class="sr-only">(current)</span></a>
-			  </li>
-			  <li class="nav-item">
-				<a class="nav-link" href="#">Cadastro</a>
-			  </li>
-			  <li class="nav-item">
-				<a class="nav-link" href="#">Dados de mercado</a>
-			  </li>
+				<li class="nav-item"><a class="nav-link" href="/">Dashboard</a>
+				</li>
+				<li class="nav-item active"><a class="nav-link" href="produtos">Investimentos<span
+						class="sr-only">(current)</span></a></li>
+				<li class="nav-item"><a class="nav-link" href="#">Cadastro</a>
+				</li>
+				<li class="nav-item"><a class="nav-link" href="#">Dados de
+						mercado</a></li>
 
 			</ul>
 			<!-- Links -->
 
 			<form class="form-inline">
-			  <div class="md-form my-0">
-				<input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-			  </div>
+				<div class="md-form my-0">
+					<input class="form-control mr-sm-2" type="text"
+						placeholder="Search" aria-label="Search">
+				</div>
 			</form>
-		  </div>
-		  <!-- Collapsible content -->
+		</div>
+		<!-- Collapsible content -->
 
-		</nav>
-		<!--/.Navbar-->
-		
+	</nav>
+	<!--/.Navbar-->
+
 	<div class="container">
 		<div class="data header">
 			<span th:text="${hoje}"></span>
 		</div>
 		<div id="produtos" class="secao">
-			
-				<h2> Investimentos</h2>
-				
-			
-			<table class="table table-hover">
+
+			<h2>Investimentos</h2>
+
+
+			<table id="tabelaProdutos"
+				class="table table-hover table-striped table-sm " cellspacing="0"
+				width="100%">
 				<thead>
 					<tr>
-						<th>Corretora</th>
-						<th>Instituição</th>
-						<th>Tipo de investimetno</th>
-						<th>Tipo de rentabilidade</th>
-						<th>Valor aplicado</th>
-						<th>Taxa</th>
-						<th>Data de aplicação</th>
-						<th>Vencimento</th>	
-						<th>Accrual</th>
-						<th>Taxa a.m.</th>		
+						<th class="th-sm">Corretora</th>
+						<th class="th-sm">Instituição</th>
+						<th class="th-sm">Tipo de investimetno</th>
+						<th class="th-sm">Tipo de rentabilidade</th>
+						<th class="th-sm">Valor aplicado</th>
+						<th class="th-sm">Taxa</th>
+						<th class="th-sm">Data de aplicação</th>
+						<th class="th-sm">Vencimento</th>
+						<th class="th-sm">Accrual</th>
+						<th class="th-sm">Taxa a.m.</th>
 					</tr>
 				</thead>
-					<tr th:each="produto : ${produtos}">
-						<td><span th:text="${produto.corretora}"></span></td>
-						<td><span th:text="${produto.instituicao}"></span></td>
-						<td><span th:text="${produto.tipoInvestimento}"></span></td>
-						<td><span th:text="${produto.tipoRentabilidade}"></span></td>
-						<td><span th:text="${#numbers.formatDecimal(produto.valorAplicado, 0, 'COMMA', 2, 'POINT')}"></span></td>		
-						<td><span th:text="${#numbers.formatDecimal(produto.taxa*100, 0, 'COMMA', 2, 'POINT')}+'%'"></span></td>
-						<td><span th:text="${produto.dtAplicacao}"></span></td>
-						<td><span th:text="${produto.vencimento}"></span></td>
-						<td><span th:text="${#numbers.formatDecimal(produto.valorPresente, 0, 'COMMA', 2, 'POINT')}"></span></td>
-						<td><span th:text="${#numbers.formatDecimal(produto.taxaMensalLiquida*100, 0, 'COMMA', 2, 'POINT')}+'%'"></span></td>
-					</tr>
+				<tr th:each="produto : ${produtos}">
+					<td><span th:text="${produto.corretora}"></span></td>
+					<td><span th:text="${produto.instituicao}"></span></td>
+					<td><span th:text="${produto.tipoInvestimento}"></span></td>
+					<td><span th:text="${produto.tipoRentabilidade}"></span></td>
+					<td><span
+						th:text="${#numbers.formatDecimal(produto.valorAplicado, 0, 'COMMA', 2, 'POINT')}"></span></td>
+					<td><span
+						th:text="${#numbers.formatDecimal(produto.taxa*100, 0, 'COMMA', 2, 'POINT')}+'%'"></span></td>
+					<td><span th:text="${produto.dtAplicacao}"></span></td>
+					<td><span th:text="${produto.vencimento}"></span></td>
+					<td><span
+						th:text="${#numbers.formatDecimal(produto.valorPresente, 0, 'COMMA', 2, 'POINT')}"></span></td>
+					<td><span
+						th:text="${#numbers.formatDecimal(produto.taxaMensalLiquida*100, 0, 'COMMA', 2, 'POINT')}+'%'"></span></td>
+				</tr>
 			</table>
 		</div>
 
 	</div>
 	<div class="secao" id="add-produto">
-	<div class="container">
-			<h2> Adicione um novo investimento</h2>
+		<div class="container">
+			<h2>Adicione um novo investimento</h2>
 			<form action="salvar" method="post" enctype="multipart/form-data">
 				<div class="form-group row">
-					<label for="corretora" class="col-sm-2 col-form-label">Corretora</label> 
+					<label for="corretora" class="col-sm-2 col-form-label">Corretora</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="corretora" name="corretora" placeholder="Corretora" />
+						<input type="text" class="form-control" id="corretora"
+							name="corretora" placeholder="Corretora" />
 					</div>
 				</div>
-				
+
 				<div class="form-group row">
-					<label for="instituicao" class="col-sm-2 col-form-label">Instituição</label> 
+					<label for="instituicao" class="col-sm-2 col-form-label">Instituição</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="instituicao" name="instituicao" placeholder="Instituição" />
+						<input type="text" class="form-control" id="instituicao"
+							name="instituicao" placeholder="Instituição" />
 					</div>
 				</div>
-				
+
 				<div class="form-group row">
-					<label for="tipoInvestimento" class="col-sm-2 col-form-label">Tipo de Investimento</label>
+					<label for="tipoInvestimento" class="col-sm-2 col-form-label">Tipo
+						de Investimento</label>
 					<div class="col-sm-10">
-						<select name="tipoInvestimento" id="tipoInvestimento" class="form-control">
-						  <option value="CDB">CDB</option>
-						  <option value="LCI">LCI</option>
-						  <option value="LC">LC</option>
+						<select name="tipoInvestimento" id="tipoInvestimento"
+							class="form-control">
+							<option value="CDB">CDB</option>
+							<option value="LCI">LCI</option>
+							<option value="LC">LC</option>
 						</select>
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="tipoRentabilidade"  class="col-sm-2 col-form-label">Tipo de Rentabilidade</label>
+					<label for="tipoRentabilidade" class="col-sm-2 col-form-label">Tipo
+						de Rentabilidade</label>
 					<div class="col-sm-10">
-						<select name="tipoRentabilidade" id="tipoRentabilidade" class="form-control">
-						  <option value="PRE">Pré-fixado</option>
-						  <option value="IPCA">Indexado ao IPCA</option>
-						  <option value="CDI">Indexado ao CDI</option>
+						<select name="tipoRentabilidade" id="tipoRentabilidade"
+							class="form-control">
+							<option value="PRE">Pré-fixado</option>
+							<option value="IPCA">Indexado ao IPCA</option>
+							<option value="CDI">Indexado ao CDI</option>
 						</select>
 					</div>
 				</div>
-				
+
 				<div class="form-group row">
-					<label for="taxa" class="col-sm-2 col-form-label">Taxa</label> 
+					<label for="taxa" class="col-sm-2 col-form-label">Taxa</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="taxa" name="taxa" placeholder="Taxa" />
+						<input type="text" class="form-control" id="taxa" name="taxa"
+							placeholder="Taxa" />
 					</div>
 				</div>
-				
+
 				<div class="form-group row">
-					<label for="valorAplicado" class="col-sm-2 col-form-label">Valor Aplicado</label> 
+					<label for="valorAplicado" class="col-sm-2 col-form-label">Valor
+						Aplicado</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="valorAplicado" name="valorAplicado" placeholder="Valor Aplicado" />
+						<input type="text" class="form-control" id="valorAplicado"
+							name="valorAplicado" placeholder="Valor Aplicado" />
 					</div>
 				</div>
-				
+
 				<div class="form-group row">
-					<label for="vencimento" class="col-sm-2 col-form-label">Vencimento</label> 
+					<label for="vencimento" class="col-sm-2 col-form-label">Vencimento</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="vencimento" name="vencimento" placeholder="Vencimento" />
+						<input type="text" class="form-control" id="vencimento"
+							name="vencimento" placeholder="Vencimento" />
 					</div>
 				</div>
-				
+
 				<div class="form-group row">
-					<label for="dtAplicacao" class="col-sm-2 col-form-label">Data de aplicação</label> 
+					<label for="dtAplicacao" class="col-sm-2 col-form-label">Data
+						de aplicação</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="dtAplicacao" name="dtAplicacao" placeholder="Data de aplicação" />
+						<input type="text" class="form-control" id="dtAplicacao"
+							name="dtAplicacao" placeholder="Data de aplicação" />
 					</div>
 				</div>
-					
-				<div class="input-group form-group">				  
-				  <div class="custom-file">
-				    <input name="arquivo" type="file" class="custom-file-input" id="arquivo">
-				    <label class="custom-file-label" for="arquivo">Escolha o arquivo</label>
-				  </div>
+
+				<div class="input-group form-group">
+					<div class="custom-file">
+						<input name="arquivo" type="file" class="custom-file-input"
+							id="arquivo"> <label class="custom-file-label"
+							for="arquivo">Escolha o arquivo</label>
+					</div>
 				</div>
-						
+
 				<button type="submit" class="btn btn-primary">Adicionar</button>
 			</form>
 		</div>
-		</div>
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="bootstrap/js/bootstrap.min.js"></script>
-  <script>
-  $('.custom-file-input').on('change', function() { 
-	   let fileName = $(this).val().split('\\').pop(); 
-	   $(this).next('.custom-file-label').addClass("selected").html(fileName); 
-	});
-  </script>
-  <!-- SCRIPTS -->
-		<!-- JQuery -->
-		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
-		<!-- Bootstrap tooltips -->
-		<script type="text/javascript" src="js/popper.min.js"></script>
-		<!-- Bootstrap core JavaScript -->
-		<script type="text/javascript" src="js/bootstrap.min.js"></script>
-		<!-- MDB core JavaScript -->
-		<script type="text/javascript" src="js/mdb.js"></script>
-		
-		<script type="text/javascript" src="js/script.js"></script>
+	</div>
+
+
+	<!-- SCRIPTS -->
+	<!-- JQuery -->
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+	<!-- Bootstrap tooltips -->
+	<script type="text/javascript" src="js/popper.min.js"></script>
+	<!-- Bootstrap core JavaScript -->
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<!-- MDB core JavaScript -->
+	<script type="text/javascript" src="js/mdb.js"></script>
+	<script type="text/javascript" src="js/addons/datatables.min.js"></script>
+	<script type="text/javascript" src="js/produtos.js"></script>
 </body>
 </html>
