@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.warren.wally.repository.MovimentacaoEntity;
+import com.warren.wally.repository.MovimentacaoRepository;
 import com.warren.wally.repository.ProdutoEntity;
 import com.warren.wally.repository.ProdutoRepository;
 
@@ -26,6 +28,9 @@ public class ProdutoController {
 
 	@Autowired
 	private ProdutoRepository repository;
+	
+	@Autowired
+	private MovimentacaoRepository movimentacaoRepository;
 
 	@Autowired
 	private MultiPortfolio multiportfolio;
@@ -142,4 +147,56 @@ public class ProdutoController {
 		}
 
 	}
+	
+	private void leArquivoFII(MultipartFile file) {
+		try {
+
+			XSSFWorkbook wb = new XSSFWorkbook(new File(file.getOriginalFilename()));
+			XSSFSheet sheet = wb.getSheetAt(0);
+			int rows = sheet.getPhysicalNumberOfRows();
+
+			for (int r = 1; r < rows; r++) {
+				XSSFRow row = sheet.getRow(r);
+				if (row != null) {
+					String codigo = row.getCell(0).getStringCellValue();
+					LocalDate data = row.getCell(1).getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
+							.toLocalDate();
+					double valorUnitario = row.getCell(4).getNumericCellValue();
+					int quantidade = (int) row.getCell(3).getNumericCellValue();
+	
+
+					MovimentacaoEntity movimentacao = new MovimentacaoEntity();
+					movimentacao.setCodigo(codigo);
+					movimentacao.setData(data);
+					movimentacao.setQuantidade(quantidade);
+					movimentacao.setValorUnitario(valorUnitario);
+					movimentacaoRepository.save(movimentacao);
+				}
+			}
+		} catch (Exception ioe) {
+			ioe.printStackTrace();
+		}
+
+	}
+	
+	
+	@RequestMapping(value = "salvarfii", method = RequestMethod.POST)
+	public String salvarFII(@RequestParam(value = "arquivo", required = true) MultipartFile arquivo, Model model) {
+
+			leArquivoFII(arquivo);
+
+		List<Produto> produtos = new ArrayList<>();
+		repository.findAll().forEach(entity -> {
+			Produto produto = ProdutoFactory.getProduto(entity);
+			if (produto != null) {
+				produto.calculaAccrual(data);
+				produtos.add(produto);
+			}
+		});
+		model.addAttribute("produtos", produtos);
+		model.addAttribute("hoje", data);
+
+		return "produtos";
+	}
+
 }
