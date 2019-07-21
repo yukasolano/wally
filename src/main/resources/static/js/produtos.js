@@ -1,5 +1,6 @@
 $(document).ready(function($) {
 	$('#tabelaProdutos').DataTable();
+	$('#tabelaProdutosRV').DataTable();
 	$('.dataTables_length').addClass('bs-select');
 });
 

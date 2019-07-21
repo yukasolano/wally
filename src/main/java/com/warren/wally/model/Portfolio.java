@@ -24,6 +24,8 @@ public class Portfolio {
 	private ProdutoRepository repository;
 
 	private List<Produto> produtos;
+	
+	private List<ProdutoFIIVO> produtosRV;
 
 	public List<Produto> getProdutos() {
 		if (produtos == null) {
@@ -32,6 +34,10 @@ public class Portfolio {
 		return produtos;
 	}
 
+	public List<ProdutoFIIVO> getProdutosRV(LocalDate dataRef) {
+		return actorFII.run(dataRef);
+	}
+	
 	public List<Produto> recuperaProdutos() {
 		List<Produto> produtos = new ArrayList<>();
 		repository.findAll().forEach(entity -> {

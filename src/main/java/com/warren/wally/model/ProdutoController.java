@@ -55,15 +55,11 @@ public class ProdutoController {
 
 	@RequestMapping("produtos")
 	public String produtos(Model model) {
-		List<Produto> produtos = new ArrayList<>();
-		repository.findAll().forEach(entity -> {
-			Produto produto = ProdutoFactory.getProduto(entity);
-			if (produto != null) {
-				produto.calculaAccrual(data);
-				produtos.add(produto);
-			}
-		});
+		List<Produto> produtos = portfolio.getProdutos();
+		List<ProdutoFIIVO> produtosRV = portfolio.getProdutosRV(data);
+		portfolio.getAccrual(data);
 		model.addAttribute("produtos", produtos);
+		model.addAttribute("produtosRV", produtosRV);
 		model.addAttribute("hoje", data);
 		return "produtos";
 	}
@@ -96,17 +92,12 @@ public class ProdutoController {
 			repository.save(novoProduto);
 		}
 
-		List<Produto> produtos = new ArrayList<>();
-		repository.findAll().forEach(entity -> {
-			Produto produto = ProdutoFactory.getProduto(entity);
-			if (produto != null) {
-				produto.calculaAccrual(data);
-				produtos.add(produto);
-			}
-		});
+		List<Produto> produtos = portfolio.getProdutos();
+		List<ProdutoFIIVO> produtosRV = portfolio.getProdutosRV(data);
+		portfolio.getAccrual(data);
 		model.addAttribute("produtos", produtos);
+		model.addAttribute("produtosRV", produtosRV);
 		model.addAttribute("hoje", data);
-
 		return "produtos";
 	}
 
@@ -187,17 +178,12 @@ public class ProdutoController {
 		movimentacaoRepository.deleteAll();
 		leArquivoFII(arquivo);
 			
-		List<Produto> produtos = new ArrayList<>();
-		repository.findAll().forEach(entity -> {
-			Produto produto = ProdutoFactory.getProduto(entity);
-			if (produto != null) {
-				produto.calculaAccrual(data);
-				produtos.add(produto);
-			}
-		});
+		List<Produto> produtos = portfolio.getProdutos();
+		List<ProdutoFIIVO> produtosRV = portfolio.getProdutosRV(data);
+		portfolio.getAccrual(data);
 		model.addAttribute("produtos", produtos);
+		model.addAttribute("produtosRV", produtosRV);
 		model.addAttribute("hoje", data);
-
 		return "produtos";
 	}
 

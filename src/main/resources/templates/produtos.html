@@ -103,6 +103,25 @@
 						th:text="${#numbers.formatDecimal(produto.taxaMensalLiquida*100, 0, 'COMMA', 2, 'POINT')}+'%'"></span></td>
 				</tr>
 			</table>
+			
+			<table id="tabelaProdutosRV"
+				class="table table-hover table-striped table-sm " cellspacing="0"
+				width="100%">
+				<thead>
+					<tr>
+						<th class="th-sm">Ticker</th>
+						<th class="th-sm">Quantidade</th>
+						<th class="th-sm">Preço Médio</th>
+						<th class="th-sm">Valor Total</th>
+					</tr>
+				</thead>
+				<tr th:each="produto : ${produtosRV}">
+					<td><span th:text="${produto.codigo}"></span></td>
+					<td><span th:text="${produto.quantidade}"></span></td>
+					<td><span th:text="${#numbers.formatDecimal(produto.precoMedio, 0, 'COMMA', 2, 'POINT')}"></span></td>
+					<td><span th:text="${#numbers.formatDecimal(produto.precoTotal, 0, 'COMMA', 2, 'POINT')}"></span></td>
+				</tr>
+			</table>
 		</div>
 
 	</div>
