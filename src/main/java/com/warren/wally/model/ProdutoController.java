@@ -34,6 +34,9 @@ public class ProdutoController {
 
 	@Autowired
 	private MultiPortfolio multiportfolio;
+	
+	@Autowired
+	private Portfolio portfolio;
 
 	private LocalDate data = LocalDate.of(2018, 12, 10); // LocalDate.now();
 
@@ -41,11 +44,10 @@ public class ProdutoController {
 	public String index(Model model) {
 		GraficoTransformador graficoTransformador = new GraficoTransformador();
 
-		multiportfolio.inicializa();
-		Portfolio portfolio = new Portfolio(multiportfolio.getProdutos(), data);
 		model.addAttribute("variacao", multiportfolio.calculaVariacoes(data));
-		model.addAttribute("patrimonioTotal", portfolio.getAccrual());
-		model.addAttribute("proporcoes", graficoTransformador.transforma(portfolio.getProporcoes()));
+		model.addAttribute("patrimonioTotal", portfolio.getAccrual(data));
+		model.addAttribute("proporcoes", graficoTransformador.transforma(portfolio.getProporcoes(data)));
+		model.addAttribute("proporcoesRV", graficoTransformador.transforma(portfolio.getProporcoesRV(data)));
 		model.addAttribute("instituicoes", graficoTransformador.transforma(portfolio.getPorInstituicoes(), true));
 		model.addAttribute("liquidez", graficoTransformador.transforma(portfolio.getLiquidez(), true));
 		return "index";
@@ -161,8 +163,8 @@ public class ProdutoController {
 					String codigo = row.getCell(0).getStringCellValue();
 					LocalDate data = row.getCell(1).getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
 							.toLocalDate();
-					double valorUnitario = row.getCell(4).getNumericCellValue();
-					int quantidade = (int) row.getCell(3).getNumericCellValue();
+					double valorUnitario = row.getCell(3).getNumericCellValue();
+					int quantidade = (int) row.getCell(2).getNumericCellValue();
 	
 
 					MovimentacaoEntity movimentacao = new MovimentacaoEntity();
@@ -182,9 +184,9 @@ public class ProdutoController {
 	
 	@RequestMapping(value = "salvarfii", method = RequestMethod.POST)
 	public String salvarFII(@RequestParam(value = "arquivo", required = true) MultipartFile arquivo, Model model) {
-
-			leArquivoFII(arquivo);
-
+		movimentacaoRepository.deleteAll();
+		leArquivoFII(arquivo);
+			
 		List<Produto> produtos = new ArrayList<>();
 		repository.findAll().forEach(entity -> {
 			Produto produto = ProdutoFactory.getProduto(entity);

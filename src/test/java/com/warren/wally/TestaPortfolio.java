@@ -25,6 +25,9 @@ public class TestaPortfolio {
 	@Autowired
 	private ProdutoRepository repository;
 	
+	@Autowired
+	private Portfolio portfolio;
+	
 	@Test
 	public void test() {
 		
@@ -43,8 +46,7 @@ public class TestaPortfolio {
 		});
 		
 		LocalDate hoje = LocalDate.of(2018, 12, 10);
-		Portfolio portfolio = new Portfolio(produtos, hoje);
-		assertEquals(60123.097, portfolio.getAccrual(), 0.01);
+		assertEquals(60123.097, portfolio.getAccrual(hoje), 0.01);
 	}
 
 }

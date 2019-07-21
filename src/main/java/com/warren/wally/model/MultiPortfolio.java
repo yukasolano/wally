@@ -11,51 +11,26 @@ import com.warren.wally.repository.ProdutoRepository;
 
 @Component
 public class MultiPortfolio {
-
+	
 	@Autowired
-	private ProdutoRepository repository;
-
-	private List<Produto> produtos;
-
-	public List<Produto> getProdutos() {
-		return produtos;
-	}
-
-	public void inicializa() {
-		recuperaProdutos();
-	}
-
-	public void recuperaProdutos() {
-		produtos = new ArrayList<>();
-		repository.findAll().forEach(entity -> {
-			Produto produto = ProdutoFactory.getProduto(entity);
-			try {
-				if (produto != null) {
-					produtos.add(produto);
-				}
-
-			} catch (Exception exp) {
-				System.out.println(exp);
-			}
-		});
-	}
+	private Portfolio portfolio;
 
 	public Variacao calculaVariacoes(LocalDate dataRef) {
 
 		Variacao variacao = new Variacao();
-		Portfolio portfolio = new Portfolio(produtos, dataRef);
+		//Portfolio portfolio = new Portfolio(getProdutos(), dataRef);
 
 		// variacao mensal
 		LocalDate mesAnterior = dataRef.minusMonths(1);
-		Portfolio portfolioMesAnterior = new Portfolio(produtos, mesAnterior);
-		variacao.setMensalAbsoluto(portfolio.getAccrual() - portfolioMesAnterior.getAccrual());
-		variacao.setMensalPorcentagem(variacao.getMensalAbsoluto() / portfolioMesAnterior.getAccrual());
+		//Portfolio portfolioMesAnterior = new Portfolio(getProdutos(), mesAnterior);
+		variacao.setMensalAbsoluto(portfolio.getAccrual(dataRef) - portfolio.getAccrual(mesAnterior));
+		variacao.setMensalPorcentagem(variacao.getMensalAbsoluto() / portfolio.getAccrual(mesAnterior));
 
 		// variacao anual
 		LocalDate anoAnterior = dataRef.minusYears(1);
-		Portfolio portfolioAnoAnterior = new Portfolio(produtos, anoAnterior);
-		variacao.setAnualAbsoluto(portfolio.getAccrual() - portfolioAnoAnterior.getAccrual());
-		variacao.setAnualPorcentagem(variacao.getAnualAbsoluto() / portfolioAnoAnterior.getAccrual());
+		//Portfolio portfolioAnoAnterior = new Portfolio(getProdutos(), anoAnterior);
+		variacao.setAnualAbsoluto(portfolio.getAccrual(dataRef) - portfolio.getAccrual(anoAnterior));
+		variacao.setAnualPorcentagem(variacao.getAnualAbsoluto() / portfolio.getAccrual(anoAnterior));
 
 		return variacao;
 	}

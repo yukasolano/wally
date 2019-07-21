@@ -4,5 +4,6 @@ public enum TipoRentabilidade {
 
 	IPCA,
 	CDI,
-	PRE
+	PRE,
+	FII
 }

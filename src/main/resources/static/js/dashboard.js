@@ -15,22 +15,22 @@ function createProporcoes(proporcoes) {
 	});
 }
 
-new Chart(document.getElementById("rendaVariavel").getContext('2d'), {
-	type : 'doughnut',
-	data : {
-		labels : [ "XPML11", "KNIP11", "BBSE3", "GGRC11", "VRTA11" ],
-		datasets : [ {
-			data : [ 300, 50, 100, 40, 120 ],
-			backgroundColor : [ "#F7464A", "#46BFBD", "#FDB45C", "#949FB1",
-					"#4D5360" ],
-			hoverBackgroundColor : [ "#FF5A5E", "#5AD3D1", "#FFC870",
-					"#A8B3C5", "#616774" ]
-		} ]
-	},
-	options : {
-		responsive : true
-	}
-});
+function createProporcoesRV(proporcoes) {
+	new Chart(document.getElementById("rendaVariavel").getContext('2d'), {
+		type : 'doughnut',
+		data : {
+			labels : proporcoes.legendas,
+			datasets : [ {
+				data : proporcoes.valores,
+				backgroundColor : proporcoes.cores,
+				hoverBackgroundColor : proporcoes.coresSecundarias
+			} ]
+		},
+		options : {
+			responsive : true
+		}
+	});
+}
 
 new Chart(document.getElementById("evolucao").getContext('2d'), {
 	type : 'line',
