@@ -30,6 +30,8 @@ public class ProdutoFIIActor {
 	}
 
 	public List<ProdutoFIIVO> run(LocalDate dataPosicao) {
+		DataMarketEquities dm = new DataMarketEquities();
+		
 		List<MovimentacaoEntity> movimentacoes = movimentacaoRepository.findByDataLessThan(dataPosicao);
 
 		Map<String, ProdutoFIIVO> produtos = new HashMap<>();
@@ -39,6 +41,7 @@ public class ProdutoFIIActor {
 				adicionaMovimentacao(entity, produtos.get(entity.getCodigo()));
 			} else {
 				ProdutoFIIVO vo = new ProdutoFIIVO(entity.getCodigo());
+				vo.setCotacao(dm.get(entity.getCodigo(), dataPosicao));
 				adicionaMovimentacao(entity, vo);
 				produtos.put(entity.getCodigo(), vo);
 			}
