@@ -1,7 +1,5 @@
 package com.warren.wally.model;
 
-import java.time.LocalDate;
-
 public class ProdutoFIIVO {
 
 	public ProdutoFIIVO(String codigo) {
@@ -13,6 +11,7 @@ public class ProdutoFIIVO {
 	private double precoTotal = 0.0;
 	private int quantidade = 0;
 	private double cotacao = 0.0;
+	private double rentabilidadeDividendo = 0.0;
 
 	public String getCodigo() {
 		return codigo;
@@ -38,6 +37,14 @@ public class ProdutoFIIVO {
 		this.quantidade = quantidade;
 	}
 
+	public double getRentabilidadeDividendo() {
+		return rentabilidadeDividendo;
+	}
+
+	public void setRentabilidadeDividendo(double rentabilidadeDividendo) {
+		this.rentabilidadeDividendo = rentabilidadeDividendo;
+	}
+
 	public double getPrecoMedio() {
 		return this.precoTotal / this.quantidade;
 	}
@@ -45,13 +52,13 @@ public class ProdutoFIIVO {
 	public double getValorPresente() {
 		return getQuantidade() * cotacao;
 	}
-	
+
 	public double getResultado() {
 		return getValorPresente() - getPrecoTotal();
 	}
 
 	public void setCotacao(double cotacao) {
-		this.cotacao = cotacao;	
+		this.cotacao = cotacao;
 	}
 
 }

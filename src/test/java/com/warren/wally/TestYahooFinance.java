@@ -6,21 +6,30 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import javax.annotation.Resource;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.warren.wally.model.DataMarketEquities;
 
 import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {WallyApplication.class})
 public class TestYahooFinance {
 
+	@Resource
+	private DataMarketEquities dm;
 	@Test
 	public void test() {
 
-		DataMarketEquities dm = new DataMarketEquities();
-		double valor = dm.get("VRTA11", LocalDate.of(2019, 01, 02));
+		double valor = dm.get("VISC11", LocalDate.of(2019, 01, 02));
 		System.out.println(valor);
+		/*
 		Stock stock;
 		try {
 			stock = YahooFinance.get("VRTA11.SA", true);
@@ -37,7 +46,7 @@ public class TestYahooFinance {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 
 	}
 

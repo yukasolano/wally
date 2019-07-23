@@ -4,8 +4,6 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -18,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.warren.wally.repository.DividendoEntity;
+import com.warren.wally.repository.DividendoRepository;
 import com.warren.wally.repository.MovimentacaoEntity;
 import com.warren.wally.repository.MovimentacaoRepository;
 import com.warren.wally.repository.ProdutoEntity;
@@ -28,17 +28,20 @@ public class ProdutoController {
 
 	@Autowired
 	private ProdutoRepository repository;
-	
+
 	@Autowired
 	private MovimentacaoRepository movimentacaoRepository;
 
 	@Autowired
+	private DividendoRepository dividendoRepository;
+
+	@Autowired
 	private MultiPortfolio multiportfolio;
-	
+
 	@Autowired
 	private PortfolioActor portfolioActor;
 
-	private LocalDate data = LocalDate.of(2018, 12, 10); // LocalDate.now();
+	private LocalDate data = LocalDate.of(2019, 06, 28); // LocalDate.now();
 
 	@RequestMapping("/")
 	public String index(Model model) {
@@ -137,7 +140,7 @@ public class ProdutoController {
 		}
 
 	}
-	
+
 	private void leArquivoFII(MultipartFile file) {
 		try {
 
@@ -147,13 +150,12 @@ public class ProdutoController {
 
 			for (int r = 1; r < rows; r++) {
 				XSSFRow row = sheet.getRow(r);
-				if (row != null) {
+				try {
 					String codigo = row.getCell(0).getStringCellValue();
 					LocalDate data = row.getCell(1).getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
 							.toLocalDate();
 					double valorUnitario = row.getCell(3).getNumericCellValue();
 					int quantidade = (int) row.getCell(2).getNumericCellValue();
-	
 
 					MovimentacaoEntity movimentacao = new MovimentacaoEntity();
 					movimentacao.setCodigo(codigo);
@@ -161,6 +163,31 @@ public class ProdutoController {
 					movimentacao.setQuantidade(quantidade);
 					movimentacao.setValorUnitario(valorUnitario);
 					movimentacaoRepository.save(movimentacao);
+				} catch (Exception e) {
+					System.out.println("Erro na linha" + r);
+				}
+			}
+
+			XSSFSheet sheet2 = wb.getSheetAt(1);
+			int rows2 = sheet2.getPhysicalNumberOfRows();
+
+			for (int r = 1; r < rows2; r++) {
+				XSSFRow row = sheet2.getRow(r);
+				try {
+					String codigo = row.getCell(0).getStringCellValue();
+					LocalDate data = row.getCell(1).getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
+							.toLocalDate();
+					double valorUnitario = row.getCell(3).getNumericCellValue();
+					int quantidade = (int) row.getCell(2).getNumericCellValue();
+
+					DividendoEntity dividendo = new DividendoEntity();
+					dividendo.setCodigo(codigo);
+					dividendo.setData(data);
+					dividendo.setQuantidade(quantidade);
+					dividendo.setValorUnitario(valorUnitario);
+					dividendoRepository.save(dividendo);
+				} catch (Exception e) {
+					System.out.println("Erro na linha" + r);
 				}
 			}
 		} catch (Exception ioe) {
@@ -168,13 +195,13 @@ public class ProdutoController {
 		}
 
 	}
-	
-	
+
 	@RequestMapping(value = "salvarfii", method = RequestMethod.POST)
 	public String salvarFII(@RequestParam(value = "arquivo", required = true) MultipartFile arquivo, Model model) {
 		movimentacaoRepository.deleteAll();
+		dividendoRepository.deleteAll();
 		leArquivoFII(arquivo);
-			
+
 		PortfolioVO portfolio = portfolioActor.run(data);
 		model.addAttribute("produtos", portfolio.getProdutosRF());
 		model.addAttribute("produtosRV", portfolio.getProdutosRV());

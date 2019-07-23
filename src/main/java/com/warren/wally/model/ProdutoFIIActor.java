@@ -8,8 +8,11 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.warren.wally.repository.DividendoEntity;
+import com.warren.wally.repository.DividendoRepository;
 import com.warren.wally.repository.MovimentacaoEntity;
 import com.warren.wally.repository.MovimentacaoRepository;
 
@@ -18,6 +21,12 @@ public class ProdutoFIIActor {
 
 	@Resource
 	private MovimentacaoRepository movimentacaoRepository;
+	
+	@Resource 
+	private DividendoRepository dividendoRepository;
+	
+	@Autowired
+	private DataMarketEquities dm;
 
 	// TODO filtrar por tipo de movimentacao
 	public ProdutoFIIVO run(LocalDate dataPosicao, String codigo) {
@@ -30,7 +39,6 @@ public class ProdutoFIIActor {
 	}
 
 	public List<ProdutoFIIVO> run(LocalDate dataPosicao) {
-		DataMarketEquities dm = new DataMarketEquities();
 		
 		List<MovimentacaoEntity> movimentacoes = movimentacaoRepository.findByDataLessThan(dataPosicao);
 
@@ -46,6 +54,15 @@ public class ProdutoFIIActor {
 				produtos.put(entity.getCodigo(), vo);
 			}
 		}
+		
+		produtos.values().stream().forEach(produto -> {
+			List<DividendoEntity> dividendos = dividendoRepository
+					.findByCodigoAndDataLessThanOrderByDataDesc(produto.getCodigo(), dataPosicao);
+			if(dividendos.size() > 0) {
+				produto.setRentabilidadeDividendo(dividendos.get(0).getValorUnitario()/produto.getPrecoMedio());
+			}
+			
+		});
 		return produtos.values().stream().collect(Collectors.toList());
 	}
 
@@ -54,4 +71,4 @@ public class ProdutoFIIActor {
 		vo.setPrecoTotal(vo.getPrecoTotal() + mov.getValorUnitario() * mov.getQuantidade());
 		vo.setQuantidade(vo.getQuantidade() + mov.getQuantidade());
 	}
-}
+} 
