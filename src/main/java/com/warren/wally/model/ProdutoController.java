@@ -36,7 +36,7 @@ public class ProdutoController {
 	private MultiPortfolio multiportfolio;
 	
 	@Autowired
-	private Portfolio portfolio;
+	private PortfolioActor portfolioActor;
 
 	private LocalDate data = LocalDate.of(2018, 12, 10); // LocalDate.now();
 
@@ -44,10 +44,11 @@ public class ProdutoController {
 	public String index(Model model) {
 		GraficoTransformador graficoTransformador = new GraficoTransformador();
 
-		model.addAttribute("variacao", multiportfolio.calculaVariacoes(data));
-		model.addAttribute("patrimonioTotal", portfolio.getAccrual(data));
-		model.addAttribute("proporcoes", graficoTransformador.transforma(portfolio.getProporcoes(data)));
-		model.addAttribute("proporcoesRV", graficoTransformador.transforma(portfolio.getProporcoesRV(data)));
+		PortfolioVO portfolio = portfolioActor.run(data);
+		model.addAttribute("variacao", multiportfolio.calculaVariacoes(data, portfolio));
+		model.addAttribute("patrimonioTotal", portfolio.getAccrual());
+		model.addAttribute("proporcoes", graficoTransformador.transforma(portfolio.getProporcoes()));
+		model.addAttribute("proporcoesRV", graficoTransformador.transforma(portfolio.getProporcoesRV()));
 		model.addAttribute("instituicoes", graficoTransformador.transforma(portfolio.getPorInstituicoes(), true));
 		model.addAttribute("liquidez", graficoTransformador.transforma(portfolio.getLiquidez(), true));
 		return "index";
@@ -55,11 +56,9 @@ public class ProdutoController {
 
 	@RequestMapping("produtos")
 	public String produtos(Model model) {
-		List<Produto> produtos = portfolio.getProdutos();
-		List<ProdutoFIIVO> produtosRV = portfolio.getProdutosRV(data);
-		portfolio.getAccrual(data);
-		model.addAttribute("produtos", produtos);
-		model.addAttribute("produtosRV", produtosRV);
+		PortfolioVO portfolio = portfolioActor.run(data);
+		model.addAttribute("produtos", portfolio.getProdutosRF());
+		model.addAttribute("produtosRV", portfolio.getProdutosRV());
 		model.addAttribute("hoje", data);
 		return "produtos";
 	}
@@ -92,11 +91,9 @@ public class ProdutoController {
 			repository.save(novoProduto);
 		}
 
-		List<Produto> produtos = portfolio.getProdutos();
-		List<ProdutoFIIVO> produtosRV = portfolio.getProdutosRV(data);
-		portfolio.getAccrual(data);
-		model.addAttribute("produtos", produtos);
-		model.addAttribute("produtosRV", produtosRV);
+		PortfolioVO portfolio = portfolioActor.run(data);
+		model.addAttribute("produtos", portfolio.getProdutosRF());
+		model.addAttribute("produtosRV", portfolio.getProdutosRV());
 		model.addAttribute("hoje", data);
 		return "produtos";
 	}
@@ -178,11 +175,9 @@ public class ProdutoController {
 		movimentacaoRepository.deleteAll();
 		leArquivoFII(arquivo);
 			
-		List<Produto> produtos = portfolio.getProdutos();
-		List<ProdutoFIIVO> produtosRV = portfolio.getProdutosRV(data);
-		portfolio.getAccrual(data);
-		model.addAttribute("produtos", produtos);
-		model.addAttribute("produtosRV", produtosRV);
+		PortfolioVO portfolio = portfolioActor.run(data);
+		model.addAttribute("produtos", portfolio.getProdutosRF());
+		model.addAttribute("produtosRV", portfolio.getProdutosRV());
 		model.addAttribute("hoje", data);
 		return "produtos";
 	}

@@ -13,24 +13,21 @@ import com.warren.wally.repository.ProdutoRepository;
 public class MultiPortfolio {
 	
 	@Autowired
-	private Portfolio portfolio;
+	private PortfolioActor portfolioActor;
 
-	public Variacao calculaVariacoes(LocalDate dataRef) {
+	public Variacao calculaVariacoes(LocalDate dataRef, PortfolioVO portfolio) {
 
 		Variacao variacao = new Variacao();
-		//Portfolio portfolio = new Portfolio(getProdutos(), dataRef);
-
+		
 		// variacao mensal
-		LocalDate mesAnterior = dataRef.minusMonths(1);
-		//Portfolio portfolioMesAnterior = new Portfolio(getProdutos(), mesAnterior);
-		variacao.setMensalAbsoluto(portfolio.getAccrual(dataRef) - portfolio.getAccrual(mesAnterior));
-		variacao.setMensalPorcentagem(variacao.getMensalAbsoluto() / portfolio.getAccrual(mesAnterior));
+		PortfolioVO portfolioMesAnterior = portfolioActor.run(dataRef.minusMonths(1));
+		variacao.setMensalAbsoluto(portfolio.getAccrual() - portfolioMesAnterior.getAccrual());
+		variacao.setMensalPorcentagem(variacao.getMensalAbsoluto() / portfolioMesAnterior.getAccrual());
 
 		// variacao anual
-		LocalDate anoAnterior = dataRef.minusYears(1);
-		//Portfolio portfolioAnoAnterior = new Portfolio(getProdutos(), anoAnterior);
-		variacao.setAnualAbsoluto(portfolio.getAccrual(dataRef) - portfolio.getAccrual(anoAnterior));
-		variacao.setAnualPorcentagem(variacao.getAnualAbsoluto() / portfolio.getAccrual(anoAnterior));
+		PortfolioVO portfolioAnoAnterior = portfolioActor.run(dataRef.minusYears(1));
+		variacao.setAnualAbsoluto(portfolio.getAccrual() - portfolioAnoAnterior.getAccrual());
+		variacao.setAnualPorcentagem(variacao.getAnualAbsoluto() / portfolioAnoAnterior.getAccrual());
 
 		return variacao;
 	}
