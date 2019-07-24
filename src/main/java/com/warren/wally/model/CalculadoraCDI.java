@@ -5,41 +5,53 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CalculadoraCDI implements Calculadora{
+public class CalculadoraCDI implements Calculadora {
 
 	private List<DataValor> cdiHistorico;
-	
+
 	public CalculadoraCDI() {
 		super();
 		recuperaDados();
+		criaDados();
 	}
-	
+
 	@Override
 	public double calculaVPBruto(double valorAplicado, double taxa, LocalDate dtAplicacao, LocalDate dtRef) {
 		List<DataValor> cdiFiltrado = filtraCDI(dtAplicacao, dtRef);
-		return valorAplicado*getFatorAcumulado(taxa, cdiFiltrado);
+		return valorAplicado * getFatorAcumulado(taxa, cdiFiltrado);
 	}
 
 	@Override
 	public TipoRentabilidade getTipoRentabilidade() {
 		return TipoRentabilidade.CDI;
 	}
-	
-	private List<DataValor> filtraCDI(LocalDate dataInicio, LocalDate dataFim){
-		return cdiHistorico.stream().filter(dt -> 
-		dt.getData().isAfter(dataInicio) &&
-		(dt.getData().isBefore(dataFim) || dt.getData().isEqual(dataFim))
-		).collect(Collectors.toList());
+
+	private List<DataValor> filtraCDI(LocalDate dataInicio, LocalDate dataFim) {
+		return cdiHistorico.stream()
+				.filter(dt -> dt.getData().isAfter(dataInicio)
+						&& (dt.getData().isBefore(dataFim) || dt.getData().isEqual(dataFim)))
+				.collect(Collectors.toList());
 	}
 
 	private double getFatorAcumulado(double taxa, List<DataValor> cdiFiltrado) {
 		double fatorAcumulado = 1.0;
-		for(DataValor dt:cdiFiltrado) {
-			fatorAcumulado *= Math.pow(1+dt.getValor()/100*taxa, 1/252.0);
-		};
+		for (DataValor dt : cdiFiltrado) {
+			fatorAcumulado *= Math.pow(1 + dt.getValor() / 100 * taxa, 1 / 252.0);
+		}
+		;
 		return fatorAcumulado;
 	}
-	
+
+	public void criaDados() {
+		BussinessDaysCalendar bc = new BussinessDaysCalendar();
+		LocalDate today = bc.getNextWorkDay(LocalDate.now());
+		LocalDate lastDate = cdiHistorico.get(cdiHistorico.size()-1).getData();
+		double lastValue = cdiHistorico.get(cdiHistorico.size()-1).getValor();
+		while(lastDate.isBefore(today)) {
+			lastDate = bc.getNextWorkDay(lastDate.plusDays(1));
+			cdiHistorico.add(new DataValor(lastDate,lastValue));
+		}
+	}
 	public void recuperaDados() {
 		cdiHistorico = new ArrayList<>();
 		cdiHistorico.add(new DataValor("02/01/2015",11.57));
@@ -1064,5 +1076,122 @@ public class CalculadoraCDI implements Calculadora{
 		cdiHistorico.add(new DataValor("29/01/2019",6.40));
 		cdiHistorico.add(new DataValor("30/01/2019",6.40));
 		cdiHistorico.add(new DataValor("31/01/2019",6.40));
+		cdiHistorico.add(new DataValor("01/02/2019",6.40));
+		cdiHistorico.add(new DataValor("04/02/2019",6.40));
+		cdiHistorico.add(new DataValor("05/02/2019",6.40));
+		cdiHistorico.add(new DataValor("06/02/2019",6.40));
+		cdiHistorico.add(new DataValor("07/02/2019",6.40));
+		cdiHistorico.add(new DataValor("08/02/2019",6.40));
+		cdiHistorico.add(new DataValor("11/02/2019",6.40));
+		cdiHistorico.add(new DataValor("12/02/2019",6.40));
+		cdiHistorico.add(new DataValor("13/02/2019",6.40));
+		cdiHistorico.add(new DataValor("14/02/2019",6.40));
+		cdiHistorico.add(new DataValor("15/02/2019",6.40));
+		cdiHistorico.add(new DataValor("18/02/2019",6.40));
+		cdiHistorico.add(new DataValor("19/02/2019",6.40));
+		cdiHistorico.add(new DataValor("20/02/2019",6.40));
+		cdiHistorico.add(new DataValor("21/02/2019",6.40));
+		cdiHistorico.add(new DataValor("22/02/2019",6.40));
+		cdiHistorico.add(new DataValor("25/02/2019",6.40));
+		cdiHistorico.add(new DataValor("26/02/2019",6.40));
+		cdiHistorico.add(new DataValor("27/02/2019",6.40));
+		cdiHistorico.add(new DataValor("28/02/2019",6.40));
+		cdiHistorico.add(new DataValor("01/03/2019",6.40));
+		cdiHistorico.add(new DataValor("06/03/2019",6.40));
+		cdiHistorico.add(new DataValor("07/03/2019",6.40));
+		cdiHistorico.add(new DataValor("08/03/2019",6.40));
+		cdiHistorico.add(new DataValor("11/03/2019",6.40));
+		cdiHistorico.add(new DataValor("12/03/2019",6.40));
+		cdiHistorico.add(new DataValor("13/03/2019",6.40));
+		cdiHistorico.add(new DataValor("14/03/2019",6.40));
+		cdiHistorico.add(new DataValor("15/03/2019",6.40));
+		cdiHistorico.add(new DataValor("18/03/2019",6.40));
+		cdiHistorico.add(new DataValor("19/03/2019",6.40));
+		cdiHistorico.add(new DataValor("20/03/2019",6.40));
+		cdiHistorico.add(new DataValor("21/03/2019",6.40));
+		cdiHistorico.add(new DataValor("22/03/2019",6.40));
+		cdiHistorico.add(new DataValor("25/03/2019",6.40));
+		cdiHistorico.add(new DataValor("26/03/2019",6.40));
+		cdiHistorico.add(new DataValor("27/03/2019",6.40));
+		cdiHistorico.add(new DataValor("28/03/2019",6.40));
+		cdiHistorico.add(new DataValor("29/03/2019",6.40));
+		cdiHistorico.add(new DataValor("01/04/2019",6.40));
+		cdiHistorico.add(new DataValor("02/04/2019",6.40));
+		cdiHistorico.add(new DataValor("03/04/2019",6.40));
+		cdiHistorico.add(new DataValor("04/04/2019",6.40));
+		cdiHistorico.add(new DataValor("05/04/2019",6.40));
+		cdiHistorico.add(new DataValor("08/04/2019",6.40));
+		cdiHistorico.add(new DataValor("09/04/2019",6.40));
+		cdiHistorico.add(new DataValor("10/04/2019",6.40));
+		cdiHistorico.add(new DataValor("11/04/2019",6.40));
+		cdiHistorico.add(new DataValor("12/04/2019",6.40));
+		cdiHistorico.add(new DataValor("15/04/2019",6.40));
+		cdiHistorico.add(new DataValor("16/04/2019",6.40));
+		cdiHistorico.add(new DataValor("17/04/2019",6.40));
+		cdiHistorico.add(new DataValor("18/04/2019",6.40));
+		cdiHistorico.add(new DataValor("22/04/2019",6.40));
+		cdiHistorico.add(new DataValor("23/04/2019",6.40));
+		cdiHistorico.add(new DataValor("24/04/2019",6.40));
+		cdiHistorico.add(new DataValor("25/04/2019",6.40));
+		cdiHistorico.add(new DataValor("26/04/2019",6.40));
+		cdiHistorico.add(new DataValor("29/04/2019",6.40));
+		cdiHistorico.add(new DataValor("30/04/2019",6.40));
+		cdiHistorico.add(new DataValor("02/05/2019",6.40));
+		cdiHistorico.add(new DataValor("03/05/2019",6.40));
+		cdiHistorico.add(new DataValor("06/05/2019",6.40));
+		cdiHistorico.add(new DataValor("07/05/2019",6.40));
+		cdiHistorico.add(new DataValor("08/05/2019",6.40));
+		cdiHistorico.add(new DataValor("09/05/2019",6.40));
+		cdiHistorico.add(new DataValor("10/05/2019",6.40));
+		cdiHistorico.add(new DataValor("13/05/2019",6.40));
+		cdiHistorico.add(new DataValor("14/05/2019",6.40));
+		cdiHistorico.add(new DataValor("15/05/2019",6.40));
+		cdiHistorico.add(new DataValor("16/05/2019",6.40));
+		cdiHistorico.add(new DataValor("17/05/2019",6.40));
+		cdiHistorico.add(new DataValor("20/05/2019",6.40));
+		cdiHistorico.add(new DataValor("21/05/2019",6.40));
+		cdiHistorico.add(new DataValor("22/05/2019",6.40));
+		cdiHistorico.add(new DataValor("23/05/2019",6.40));
+		cdiHistorico.add(new DataValor("24/05/2019",6.40));
+		cdiHistorico.add(new DataValor("27/05/2019",6.40));
+		cdiHistorico.add(new DataValor("28/05/2019",6.40));
+		cdiHistorico.add(new DataValor("29/05/2019",6.40));
+		cdiHistorico.add(new DataValor("30/05/2019",6.40));
+		cdiHistorico.add(new DataValor("31/05/2019",6.40));
+		cdiHistorico.add(new DataValor("03/06/2019",6.40));
+		cdiHistorico.add(new DataValor("04/06/2019",6.40));
+		cdiHistorico.add(new DataValor("05/06/2019",6.40));
+		cdiHistorico.add(new DataValor("06/06/2019",6.40));
+		cdiHistorico.add(new DataValor("07/06/2019",6.40));
+		cdiHistorico.add(new DataValor("10/06/2019",6.40));
+		cdiHistorico.add(new DataValor("11/06/2019",6.40));
+		cdiHistorico.add(new DataValor("12/06/2019",6.40));
+		cdiHistorico.add(new DataValor("13/06/2019",6.40));
+		cdiHistorico.add(new DataValor("14/06/2019",6.40));
+		cdiHistorico.add(new DataValor("17/06/2019",6.40));
+		cdiHistorico.add(new DataValor("18/06/2019",6.40));
+		cdiHistorico.add(new DataValor("19/06/2019",6.40));
+		cdiHistorico.add(new DataValor("21/06/2019",6.40));
+		cdiHistorico.add(new DataValor("24/06/2019",6.40));
+		cdiHistorico.add(new DataValor("25/06/2019",6.40));
+		cdiHistorico.add(new DataValor("26/06/2019",6.40));
+		cdiHistorico.add(new DataValor("27/06/2019",6.40));
+		cdiHistorico.add(new DataValor("28/06/2019",6.40));
+		cdiHistorico.add(new DataValor("01/07/2019",6.40));
+		cdiHistorico.add(new DataValor("02/07/2019",6.40));
+		cdiHistorico.add(new DataValor("03/07/2019",6.40));
+		cdiHistorico.add(new DataValor("04/07/2019",6.40));
+		cdiHistorico.add(new DataValor("05/07/2019",6.40));
+		cdiHistorico.add(new DataValor("08/07/2019",6.40));
+		cdiHistorico.add(new DataValor("09/07/2019",6.40));
+		cdiHistorico.add(new DataValor("10/07/2019",6.40));
+		cdiHistorico.add(new DataValor("11/07/2019",6.40));
+		cdiHistorico.add(new DataValor("12/07/2019",6.40));
+		cdiHistorico.add(new DataValor("15/07/2019",6.40));
+		cdiHistorico.add(new DataValor("16/07/2019",6.40));
+		cdiHistorico.add(new DataValor("17/07/2019",6.40));
+		cdiHistorico.add(new DataValor("18/07/2019",6.40));
+		cdiHistorico.add(new DataValor("19/07/2019",6.40));
+		cdiHistorico.add(new DataValor("22/07/2019",6.40));
 	}
 }

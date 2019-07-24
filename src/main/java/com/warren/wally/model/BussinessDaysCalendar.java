@@ -18,7 +18,7 @@ public class BussinessDaysCalendar {
 		
 		LocalDate iterator = start.plusDays(1);
 		while(iterator.isBefore(end) || iterator.isEqual(end)) {
-			if(!isWeekEnd(iterator) && !isHoliday(iterator)) {
+			if(isWorkDay(iterator)) {
 				count++;
 			}
 			iterator = iterator.plusDays(1);
@@ -31,6 +31,20 @@ public class BussinessDaysCalendar {
 		return ChronoUnit.DAYS.between(start, end);
 	}
 	
+	public LocalDate getNextWorkDay(LocalDate date) {
+		if(isWorkDay(date)) {
+			return date;
+		}
+		LocalDate iterator = date.plusDays(1);
+		while(!isWorkDay(iterator)) {
+			iterator = iterator.plusDays(1);
+		}
+		return iterator;
+	}
+	
+	private boolean isWorkDay(LocalDate date) {
+		return !isWeekEnd(date) && !isHoliday(date);
+	}
 	private boolean isWeekEnd(LocalDate date) {
 	  DayOfWeek dow = date.getDayOfWeek();
 	  return dow == DayOfWeek.SATURDAY || dow == DayOfWeek.SUNDAY;

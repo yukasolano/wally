@@ -41,7 +41,7 @@ public class ProdutoController {
 	@Autowired
 	private PortfolioActor portfolioActor;
 
-	private LocalDate data = LocalDate.of(2019, 06, 28); // LocalDate.now();
+	private LocalDate data = LocalDate.of(2019, 07, 01); // LocalDate.now();
 
 	@RequestMapping("/")
 	public String index(Model model) {
@@ -77,7 +77,9 @@ public class ProdutoController {
 			@RequestParam(value = "valorAplicado", required = false, defaultValue = "0.0") double valorAplicado,
 			@RequestParam(value = "arquivo", required = false) MultipartFile arquivo, Model model) {
 
+		
 		if (arquivo != null) {
+			repository.deleteAll();
 			leArquivo(arquivo);
 		} else {
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");

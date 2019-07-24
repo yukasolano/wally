@@ -3,7 +3,7 @@ package com.warren.wally.model;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class DataValor {
+public class DataValor implements Comparable<DataValor>{
 
 	private LocalDate data;
 	private double valor;
@@ -11,6 +11,11 @@ public class DataValor {
 	public DataValor(String data, double valor) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		this.data = LocalDate.parse(data, dtf);
+		this.valor = valor;
+	}
+	
+	public DataValor(LocalDate data, double valor) {
+		this.data = data;
 		this.valor = valor;
 	}
 
@@ -36,6 +41,11 @@ public class DataValor {
 	@Override
 	public String toString() {
 		return "[data=" + data + ", valor=" + valor + "]";
+	}
+
+	@Override
+	public int compareTo(DataValor o) {
+		return this.getData().compareTo(o.getData());
 	}
 
 }

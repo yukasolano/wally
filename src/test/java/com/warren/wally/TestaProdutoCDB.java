@@ -50,6 +50,7 @@ public class TestaProdutoCDB {
 		assertEquals(0.80, produto.getRentabilidadeLiquida()*100, 0.01);
 		assertEquals(6.50, produto.getTaxaAnualLiquida()*100, 0.01);
 		assertEquals(0.53, produto.getTaxaMensalLiquida()*100, 0.01);
+		
 	}
 	
 
