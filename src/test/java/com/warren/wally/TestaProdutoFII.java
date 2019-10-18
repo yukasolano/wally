@@ -1,27 +1,25 @@
 package com.warren.wally;
 
-import static org.junit.Assert.assertEquals;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import javax.annotation.Resource;
-
-import org.junit.Before;
+import com.warren.wally.model.ProdutoFIIActor;
+import com.warren.wally.model.ProdutoFIIVO;
+import com.warren.wally.repository.MovimentacaoRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.warren.wally.model.ProdutoFIIActor;
-import com.warren.wally.model.ProdutoFIIVO;
-import com.warren.wally.repository.MovimentacaoEntity;
-import com.warren.wally.repository.MovimentacaoRepository;
+import javax.annotation.Resource;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { WallyApplication.class })
+@TestPropertySource(locations = "/application.properties")
 public class TestaProdutoFII {
 
 	@Autowired
