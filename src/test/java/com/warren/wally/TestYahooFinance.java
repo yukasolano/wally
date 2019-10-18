@@ -1,34 +1,28 @@
 package com.warren.wally;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
-import javax.annotation.Resource;
-
+import com.warren.wally.model.DataMarketEquities;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.warren.wally.model.DataMarketEquities;
-
-import yahoofinance.Stock;
-import yahoofinance.YahooFinance;
+import javax.annotation.Resource;
+import java.time.LocalDate;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WallyApplication.class})
+@TestPropertySource(locations = "/application.properties")
 public class TestYahooFinance {
 
-	@Resource
-	private DataMarketEquities dm;
-	@Test
-	public void test() {
+    @Resource
+    private DataMarketEquities dm;
 
-		double valor = dm.get("VISC11", LocalDate.of(2019, 01, 02));
-		System.out.println(valor);
+    @Test
+    public void test() {
+
+        double valor = dm.get("VISC11", LocalDate.of(2019, 01, 02));
+        System.out.println(valor);
 		/*
 		Stock stock;
 		try {
@@ -48,6 +42,6 @@ public class TestYahooFinance {
 			e.printStackTrace();
 		}*/
 
-	}
+    }
 
 }
