@@ -19,33 +19,33 @@ import com.warren.wally.model.ProdutoFactory;
 import com.warren.wally.repository.ProdutoRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { WallyApplication.class })
+@ContextConfiguration(classes = {WallyApplication.class})
 public class TestaPortfolio {
 
-	@Autowired
-	private ProdutoRepository repository;
+    @Autowired
+    private ProdutoRepository repository;
 
-	@Autowired
-	private PortfolioActor portfolioActor;
+    @Autowired
+    private PortfolioActor portfolioActor;
 
-	@Test
-	public void test() {
+    @Test
+    public void test() {
 
-		List<Produto> produtos = new ArrayList<>();
-		repository.findAll().forEach(entity -> {
-			Produto produto = ProdutoFactory.getProduto(entity);
-			try {
-				if (produto != null) {
-					produtos.add(produto);
-				}
+        List<Produto> produtos = new ArrayList<>();
+        repository.findAll().forEach(entity -> {
+            Produto produto = ProdutoFactory.getProduto(entity);
+            try {
+                if (produto != null) {
+                    produtos.add(produto);
+                }
 
-			} catch (Exception exp) {
-				System.out.println(exp);
-			}
-		});
-		LocalDate hoje = LocalDate.of(2018, 12, 10);
-		PortfolioVO portfolio = portfolioActor.run(hoje);
-		assertEquals(60123.097, portfolio.getAccrual(), 0.01);
-	}
+            } catch (Exception exp) {
+                System.out.println(exp);
+            }
+        });
+        LocalDate hoje = LocalDate.of(2018, 12, 10);
+        PortfolioVO portfolio = portfolioActor.run(hoje);
+        assertEquals(60123.097, portfolio.getAccrual(), 0.01);
+    }
 
 }
