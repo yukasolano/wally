@@ -1,19 +1,14 @@
 package com.warren.wally;
 
+import com.warren.wally.db.WallyTestCase;
 import com.warren.wally.model.DataMarketEquities;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WallyApplication.class})
-@TestPropertySource(locations = "/application.properties")
-public class TestYahooFinance {
+
+public class TestYahooFinance extends WallyTestCase {
 
     @Resource
     private DataMarketEquities dm;
