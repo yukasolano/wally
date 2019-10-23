@@ -1,25 +1,19 @@
 package com.warren.wally;
 
+import com.warren.wally.db.WallyTestCase;
 import com.warren.wally.model.TipoInvestimento;
 import com.warren.wally.model.TipoRentabilidade;
 import com.warren.wally.repository.ProdutoEntity;
 import com.warren.wally.repository.ProdutoRepository;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
 import static com.warren.wally.utils.DateUtils.dateOf;
 import static org.junit.Assert.assertEquals;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WallyApplication.class})
-@TestPropertySource(locations = "/application.properties")
-public class TestaProdutoRepository {
+public class TestaProdutoRepository extends WallyTestCase {
 
     @Autowired
     ProdutoRepository repository;
