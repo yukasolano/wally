@@ -1,33 +1,33 @@
-package com.warren.wally.model;
+package com.warren.wally.model.calculadora;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.warren.wally.model.calculadora.Calculadora;
-import com.warren.wally.model.calculadora.TipoRentabilidade;
+import org.springframework.stereotype.Component;
 
-public class CalculadoraCDI implements Calculadora {
+import com.warren.wally.model.BussinessDaysCalendar;
+import com.warren.wally.model.DataValor;
+
+@Component
+public class CalculadoraCDIStrategy implements Calculadora{
 
 	private List<DataValor> cdiHistorico;
-
-	public CalculadoraCDI() {
-		super();
-		recuperaDados();
-		criaDados();
-	}
-
-	@Override
-	public double calculaVPBruto(double valorAplicado, double taxa, LocalDate dtAplicacao, LocalDate dtRef) {
-		List<DataValor> cdiFiltrado = filtraCDI(dtAplicacao, dtRef);
-		return valorAplicado * getFatorAcumulado(taxa, cdiFiltrado);
-	}
-
+	
 	@Override
 	public TipoRentabilidade getTipoRentabilidade() {
 		return TipoRentabilidade.CDI;
 	}
+
+	@Override
+	public double calculaVPBruto(double valorAplicado, double taxa, LocalDate dtAplicacao, LocalDate dtRef) {	
+		recuperaDados();
+		criaDados();
+		List<DataValor> cdiFiltrado = filtraCDI(dtAplicacao, dtRef);
+		return valorAplicado * getFatorAcumulado(taxa, cdiFiltrado);
+	}
+
 
 	private List<DataValor> filtraCDI(LocalDate dataInicio, LocalDate dataFim) {
 		return cdiHistorico.stream()
@@ -41,7 +41,6 @@ public class CalculadoraCDI implements Calculadora {
 		for (DataValor dt : cdiFiltrado) {
 			fatorAcumulado *= Math.pow(1 + dt.getValor() / 100 * taxa, 1 / 252.0);
 		}
-		;
 		return fatorAcumulado;
 	}
 
@@ -1197,4 +1196,5 @@ public class CalculadoraCDI implements Calculadora {
 		cdiHistorico.add(new DataValor("19/07/2019",6.40));
 		cdiHistorico.add(new DataValor("22/07/2019",6.40));
 	}
+
 }

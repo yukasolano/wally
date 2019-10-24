@@ -1,5 +1,6 @@
 package com.warren.wally.model;
 
+import com.warren.wally.model.investimento.TipoInvestimento;
 import com.warren.wally.repository.ProdutoEntity;
 
 public class ProdutoFactory {

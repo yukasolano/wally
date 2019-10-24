@@ -7,11 +7,11 @@ import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.warren.wally.model.Calculadora;
 import com.warren.wally.model.CalculadoraCDI;
 import com.warren.wally.model.CalculadoraIPCA;
 import com.warren.wally.model.CalculadoraPre;
 import com.warren.wally.model.ProdutoCDB;
+import com.warren.wally.model.calculadora.Calculadora;
 
 public class TestaProdutoCDB {
 

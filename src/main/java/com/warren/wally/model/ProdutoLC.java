@@ -2,6 +2,8 @@ package com.warren.wally.model;
 
 import java.time.LocalDate;
 
+import com.warren.wally.model.investimento.TipoInvestimento;
+
 public class ProdutoLC extends Produto {
 
 	public ProdutoLC(LocalDate dtAplicacao, LocalDate dtVencimento, double valorAplicado, double taxa) {

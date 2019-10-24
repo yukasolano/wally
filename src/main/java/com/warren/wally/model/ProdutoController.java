@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.warren.wally.model.calculadora.TipoRentabilidade;
+import com.warren.wally.model.investimento.TipoInvestimento;
 import com.warren.wally.repository.DividendoEntity;
 import com.warren.wally.repository.DividendoRepository;
 import com.warren.wally.repository.MovimentacaoEntity;
@@ -105,7 +107,7 @@ public class ProdutoController {
 
 	private void leArquivo(MultipartFile file) {
 		try {
-
+				
 			XSSFWorkbook wb = new XSSFWorkbook(new File(file.getOriginalFilename()));
 			XSSFSheet sheet = wb.getSheetAt(0);
 			int rows = sheet.getPhysicalNumberOfRows();

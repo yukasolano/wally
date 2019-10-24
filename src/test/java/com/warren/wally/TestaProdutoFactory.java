@@ -8,8 +8,8 @@ import org.junit.Test;
 
 import com.warren.wally.model.Produto;
 import com.warren.wally.model.ProdutoFactory;
-import com.warren.wally.model.TipoInvestimento;
-import com.warren.wally.model.TipoRentabilidade;
+import com.warren.wally.model.calculadora.TipoRentabilidade;
+import com.warren.wally.model.investimento.TipoInvestimento;
 import com.warren.wally.repository.ProdutoEntity;
 
 public class TestaProdutoFactory {

@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.warren.wally.model.calculadora.Calculadora;
+import com.warren.wally.model.calculadora.TipoRentabilidade;
+
 public class CalculadoraIPCA implements Calculadora {
 
 	List<DataValor> ipcaAcumulado = new ArrayList<>();

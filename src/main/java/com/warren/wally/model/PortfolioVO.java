@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.warren.wally.model.calculadora.TipoRentabilidade;
+
 public class PortfolioVO {
 
 	private List<Produto> produtosRF;

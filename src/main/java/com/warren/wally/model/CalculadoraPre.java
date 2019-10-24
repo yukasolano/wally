@@ -2,6 +2,9 @@ package com.warren.wally.model;
 
 import java.time.LocalDate;
 
+import com.warren.wally.model.calculadora.Calculadora;
+import com.warren.wally.model.calculadora.TipoRentabilidade;
+
 public class CalculadoraPre implements Calculadora {
 
 	@Override

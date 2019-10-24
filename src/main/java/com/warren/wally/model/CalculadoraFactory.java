@@ -1,5 +1,7 @@
 package com.warren.wally.model;
 
+import com.warren.wally.model.calculadora.Calculadora;
+import com.warren.wally.model.calculadora.TipoRentabilidade;
 
 public class CalculadoraFactory {
 	public static Calculadora getCalculadora(TipoRentabilidade tipoRentabilidade) {

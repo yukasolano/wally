@@ -8,8 +8,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import com.warren.wally.model.TipoInvestimento;
-import com.warren.wally.model.TipoRentabilidade;
+import com.warren.wally.model.calculadora.TipoRentabilidade;
+import com.warren.wally.model.investimento.TipoInvestimento;
 
 @Entity(name = "produto")
 public class ProdutoEntity {
