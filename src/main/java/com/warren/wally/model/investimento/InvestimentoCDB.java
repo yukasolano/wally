@@ -6,18 +6,21 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
-import com.warren.wally.model.BussinessDaysCalendar;
 import com.warren.wally.model.Leao;
 import com.warren.wally.model.ProdutoVO;
 import com.warren.wally.model.calculadora.Calculadora;
 import com.warren.wally.model.calculadora.CalculadoraResolver;
 import com.warren.wally.repository.ProdutoEntity;
+import com.warren.wally.utils.BussinessDaysCalendar;
 
 @Component
 public class InvestimentoCDB implements Investimento {
 	
 	@Resource
 	private CalculadoraResolver calculadoraResolver;
+	
+	@Resource
+	private BussinessDaysCalendar bc;
 	
 	@Override
 	public TipoInvestimento getTipoInvestimento() {
@@ -48,7 +51,7 @@ public class InvestimentoCDB implements Investimento {
 		}
 
 
-		vo.setDu(new BussinessDaysCalendar().getDu(vo.getDtAplicacao(), vo.getDataReferencia()));
+		vo.setDu(bc.getDu(vo.getDtAplicacao(), vo.getDataReferencia()));
 		Calculadora calc = calculadoraResolver.resolve(vo.getTipoRentabilidade());
 		if (calc != null) {
 			double VPBruto = calc.calculaVPBruto(vo.getValorAplicado(), vo.getTaxa(), 
