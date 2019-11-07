@@ -6,7 +6,6 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
-import com.warren.wally.model.Leao;
 import com.warren.wally.model.ProdutoVO;
 import com.warren.wally.model.calculadora.Calculadora;
 import com.warren.wally.model.calculadora.CalculadoraResolver;
@@ -14,7 +13,7 @@ import com.warren.wally.repository.ProdutoEntity;
 import com.warren.wally.utils.BussinessDaysCalendar;
 
 @Component
-public class InvestimentoCDB extends InvestimentoAbstract {
+public class InvestimentoLCI extends InvestimentoAbstract {
 
 	@Resource
 	private CalculadoraResolver calculadoraResolver;
@@ -22,12 +21,9 @@ public class InvestimentoCDB extends InvestimentoAbstract {
 	@Resource
 	private BussinessDaysCalendar bc;
 
-	@Resource
-	private Leao leao;
-
 	@Override
 	public TipoInvestimento getTipoInvestimento() {
-		return TipoInvestimento.CDB;
+		return TipoInvestimento.LCI;
 	}
 
 	@Override
@@ -54,8 +50,6 @@ public class InvestimentoCDB extends InvestimentoAbstract {
 	}
 
 	protected double getValorPresente(ProdutoVO vo, double VPBruto) {
-		double ir = leao.getIR(VPBruto - vo.getValorAplicado(), vo.getDtAplicacao(), vo.getDataReferencia());
-		return VPBruto - ir;
+		return VPBruto;
 	}
-
 }

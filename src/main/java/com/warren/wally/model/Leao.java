@@ -2,8 +2,11 @@ package com.warren.wally.model;
 
 import java.time.LocalDate;
 
+import org.springframework.stereotype.Component;
+
 import com.warren.wally.utils.BussinessDaysCalendar;
 
+@Component
 public class Leao {
 
 	private double getAliquota(LocalDate start, LocalDate end) {

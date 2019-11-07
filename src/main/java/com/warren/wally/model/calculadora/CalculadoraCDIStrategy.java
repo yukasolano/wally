@@ -1,6 +1,7 @@
 package com.warren.wally.model.calculadora;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,10 @@ public class CalculadoraCDIStrategy implements Calculadora {
 	@Resource
 	private BussinessDaysCalendar bc;
 
+	private List<DataValor> cdi = new ArrayList<>();
+
+	private LocalDate lastUpdatedDate;
+
 	@Override
 	public TipoRentabilidade getTipoRentabilidade() {
 		return TipoRentabilidade.CDI;
@@ -28,17 +33,7 @@ public class CalculadoraCDIStrategy implements Calculadora {
 
 	@Override
 	public double calculaVPBruto(double valorAplicado, double taxa, LocalDate dtAplicacao, LocalDate dtRef) {
-		List<DataValor> cdiFiltrado = filtraCDI(dtAplicacao, dtRef);
-		return valorAplicado * getFatorAcumulado(taxa, cdiFiltrado);
-	}
-
-	private List<DataValor> filtraCDI(LocalDate dataInicio, LocalDate dataFim) {
-		LocalDate dtInicio = bc.getNextWorkDay(dataInicio.plusDays(1));
-		List<DataValor> cdis = cdiRepository.findByDataBetween(dtInicio, dataFim).stream()
-				.map(it -> new DataValor(it.getData(), it.getValor())).collect(Collectors.toList());
-		completaDados(cdis, dataFim);
-		return cdis;
-
+		return valorAplicado * getFatorAcumulado(taxa, filtraCDI(dtAplicacao, dtRef));
 	}
 
 	private double getFatorAcumulado(double taxa, List<DataValor> cdiFiltrado) {
@@ -49,7 +44,28 @@ public class CalculadoraCDIStrategy implements Calculadora {
 		return fatorAcumulado;
 	}
 
-	public void completaDados(List<DataValor> cdi, LocalDate dataFim) {
+	private List<DataValor> filtraCDI(LocalDate dataInicio, LocalDate dataFim) {
+
+		List<DataValor> cdiFiltrado = getCdis().stream()
+				.filter(dt -> dt.getData().isAfter(dataInicio)
+						&& (dt.getData().isBefore(dataFim) || dt.getData().isEqual(dataFim)))
+				.collect(Collectors.toList());
+
+		return cdiFiltrado;
+
+	}
+
+	private List<DataValor> getCdis() {
+		if (cdi.isEmpty() || !LocalDate.now().isEqual(lastUpdatedDate)) {
+			lastUpdatedDate = LocalDate.now();
+			cdi.clear();
+			cdiRepository.findAll().forEach(it -> cdi.add(new DataValor(it.getData(), it.getValor())));
+			completaDados(cdi, LocalDate.now());
+		}
+		return cdi;
+	}
+
+	private void completaDados(List<DataValor> cdi, LocalDate dataFim) {
 		LocalDate today = bc.getNextWorkDay(dataFim);
 		LocalDate lastDate = cdi.get(cdi.size() - 1).getData();
 		double lastValue = cdi.get(cdi.size() - 1).getValor();

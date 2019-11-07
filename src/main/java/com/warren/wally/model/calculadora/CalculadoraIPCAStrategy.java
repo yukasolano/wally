@@ -1,6 +1,7 @@
 package com.warren.wally.model.calculadora;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
+import com.warren.wally.model.DataValor;
 import com.warren.wally.model.calculadora.repository.IpcaEntity;
 import com.warren.wally.model.calculadora.repository.IpcaRepository;
 import com.warren.wally.utils.BussinessDaysCalendar;
@@ -20,6 +22,10 @@ public class CalculadoraIPCAStrategy implements Calculadora {
 
 	@Resource
 	private IpcaRepository ipcaRepository;
+
+	private List<DataValor> ipca = new ArrayList<>();
+
+	private LocalDate lastUpdatedDate;
 
 	@Override
 	public TipoRentabilidade getTipoRentabilidade() {
@@ -62,33 +68,39 @@ public class CalculadoraIPCAStrategy implements Calculadora {
 
 	}
 
-	public double find(LocalDate dataRef) {
-		List<IpcaEntity> ipcaAcum = ipcaRepository.findByData(dataRef);
-		if (ipcaAcum != null && ipcaAcum.size() > 0) {
-			return ipcaAcum.get(0).getValorAcum();
-		}
-
-		LocalDate nextMonth = dataRef.withDayOfMonth(1).plusMonths(1);
-
-		List<IpcaEntity> ipca = ipcaRepository.findFirstByOrderByDataDesc();
-		LocalDate lastDate = ipca.get(0).getData();
-		double lastValue = ipca.get(0).getValor();
-		double lastAcum = ipca.get(0).getValorAcum();
-		while (lastDate.isBefore(nextMonth)) {
-			lastDate = lastDate.plusMonths(1);
-			lastAcum = lastAcum * (1 + lastValue / 100);
-			IpcaEntity entity = new IpcaEntity();
-			entity.setData(lastDate);
-			entity.setValorAcum(lastValue);
-			ipcaAcum.add(entity);
-		}
-
-		Optional<IpcaEntity> ipcaAcumuladoFiltrado = ipcaAcum.stream().filter(dt -> dt.getData().isEqual(dataRef))
+	private double find(LocalDate dataRef) {
+		Optional<DataValor> ipcaAcumuladoFiltrado = getIpcas().stream().filter(dt -> dt.getData().isEqual(dataRef))
 				.findFirst();
+
 		if (ipcaAcumuladoFiltrado.isPresent()) {
 			return ipcaAcumuladoFiltrado.get().getValor();
 		}
 		throw new RuntimeException("Data de IPCA não tratada - " + dataRef);
+	}
+
+	private List<DataValor> getIpcas() {
+		if (ipca.isEmpty() || !LocalDate.now().isEqual(lastUpdatedDate)) {
+			lastUpdatedDate = LocalDate.now();
+			ipca.clear();
+			ipcaRepository.findAll().forEach(it -> {
+				ipca.add(new DataValor(it.getData(), it.getValorAcum()));
+			});
+			completaDados(ipca, LocalDate.now());
+		}
+		return ipca;
+	}
+
+	private void completaDados(List<DataValor> ipca, LocalDate dataFim) {
+		LocalDate nextMonth = dataFim.withDayOfMonth(1).plusMonths(1);
+		List<IpcaEntity> lastIpca = ipcaRepository.findFirstByOrderByDataDesc();
+		LocalDate lastDate = lastIpca.get(0).getData();
+		double lastValue = lastIpca.get(0).getValor();
+		double lastAcum = lastIpca.get(0).getValorAcum();
+		while (lastDate.isBefore(nextMonth)) {
+			lastDate = lastDate.plusMonths(1);
+			lastAcum = lastAcum * (1 + lastValue / 100);
+			ipca.add(new DataValor(lastDate, lastValue));
+		}
 	}
 
 }
