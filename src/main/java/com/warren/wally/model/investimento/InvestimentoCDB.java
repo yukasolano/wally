@@ -6,12 +6,11 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
-import com.warren.wally.model.Leao;
-import com.warren.wally.model.ProdutoVO;
 import com.warren.wally.model.calculadora.Calculadora;
 import com.warren.wally.model.calculadora.CalculadoraResolver;
 import com.warren.wally.repository.ProdutoEntity;
 import com.warren.wally.utils.BussinessDaysCalendar;
+import com.warren.wally.utils.Leao;
 
 @Component
 public class InvestimentoCDB extends InvestimentoAbstract {

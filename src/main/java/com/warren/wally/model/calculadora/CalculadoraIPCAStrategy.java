@@ -9,10 +9,10 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
-import com.warren.wally.model.DataValor;
 import com.warren.wally.model.calculadora.repository.IpcaEntity;
 import com.warren.wally.model.calculadora.repository.IpcaRepository;
 import com.warren.wally.utils.BussinessDaysCalendar;
+import com.warren.wally.utils.DataValor;
 
 @Component
 public class CalculadoraIPCAStrategy implements Calculadora {

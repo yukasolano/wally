@@ -2,8 +2,7 @@ package com.warren.wally.model.investimento;
 
 import java.time.LocalDate;
 
-import com.warren.wally.model.Leao;
-import com.warren.wally.model.ProdutoVO;
+import com.warren.wally.utils.Leao;
 
 public abstract class InvestimentoAbstract implements Investimento {
 

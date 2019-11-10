@@ -1,4 +1,4 @@
-package com.warren.wally.model;
+package com.warren.wally.grafico;
 
 import java.util.Map;
 

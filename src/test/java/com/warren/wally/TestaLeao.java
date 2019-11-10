@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import org.junit.Test;
 
 import com.warren.wally.db.WallyTestCase;
-import com.warren.wally.model.Leao;
+import com.warren.wally.utils.Leao;
 
 public class TestaLeao extends WallyTestCase {
 

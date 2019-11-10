@@ -1,9 +1,8 @@
-package com.warren.wally.model;
+package com.warren.wally.model.investimento;
 
 import java.time.LocalDate;
 
 import com.warren.wally.model.calculadora.TipoRentabilidade;
-import com.warren.wally.model.investimento.TipoInvestimento;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -28,5 +27,15 @@ public class ProdutoVO {
 	private double taxaMensalLiquida;
 	private long du;
 	private LocalDate dataReferencia;
-	
+
+	public String getAnoVencimento() {
+		return Integer.valueOf(this.dtVencimento.getYear()).toString();
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s %s %s %.2f %.2f %s ", tipoInvestimento, tipoRentabilidade, instituicao, taxa,
+				valorAplicado, dtAplicacao);
+	}
+
 }

@@ -1,4 +1,4 @@
-package com.warren.wally.model;
+package com.warren.wally.portfolio;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,17 +15,17 @@ public class MultiPortfolio {
 	@Autowired
 	private PortfolioActor portfolioActor;
 
-	public Variacao calculaVariacoes(LocalDate dataRef, PortfolioVO portfolio) {
+	public VariacaoVO calculaVariacoes(PortfolioVO portfolio) {
 
-		Variacao variacao = new Variacao();
+		VariacaoVO variacao = new VariacaoVO();
 		
 		// variacao mensal
-		PortfolioVO portfolioMesAnterior = portfolioActor.run(dataRef.minusMonths(1));
+		PortfolioVO portfolioMesAnterior = portfolioActor.run(portfolio.getDataRef().minusMonths(1));
 		variacao.setMensalAbsoluto(portfolio.getAccrual() - portfolioMesAnterior.getAccrual());
 		variacao.setMensalPorcentagem(variacao.getMensalAbsoluto() / portfolioMesAnterior.getAccrual());
 
 		// variacao anual
-		PortfolioVO portfolioAnoAnterior = portfolioActor.run(dataRef.minusYears(1));
+		PortfolioVO portfolioAnoAnterior = portfolioActor.run(portfolio.getDataRef().minusYears(1));
 		variacao.setAnualAbsoluto(portfolio.getAccrual() - portfolioAnoAnterior.getAccrual());
 		variacao.setAnualPorcentagem(variacao.getAnualAbsoluto() / portfolioAnoAnterior.getAccrual());
 

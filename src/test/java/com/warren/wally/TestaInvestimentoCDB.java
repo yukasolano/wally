@@ -10,11 +10,11 @@ import javax.annotation.Resource;
 import org.junit.Test;
 
 import com.warren.wally.db.WallyTestCase;
-import com.warren.wally.model.ProdutoVO;
 import com.warren.wally.model.calculadora.CalculadoraResolver;
 import com.warren.wally.model.calculadora.TipoRentabilidade;
 import com.warren.wally.model.investimento.Investimento;
 import com.warren.wally.model.investimento.InvestimentoResolver;
+import com.warren.wally.model.investimento.ProdutoVO;
 import com.warren.wally.model.investimento.TipoInvestimento;
 import com.warren.wally.repository.ProdutoEntity;
 

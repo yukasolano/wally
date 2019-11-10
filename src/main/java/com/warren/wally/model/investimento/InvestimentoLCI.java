@@ -6,7 +6,6 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
-import com.warren.wally.model.ProdutoVO;
 import com.warren.wally.model.calculadora.Calculadora;
 import com.warren.wally.model.calculadora.CalculadoraResolver;
 import com.warren.wally.repository.ProdutoEntity;

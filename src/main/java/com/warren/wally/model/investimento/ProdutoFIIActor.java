@@ -1,4 +1,4 @@
-package com.warren.wally.model;
+package com.warren.wally.model.investimento;
 
 import java.time.LocalDate;
 import java.util.HashMap;

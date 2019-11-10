@@ -1,10 +1,8 @@
-package com.warren.wally.model;
+package com.warren.wally.utils;
 
 import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
-
-import com.warren.wally.utils.BussinessDaysCalendar;
 
 @Component
 public class Leao {

@@ -1,4 +1,4 @@
-package com.warren.wally.model;
+package com.warren.wally.model.investimento;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -52,8 +52,6 @@ public class DataMarketEquities {
 		}
 		//busca data especifica 
 		List<BolsaEntity> bolsaValor = bolsaRepository.findByCodigoAndData(ticker, dataRef);
-		System.out.println("bolsavalor: ");
-		System.out.println(bolsaValor);
 		//se não achar busca historico hoje - ultima data
 		if(bolsaValor == null || bolsaValor.size() == 0) {
 			LocalDate ultimaData = entity.get(0).getData();

@@ -1,4 +1,4 @@
-package com.warren.wally.model;
+package com.warren.wally.utils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

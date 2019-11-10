@@ -1,4 +1,4 @@
-package com.warren.wally.model;
+package com.warren.wally.portfolio;
 
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
@@ -7,38 +7,25 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.warren.wally.model.calculadora.TipoRentabilidade;
+import com.warren.wally.model.investimento.ProdutoFIIVO;
+import com.warren.wally.model.investimento.ProdutoVO;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Builder
 public class PortfolioVO {
 
-	private List<Produto> produtosRF;
+	private List<ProdutoVO> produtosRF;
 
 	private List<ProdutoFIIVO> produtosRV;
 
 	private double accrual;
 
-	public void setProdutos(List<Produto> produtosRF) {
-		this.produtosRF = produtosRF;
-	}
-
-	public void setProdutosRV(List<ProdutoFIIVO> produtosRV) {
-		this.produtosRV = produtosRV;
-	}
-
-	public List<Produto> getProdutosRF() {
-		return produtosRF;
-	}
-	
-	public void setProdutosRF(List<Produto> produtosRF) {
-		this.produtosRF = produtosRF;
-	}
-	
-	public void setAccrual(double accrual) {
-		this.accrual = accrual;
-	}
-
-	public double getAccrual() {
-		return accrual;
-	}
+	private LocalDate dataRef;
 
 	public Map<String, Double> getProporcoes() {
 		Map<String, Double> proporcoes = produtosRF.stream()
@@ -55,11 +42,6 @@ public class PortfolioVO {
 				.collect(Collectors.groupingBy(produto -> produto.getCodigo(),
 						Collectors.reducing(0.0, produto -> produto.getPrecoTotal(), Double::sum)));
 		return sortedByKey(proporcoes);
-	}
-
-
-	public List<ProdutoFIIVO> getProdutosRV() {
-		return produtosRV;
 	}
 
 	public Map<String, Double> getPorInstituicoes() {

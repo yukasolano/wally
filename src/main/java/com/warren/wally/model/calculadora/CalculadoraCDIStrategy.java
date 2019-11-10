@@ -9,9 +9,9 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
-import com.warren.wally.model.DataValor;
 import com.warren.wally.model.calculadora.repository.CdiRepository;
 import com.warren.wally.utils.BussinessDaysCalendar;
+import com.warren.wally.utils.DataValor;
 
 @Component
 public class CalculadoraCDIStrategy implements Calculadora {
