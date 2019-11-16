@@ -1,0 +1,33 @@
+
+<mat-card>
+    <mat-card-title>Produtos de renda fixa</mat-card-title>
+    <mat-card-content>
+        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+            <ng-container matColumnDef="instituicao">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Instituição </th>
+                <td mat-cell *matCellDef="let element"> {{element.instituicao}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="tipoInvestimento">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de investimento </th>
+                <td mat-cell *matCellDef="let element"> {{element.tipoInvestimento}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="tipoRentabilidade">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de rentabilidade </th>
+                <td mat-cell *matCellDef="let element"> {{element.tipoRentabilidade}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="valorAplicado">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Valor aplicado </th>
+                <td mat-cell *matCellDef="let element"> {{element.valorAplicado}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </mat-card-content>
+</mat-card>
+        
+          
