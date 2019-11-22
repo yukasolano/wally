@@ -11,13 +11,20 @@ import { ProductsComponent } from './products/products.component';
 import { CadastroComponent } from './cadastro/cadastro.component';
 import { HttpClientModule } from '@angular/common/http';
 
+import localePt from '@angular/common/locales/pt';
+import { registerLocaleData } from '@angular/common';
+import { TabelaProdutosComponent } from './products/tabela-produtos/tabela-produtos.component';
+
+registerLocaleData(localePt, 'pt');
+
 @NgModule({
   declarations: [
     AppComponent,
     TopBarComponent,
     DashboardComponent,
     ProductsComponent,
-    CadastroComponent
+    CadastroComponent,
+    TabelaProdutosComponent
   ],
   imports: [
     BrowserModule,

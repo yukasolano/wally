@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
 import { ProdutoRF } from './produtoRF';
+import { TabelaProdutosComponent } from './tabela-produtos/tabela-produtos.component';
 
 
 @Component({
@@ -14,21 +12,17 @@ import { ProdutoRF } from './produtoRF';
   })
   export class ProductsComponent implements OnInit {
 
-    courses$: Observable<ProdutoRF[]>;
-    displayedColumns: string[];
-    dataSource = new MatTableDataSource();
-
-    @ViewChild(MatSort, {static: true}) sort: MatSort;
+   @ViewChild(TabelaProdutosComponent, {static: true}) produtosRF: TabelaProdutosComponent;
 
     constructor(private http: HttpClient ) { }
 
     ngOnInit() {
-      this.displayedColumns = ['instituicao', 'tipoInvestimento', 'tipoRentabilidade', 'valorAplicado'];
 
       this.http.get<ProdutoRF[]>(`${environment.baseUrl}produtosRF`).subscribe( resp => {
-          this.dataSource = new MatTableDataSource(resp);
-          this.dataSource.sort = this.sort;
+        this.produtosRF.updateData(resp);
       });
     }
 
   }
+
+  // https://stackoverflow.com/questions/53198805/angular-pass-pipe-as-variable
