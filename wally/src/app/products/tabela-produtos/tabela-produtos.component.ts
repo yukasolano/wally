@@ -1,4 +1,4 @@
-import { OnInit, ViewChild, Component } from '@angular/core';
+import { OnInit, ViewChild, Component, Input } from '@angular/core';
 import { ProdutoRF } from '../produtoRF';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -12,6 +12,8 @@ import { MatPaginator } from '@angular/material/paginator';
 })
 export class TabelaProdutosComponent implements OnInit {
 
+  @Input() tableInfo;
+
   displayedColumns: string[];
   dataSource = new MatTableDataSource();
 
@@ -19,11 +21,10 @@ export class TabelaProdutosComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   ngOnInit() {
-    this.displayedColumns = ['instituicao', 'tipoInvestimento', 'tipoRentabilidade', 'valorAplicado', 'taxa',
-    'dtAplicacao', 'dtVencimento', 'valorPresente', 'taxaMensalLiquida'];
+    this.displayedColumns = Object.keys(this.tableInfo);
   }
 
-  updateData(data: ProdutoRF[]) {
+  updateData(data) {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;

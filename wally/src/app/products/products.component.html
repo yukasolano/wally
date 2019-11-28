@@ -1,7 +1,14 @@
 <mat-card>
     <mat-card-title>Produtos de renda fixa</mat-card-title>
     <mat-card-content>
-       <app-tabela-produtos #produtosRF></app-tabela-produtos> 
+       <app-tabela-produtos #tabelaProdutosRF [tableInfo]="produtoRF.getTableInfo()"></app-tabela-produtos> 
+    </mat-card-content>
+</mat-card>
+
+<mat-card>
+    <mat-card-title>Produtos de renda variável</mat-card-title>
+    <mat-card-content>
+       <app-tabela-produtos #tabelaProdutosRV [tableInfo]="produtoRV.getTableInfo()"></app-tabela-produtos> 
     </mat-card-content>
 </mat-card>
         

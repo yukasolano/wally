@@ -1,3 +1,4 @@
+import { registerLocaleData, DecimalPipe, CommonModule, DatePipe, PercentPipe } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -10,9 +11,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProductsComponent } from './products/products.component';
 import { CadastroComponent } from './cadastro/cadastro.component';
 import { HttpClientModule } from '@angular/common/http';
+import { DynamicPipe } from './dynamic.pipe';
 
 import localePt from '@angular/common/locales/pt';
-import { registerLocaleData } from '@angular/common';
 import { TabelaProdutosComponent } from './products/tabela-produtos/tabela-produtos.component';
 
 registerLocaleData(localePt, 'pt');
@@ -21,19 +22,25 @@ registerLocaleData(localePt, 'pt');
   declarations: [
     AppComponent,
     TopBarComponent,
+    DynamicPipe,
     DashboardComponent,
     ProductsComponent,
     CadastroComponent,
-    TabelaProdutosComponent
+    TabelaProdutosComponent,
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
     DemoMaterialModule
   ],
-  providers: [],
+  providers: [
+    DecimalPipe,
+    DatePipe,
+    PercentPipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

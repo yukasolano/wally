@@ -18,6 +18,7 @@ import com.warren.wally.file.TypeFile;
 import com.warren.wally.grafico.GraficoTransformador;
 import com.warren.wally.model.calculadora.TipoRentabilidade;
 import com.warren.wally.model.investimento.ProdutoVO;
+import com.warren.wally.model.investimento.ProdutosVO;
 import com.warren.wally.model.investimento.TipoInvestimento;
 import com.warren.wally.portfolio.MultiPortfolio;
 import com.warren.wally.portfolio.PortfolioActor;
@@ -64,10 +65,13 @@ public class ProdutoController {
 		return "index";
 	}*/
 
-	@RequestMapping("produtosRF")
-	public List<ProdutoVO> produtos(Model model) {
+	@RequestMapping("produtos")
+	public ProdutosVO produtos(Model model) {
 		PortfolioVO portfolio = portfolioActor.run(data);
-		return portfolio.getProdutosRF();
+		ProdutosVO vo = new ProdutosVO();
+		vo.setProdutosRF(portfolio.getProdutosRF());
+		vo.setProdutosRV(portfolio.getProdutosRV());
+		return vo;
 		
 	}
 
