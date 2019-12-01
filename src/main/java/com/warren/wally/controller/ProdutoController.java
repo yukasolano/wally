@@ -15,7 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.warren.wally.file.FileUploadResolver;
 import com.warren.wally.file.TypeFile;
+import com.warren.wally.grafico.GraficoDados;
 import com.warren.wally.grafico.GraficoTransformador;
+import com.warren.wally.grafico.GraficosVO;
 import com.warren.wally.model.calculadora.TipoRentabilidade;
 import com.warren.wally.model.investimento.ProdutoVO;
 import com.warren.wally.model.investimento.ProdutosVO;
@@ -51,19 +53,19 @@ public class ProdutoController {
 
 	private LocalDate data = LocalDate.of(2019, 07, 01); // LocalDate.now();
 
-	/*@RequestMapping("/")
-	public String index(Model model) {
+	@RequestMapping("/portfolio-graficos")
+	public GraficosVO index(Model model) {
 		GraficoTransformador graficoTransformador = new GraficoTransformador();
-
 		PortfolioVO portfolio = portfolioActor.run(data);
-		model.addAttribute("variacao", multiportfolio.calculaVariacoes(portfolio));
-		model.addAttribute("patrimonioTotal", portfolio.getAccrual());
-		model.addAttribute("proporcoes", graficoTransformador.transforma(portfolio.getProporcoes()));
-		model.addAttribute("proporcoesRV", graficoTransformador.transforma(portfolio.getProporcoesRV()));
-		model.addAttribute("instituicoes", graficoTransformador.transforma(portfolio.getPorInstituicoes(), true));
-		model.addAttribute("liquidez", graficoTransformador.transforma(portfolio.getLiquidez(), true));
-		return "index";
-	}*/
+		GraficosVO graficos = new GraficosVO();
+		graficos.setPatrimonioTotal(portfolio.getAccrual());
+		graficos.setVariacao(multiportfolio.calculaVariacoes(portfolio));
+		graficos.setProporcao(graficoTransformador.transforma(portfolio.getProporcoes()));
+		graficos.setProporcaoRV(graficoTransformador.transforma(portfolio.getProporcoesRV()));
+		graficos.setInstituicoes(graficoTransformador.transforma(portfolio.getPorInstituicoes(), true));
+		graficos.setLiquidez(graficoTransformador.transforma(portfolio.getLiquidez(), true));
+		return graficos;
+	}
 
 	@RequestMapping("produtos")
 	public ProdutosVO produtos(Model model) {

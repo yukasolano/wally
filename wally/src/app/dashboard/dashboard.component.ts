@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { BarChartComponent } from './bar-chart/bar-chart.component';
+import { PieChartComponent } from './pie-chart/pie-chart.component';
+import { SummaryComponent } from './summary/summary.component';
 
 @Component({
     selector: 'app-dashboard',
@@ -7,9 +12,23 @@ import { Component, OnInit } from '@angular/core';
   })
   export class DashboardComponent implements OnInit {
 
-    constructor() { }
+    constructor(private http: HttpClient) { }
+
+    @ViewChild('summary', {static: true}) summary: SummaryComponent;
+    @ViewChild('proporcao', {static: true}) proporcao: PieChartComponent;
+    @ViewChild('proporcaoRV', {static: true}) proporcaoRV: PieChartComponent;
+    @ViewChild('instituicoes', {static: true}) instituicoes: BarChartComponent;
+    @ViewChild('liquidez', {static: true}) liquidez: BarChartComponent;
+
 
     ngOnInit() {
+      this.http.get<any>(`${environment.baseUrl}portfolio-graficos`).subscribe( resp => {
+        console.log(resp);
+        this.summary.update(resp.variacao, resp.patrimonioTotal);
+        this.proporcao.update(resp.proporcao.valores, resp.proporcao.legendas);
+        this.proporcaoRV.update(resp.proporcaoRV.valores, resp.proporcaoRV.legendas);
+        this.instituicoes.update(resp.instituicoes.valores, resp.instituicoes.legendas);
+        this.liquidez.update(resp.liquidez.valores, resp.liquidez.legendas);
+      });
     }
-
-  }
+}

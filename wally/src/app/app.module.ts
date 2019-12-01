@@ -1,6 +1,7 @@
 import { registerLocaleData, DecimalPipe, CommonModule, DatePipe, PercentPipe } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { ChartsModule } from 'ng2-charts';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +16,9 @@ import { DynamicPipe } from './dynamic.pipe';
 
 import localePt from '@angular/common/locales/pt';
 import { TabelaProdutosComponent } from './products/tabela-produtos/tabela-produtos.component';
+import { BarChartComponent } from './dashboard/bar-chart/bar-chart.component';
+import { PieChartComponent } from './dashboard/pie-chart/pie-chart.component';
+import { SummaryComponent } from './dashboard/summary/summary.component';
 
 registerLocaleData(localePt, 'pt');
 
@@ -27,6 +31,9 @@ registerLocaleData(localePt, 'pt');
     ProductsComponent,
     CadastroComponent,
     TabelaProdutosComponent,
+    BarChartComponent,
+    PieChartComponent,
+    SummaryComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +41,9 @@ registerLocaleData(localePt, 'pt');
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    DemoMaterialModule
+    DemoMaterialModule,
+    BrowserModule,
+    ChartsModule
   ],
   providers: [
     DecimalPipe,

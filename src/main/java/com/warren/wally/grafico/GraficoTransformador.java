@@ -9,11 +9,11 @@ public class GraficoTransformador {
 
 	private Cores cores = new Cores();
 
-	public String transforma(Map<String, Double> dados) {
+	public GraficoDados transforma(Map<String, Double> dados) {
 		return transforma(dados, false);
 	}
 
-	public String transforma(Map<String, Double> dados, boolean coresClaras) {
+	public GraficoDados transforma(Map<String, Double> dados, boolean coresClaras) {
 		GraficoDados graficoDados = new GraficoDados();
 
 		dados.forEach((key, value) -> {
@@ -29,14 +29,14 @@ public class GraficoTransformador {
 			graficoDados.setCoresSecundarias(cores.getCoresHover(dados.size()));
 		}
 
-		try {
-			String json = new ObjectMapper().writeValueAsString(graficoDados);
-			return json;
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
+		//try {
+		//	String json = new ObjectMapper().writeValueAsString(graficoDados);
+		//	return json;
+		//} catch (JsonProcessingException e) {
+		//	e.printStackTrace();
+		//}
 
-		return "";
+		return graficoDados;
 
 	}
 }
