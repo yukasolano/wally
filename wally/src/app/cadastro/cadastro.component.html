@@ -1,1 +1,113 @@
-cadastro works
+<mat-card>
+    <mat-card-title>Cadastro de investimentos</mat-card-title>
+    <mat-card-content>
+        <form [formGroup]="form" >
+            
+            <mat-radio-group aria-label="Escolha uma opção" formControlName="categoria">
+                <mat-radio-button value="RF">Renda fixa</mat-radio-button>
+                <mat-radio-button value="RV">Renda variável</mat-radio-button>
+            </mat-radio-group>
+            
+            
+            <mat-slide-toggle formControlName="importaArquivo" >Importar arquivo</mat-slide-toggle>
+            
+        </form>
+        
+        <form [formGroup]="formFileRF" *ngIf="form.value.importaArquivo&&form.value.categoria==='RF'">
+            <mat-form-field class="fileInput">
+                <ngx-mat-file-input  placeholder="Arquivo de renda fixa" formControlName="arquivo"></ngx-mat-file-input>
+                <mat-icon matSuffix>folder</mat-icon>
+            </mat-form-field> 
+        </form>
+        
+        <form [formGroup]="formRF" *ngIf="!form.value.importaArquivo&&form.value.categoria==='RF'">
+
+            <mat-form-field>
+                <input matInput placeholder="Corretora" formControlName="corretora" required>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput placeholder="Instituição" formControlName="instituicao" required>
+            </mat-form-field>
+        
+            <mat-form-field>
+                <mat-select placeholder="Tipo de investimento" formControlName="tipoInvestimento" required>
+                    <mat-option value="CDB">CDB</mat-option>
+                    <mat-option value="LCI">LCI</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-select placeholder="Tipo de rentabilidade" formControlName="tipoRentabilidade" required>
+                    <mat-option value="CDI">CDI</mat-option>
+                    <mat-option value="IPCA">IPCA</mat-option>
+                    <mat-option value="PRE">PRE</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput [matDatepicker]="dtAplicacao" placeholder="Data de aplicação" 
+                formControlName="dtAplicacao" required>
+                <mat-datepicker-toggle matSuffix [for]="dtAplicacao"></mat-datepicker-toggle>
+                <mat-datepicker #dtAplicacao></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput [matDatepicker]="dtVencimento" placeholder="Data de vencimento" 
+                formControlName="dtVencimento" required>
+                <mat-datepicker-toggle matSuffix [for]="dtVencimento"></mat-datepicker-toggle>
+                <mat-datepicker #dtVencimento></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input type="number" matInput placeholder="Taxa" formControlName="taxa" required>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input type="number" matInput placeholder="Valor aplicado" formControlName="valorAplicado" required>
+            </mat-form-field>
+           
+        </form>
+
+        <form [formGroup]="formFileRV" *ngIf="form.value.importaArquivo&&form.value.categoria==='RV'">
+            <mat-form-field class="fileInput" >
+                <ngx-mat-file-input  placeholder="Arquivo de renda variável" formControlName="arquivo"></ngx-mat-file-input>
+                <mat-icon matSuffix>folder</mat-icon>
+            </mat-form-field> 
+        </form>
+        
+        <form [formGroup]="formRV" *ngIf="!form.value.importaArquivo&&form.value.categoria==='RV'">
+
+            <mat-form-field>
+                <mat-select placeholder="Tipo de fluxo" formControlName="tipo" required>
+                    <mat-option value="dividendo">Dividendo</mat-option>
+                    <mat-option value="compra">Compra</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput placeholder="Código" formControlName="codigo" required>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput [matDatepicker]="data" placeholder="Data" 
+                formControlName="data" required>
+                <mat-datepicker-toggle matSuffix [for]="data"></mat-datepicker-toggle>
+                <mat-datepicker #data></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input type="number" matInput placeholder="Quantidade" formControlName="quantidade" required>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input type="number" matInput placeholder="Valor unitário" formControlName="valorUnitario" required>
+            </mat-form-field>
+           
+        </form>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button class="button" (click)="onSubmit()">Salvar</button>
+        </mat-card-actions>
+    </mat-card>
+

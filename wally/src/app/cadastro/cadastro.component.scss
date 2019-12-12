@@ -1,0 +1,31 @@
+.mat-card {
+    margin: 10px 30px;
+}
+
+.mat-card-content {
+    display: flex;
+    flex-direction: column;
+}
+  
+.mat-card-content > * {
+    width: 100%;
+}
+
+.fileInput {
+    cursor:pointer;
+}
+
+.fileInput .mat-icon{
+    color: rgba(0,0,0,.54);
+    vertical-align: middle;
+    font-size: 120%;
+}
+
+.mat-radio-button {
+    margin-right: 1em;
+}
+.mat-radio-group {
+    display: inline-block;
+    position: relative;
+    margin-bottom: 1.25em;
+}

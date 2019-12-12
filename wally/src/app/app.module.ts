@@ -19,6 +19,14 @@ import { TabelaProdutosComponent } from './products/tabela-produtos/tabela-produ
 import { BarChartComponent } from './dashboard/bar-chart/bar-chart.component';
 import { PieChartComponent } from './dashboard/pie-chart/pie-chart.component';
 import { SummaryComponent } from './dashboard/summary/summary.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
+import {
+  MAT_MOMENT_DATE_FORMATS,
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 registerLocaleData(localePt, 'pt');
 
@@ -37,7 +45,10 @@ registerLocaleData(localePt, 'pt');
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     BrowserModule,
+    MaterialFileInputModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
@@ -46,10 +57,26 @@ registerLocaleData(localePt, 'pt');
     ChartsModule
   ],
   providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'pt'},
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
     DecimalPipe,
     DatePipe,
     PercentPipe
   ],
+  entryComponents: [
+    CadastroComponent
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+  constructor(private adapter: DateAdapter<any>) {
+
+    this.adapter.setLocale('pt');
+  }
+}

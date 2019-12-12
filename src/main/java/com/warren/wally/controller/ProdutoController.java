@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,13 +21,16 @@ import com.warren.wally.grafico.GraficoDados;
 import com.warren.wally.grafico.GraficoTransformador;
 import com.warren.wally.grafico.GraficosVO;
 import com.warren.wally.model.calculadora.TipoRentabilidade;
+import com.warren.wally.model.investimento.ProdutoRVInfoVO;
 import com.warren.wally.model.investimento.ProdutoVO;
 import com.warren.wally.model.investimento.ProdutosVO;
 import com.warren.wally.model.investimento.TipoInvestimento;
 import com.warren.wally.portfolio.MultiPortfolio;
 import com.warren.wally.portfolio.PortfolioActor;
 import com.warren.wally.portfolio.PortfolioVO;
+import com.warren.wally.repository.DividendoEntity;
 import com.warren.wally.repository.DividendoRepository;
+import com.warren.wally.repository.MovimentacaoEntity;
 import com.warren.wally.repository.MovimentacaoRepository;
 import com.warren.wally.repository.ProdutoEntity;
 import com.warren.wally.repository.ProdutoRepository;
@@ -77,53 +82,63 @@ public class ProdutoController {
 		
 	}
 
-	/*@RequestMapping(value = "salvar", method = RequestMethod.POST)
-	public String salvar(@RequestParam(value = "corretora", required = false) String corretora,
-			@RequestParam(value = "instituicao", required = false) String instituicao,
-			@RequestParam(value = "tipoInvestimento", required = false) String tipoInvestimento,
-			@RequestParam(value = "tipoRentabilidade", required = false) String tipoRentabilidade,
-			@RequestParam(value = "dtVencimento", required = false) String dtVencimento,
-			@RequestParam(value = "dtAplicacao", required = false) String dtAplicacao,
-			@RequestParam(value = "taxa", required = false, defaultValue = "0.0") double taxa,
-			@RequestParam(value = "valorAplicado", required = false, defaultValue = "0.0") double valorAplicado,
-			@RequestParam(value = "arquivo", required = false) MultipartFile arquivo, Model model) {
+	@PostMapping(value = "produtos/renda-fixa")
+	public ProdutoInfoVO salvar(
+			@RequestBody ProdutoInfoVO produto) {
+		ProdutoEntity novoProduto = new ProdutoEntity();
+		novoProduto.setCorretora(produto.getCorretora());
+		novoProduto.setInstituicao(produto.getInstituicao());
+		novoProduto.setTipoInvestimento(produto.getTipoInvestimento());
+		novoProduto.setTipoRentabilidade(produto.getTipoRentabilidade());
+		novoProduto.setVencimento(produto.getDtVencimento());
+		novoProduto.setDtAplicacao(produto.getDtAplicacao());
+		novoProduto.setTaxa(produto.getTaxa());
+		novoProduto.setValorAplicado(produto.getValorAplicado());
+		produtoRepository.save(novoProduto);
 
-		if (arquivo != null) {
-			produtoRepository.deleteAll();
-			fileUploadResolver.resolve(TypeFile.INVESTIMENTOS).read(arquivo);
-		} else {
-			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-			ProdutoEntity novoProduto = new ProdutoEntity();
-			novoProduto.setCorretora(corretora);
-			novoProduto.setInstituicao(instituicao);
-			novoProduto.setTipoInvestimento(TipoInvestimento.valueOf(tipoInvestimento));
-			novoProduto.setTipoRentabilidade(TipoRentabilidade.valueOf(tipoRentabilidade));
-			novoProduto.setVencimento(LocalDate.parse(dtVencimento, dtf));
-			novoProduto.setDtAplicacao(LocalDate.parse(dtAplicacao, dtf));
-			novoProduto.setTaxa(taxa);
-			novoProduto.setValorAplicado(valorAplicado);
-			produtoRepository.save(novoProduto);
-		}
-
-		PortfolioVO portfolio = portfolioActor.run(data);
-		model.addAttribute("produtos", portfolio.getProdutosRF());
-		model.addAttribute("produtosRV", portfolio.getProdutosRV());
-		model.addAttribute("hoje", data);
-		return "produtos";
+		return produto;
 	}
-
-	@RequestMapping(value = "salvarfii", method = RequestMethod.POST)
-	public String salvarFII(@RequestParam(value = "arquivo", required = true) MultipartFile arquivo, Model model) {
+	
+	@PostMapping(value = "produtos/arquivo-renda-fixa")
+	public ProdutoInfoVO salvarArquivo(
+			@RequestBody MultipartFile arquivo) {
+		produtoRepository.deleteAll();
+		fileUploadResolver.resolve(TypeFile.INVESTIMENTOS).read(arquivo);
+		
+		
+		return null;
+	}
+	
+	@PostMapping(value = "produtos/renda-variavel")
+	public ProdutoRVInfoVO criarProdutoRV(
+			@RequestBody ProdutoRVInfoVO produto) {
+		if(produto.getTipo().equals("dividendo")) {
+			DividendoEntity dividendo = new DividendoEntity();
+			dividendo.setCodigo(produto.getCodigo());
+			dividendo.setData(produto.getData());
+			dividendo.setQuantidade(produto.getQuantidade());
+			dividendo.setValorUnitario(produto.getValorUnitario());
+			dividendoRepository.save(dividendo);
+		} else {
+			MovimentacaoEntity mov = new MovimentacaoEntity();
+			mov.setCodigo(produto.getCodigo());
+			mov.setData(produto.getData());
+			mov.setQuantidade(produto.getQuantidade());
+			mov.setValorUnitario(produto.getValorUnitario());
+			movimentacaoRepository.save(mov);
+		}
+		return produto;
+	}
+	
+	@PostMapping(value = "produtos/arquivo-renda-variavel")
+	public ProdutoRVInfoVO salvarArquivoRV(
+			@RequestBody MultipartFile arquivo) {
 		movimentacaoRepository.deleteAll();
 		dividendoRepository.deleteAll();
 		fileUploadResolver.resolve(TypeFile.MOVIMENTOS).read(arquivo);
-
-		PortfolioVO portfolio = portfolioActor.run(data);
-		model.addAttribute("produtos", portfolio.getProdutosRF());
-		model.addAttribute("produtosRV", portfolio.getProdutosRV());
-		model.addAttribute("hoje", data);
-		return "produtos";
-	}*/
+		
+		
+		return null;
+	}
 
 }
