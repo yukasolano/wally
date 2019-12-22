@@ -7,15 +7,13 @@
                 <mat-radio-button value="RF">Renda fixa</mat-radio-button>
                 <mat-radio-button value="RV">Renda variável</mat-radio-button>
             </mat-radio-group>
-            
-            
-            <mat-slide-toggle formControlName="importaArquivo" >Importar arquivo</mat-slide-toggle>
-            
+                        
+            <mat-slide-toggle formControlName="importaArquivo" >Importar arquivo</mat-slide-toggle>         
         </form>
         
         <form [formGroup]="formFileRF" *ngIf="form.value.importaArquivo&&form.value.categoria==='RF'">
             <mat-form-field class="fileInput">
-                <ngx-mat-file-input  placeholder="Arquivo de renda fixa" formControlName="arquivo"></ngx-mat-file-input>
+                <ngx-mat-file-input  placeholder="Arquivo de renda fixa" formControlName="arquivo" required></ngx-mat-file-input>
                 <mat-icon matSuffix>folder</mat-icon>
             </mat-form-field> 
         </form>
@@ -71,7 +69,7 @@
 
         <form [formGroup]="formFileRV" *ngIf="form.value.importaArquivo&&form.value.categoria==='RV'">
             <mat-form-field class="fileInput" >
-                <ngx-mat-file-input  placeholder="Arquivo de renda variável" formControlName="arquivo"></ngx-mat-file-input>
+                <ngx-mat-file-input  placeholder="Arquivo de renda variável" formControlName="arquivo" required></ngx-mat-file-input>
                 <mat-icon matSuffix>folder</mat-icon>
             </mat-form-field> 
         </form>
@@ -107,7 +105,9 @@
         </form>
         </mat-card-content>
         <mat-card-actions>
-            <button mat-raised-button class="button" (click)="onSubmit()">Salvar</button>
+            <button mat-raised-button (click)="onSubmit()" color="primary" [disabled]="formInvalid()">Salvar</button>
+            <button mat-raised-button><a href="/assets/planilha_exemplo_investimentos.xlsx">Baixar planiha exemplo de investimentos</a></button>
+            <button mat-raised-button><a href="/assets/planilha_exemplo_movimentacoes.xlsx">Baixar planiha exemplo de movimentações</a></button>
         </mat-card-actions>
     </mat-card>
 

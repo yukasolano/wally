@@ -1,3 +1,21 @@
-.mat-card {
+.dashboard {
+    display: flex;
     margin: 10px 30px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.card {
+    margin-right: 1rem;
+    margin-bottom: 10px;
+}
+.card-resumo {
+    width: calc(20% - 3rem);
+}
+.card-categoria, .card-renda-variavel {
+    width: calc(40% - 3rem);
+}
+
+.card-liquidez, .card-instituicoes {
+    width:calc(50% - 3rem);
 }

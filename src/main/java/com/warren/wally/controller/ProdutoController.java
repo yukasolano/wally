@@ -5,8 +5,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.warren.wally.file.ExportedFile;
+import com.warren.wally.file.FileExporterInvestimentos;
+import com.warren.wally.file.FileExporterResolver;
 import com.warren.wally.file.FileUploadResolver;
 import com.warren.wally.file.TypeFile;
 import com.warren.wally.grafico.GraficoDados;
@@ -57,6 +65,9 @@ public class ProdutoController {
 	private DividendoRepository dividendoRepository;
 
 	private LocalDate data = LocalDate.of(2019, 07, 01); // LocalDate.now();
+	
+	@Autowired
+	private FileExporterResolver fileExporterResolver;
 
 	@RequestMapping("/portfolio-graficos")
 	public GraficosVO index(Model model) {
@@ -133,12 +144,36 @@ public class ProdutoController {
 	@PostMapping(value = "produtos/arquivo-renda-variavel")
 	public ProdutoRVInfoVO salvarArquivoRV(
 			@RequestBody MultipartFile arquivo) {
-		movimentacaoRepository.deleteAll();
+		movimentacaoRepository.deleteAll(); 
 		dividendoRepository.deleteAll();
 		fileUploadResolver.resolve(TypeFile.MOVIMENTOS).read(arquivo);
 		
 		
 		return null;
+	}
+	
+	@GetMapping(value = "produtos/arquivo-renda-fixa/download")
+	public ResponseEntity exportaArquivoRF() {
+		ExportedFile resource = fileExporterResolver.resolve(TypeFile.INVESTIMENTOS).export();
+
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ resource.getFilename())
+		        .contentLength(resource.getFile().contentLength())
+		        .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+		        .body(resource.getFile());
+		
+	}
+	
+	@GetMapping(value = "produtos/arquivo-renda-variavel/download")
+	public ResponseEntity exportaArquivoRVF() {
+		ExportedFile resource = fileExporterResolver.resolve(TypeFile.MOVIMENTOS).export();
+
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ resource.getFilename())
+		        .contentLength(resource.getFile().contentLength())
+		        .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+		        .body(resource.getFile());
+		
 	}
 
 }

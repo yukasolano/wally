@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ProdutoInfo } from './produto-info';
 
 @Component({
     selector: 'app-cadastro',
@@ -61,11 +60,14 @@ import { ProdutoInfo } from './produto-info';
 
     ngOnInit() {
     }
-    onSubmit() {
-      console.log(this.form.value);
-      console.log(this.formFileRF.value);
-      console.log(this.form.value.categoria === 'RF');
 
+    formInvalid() {
+      if (this.form.value.categoria === 'RF') {
+        return this.form.value.importaArquivo ? this.formFileRF.invalid : this.formRF.invalid;
+      }
+      return this.form.value.importaArquivo ? this.formFileRV.invalid : this.formRV.invalid;
+    }
+    onSubmit() {
       if (this.form.value.categoria === 'RF') {
 
         if (this.form.value.importaArquivo) {

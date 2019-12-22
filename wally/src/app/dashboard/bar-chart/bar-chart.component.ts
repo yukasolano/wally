@@ -8,19 +8,22 @@ import { Component, OnInit, Input } from '@angular/core';
   export class BarChartComponent implements OnInit {
 
     @Input() titulo;
+    @Input() direction = 'horizontal';
 
     public barChartOptions = {
       scaleShowVerticalLines: false,
       responsive: true
     };
-    public barChartType = 'horizontalBar';
+    public barChartType;
     public barChartLegend = true;
     public barChartLabels = [];
     public barChartData = [];
 
     constructor() {}
 
-    ngOnInit() {}
+    ngOnInit() {
+      this.barChartType = this.direction === 'horizontal' ? 'horizontalBar' : 'bar';
+    }
 
     update(dados: number[], legendas?: string[]) {
         this.barChartLabels = legendas;

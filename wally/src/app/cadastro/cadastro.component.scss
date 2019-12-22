@@ -5,9 +5,10 @@
 .mat-card-content {
     display: flex;
     flex-direction: column;
+    padding: 1.25em 0;
 }
   
-.mat-card-content > * {
+form > * {
     width: 100%;
 }
 
@@ -27,5 +28,13 @@
 .mat-radio-group {
     display: inline-block;
     position: relative;
-    margin-bottom: 1.25em;
+    padding-bottom: 1.25em;
+}
+
+.mat-slide-toggle {
+    padding-bottom: 1.25em;
+}
+.mat-raised-button a {
+    text-decoration: none;
+    color: inherit;
 }
