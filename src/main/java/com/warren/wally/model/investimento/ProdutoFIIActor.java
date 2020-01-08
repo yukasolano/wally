@@ -21,10 +21,10 @@ public class ProdutoFIIActor {
 
 	@Resource
 	private MovimentacaoRepository movimentacaoRepository;
-	
-	@Resource 
+
+	@Resource
 	private DividendoRepository dividendoRepository;
-	
+
 	@Autowired
 	private DataMarketEquities dm;
 
@@ -34,12 +34,12 @@ public class ProdutoFIIActor {
 				dataPosicao);
 		ProdutoFIIVO produto = new ProdutoFIIVO(codigo);
 		movimentacoes.stream().forEach(it -> adicionaMovimentacao(it, produto));
-
+		produto.setRentabilidadeDividendo(getRentabilidade(produto, dataPosicao));
 		return produto;
 	}
 
 	public List<ProdutoFIIVO> run(LocalDate dataPosicao) {
-		
+
 		List<MovimentacaoEntity> movimentacoes = movimentacaoRepository.findByDataLessThan(dataPosicao);
 
 		Map<String, ProdutoFIIVO> produtos = new HashMap<>();
@@ -54,21 +54,32 @@ public class ProdutoFIIActor {
 				produtos.put(entity.getCodigo(), vo);
 			}
 		}
-		
-		produtos.values().stream().forEach(produto -> {
-			List<DividendoEntity> dividendos = dividendoRepository
-					.findByCodigoAndDataLessThanOrderByDataDesc(produto.getCodigo(), dataPosicao);
-			if(dividendos.size() > 0) {
-				produto.setRentabilidadeDividendo(dividendos.get(0).getValorUnitario()/produto.getPrecoMedio());
-			}
-			
-		});
+
+		produtos.values().stream()
+				.forEach(produto -> produto.setRentabilidadeDividendo(getRentabilidade(produto, dataPosicao)));
 		return produtos.values().stream().collect(Collectors.toList());
 	}
 
-	
 	private void adicionaMovimentacao(MovimentacaoEntity mov, ProdutoFIIVO vo) {
 		vo.setPrecoTotal(vo.getPrecoTotal() + mov.getValorUnitario() * mov.getQuantidade());
 		vo.setQuantidade(vo.getQuantidade() + mov.getQuantidade());
 	}
-} 
+
+	private Double getRentabilidade(ProdutoFIIVO produto, LocalDate dataPosicao) {
+		List<DividendoEntity> dividendos = getDividendos(produto.getCodigo(), dataPosicao);
+		Double somaDividendos = dividendos.stream().mapToDouble(DividendoEntity::getValorUnitario).sum();
+		Double rentabilidade = somaDividendos / produto.getPrecoMedio();
+		Long quantidade = dividendos.stream().count();
+		Double rentabilidadeAnualizada = Math.pow((1 + rentabilidade), 12.0 / quantidade) - 1;
+		return rentabilidadeAnualizada;
+	}
+
+ 	public List<DividendoEntity> getDividendos(String codigo, LocalDate dataPosicao) {
+		return dividendoRepository.findByCodigoAndDataBetweenOrderByDataDesc(codigo,
+				dataPosicao.minusYears(1), dataPosicao);
+	}
+ 	
+ 	public List<DividendoEntity> getDividendos(LocalDate dataPosicao) {
+		return dividendoRepository.findByDataBetweenOrderByData(dataPosicao.minusYears(1), dataPosicao);
+	}
+}

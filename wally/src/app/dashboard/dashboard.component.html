@@ -4,18 +4,27 @@
     </mat-card>
     
     <mat-card class="card card-categoria">
-        <app-pie-chart #proporcao titulo="Categoria de investimentos"></app-pie-chart>
-    </mat-card>
-    
-    <mat-card class="card card-renda-variavel">
-        <app-pie-chart #proporcaoRV titulo="Investimentos de renda variável"></app-pie-chart>
+        <mat-card-title>Categoria de investimento</mat-card-title>
+        <app-pie-chart #proporcao></app-pie-chart>
     </mat-card>
     
     <mat-card class="card card-instituicoes">
+        <mat-card-title>Instituições de renda fixa</mat-card-title>
         <app-bar-chart #instituicoes titulo="Instituições"></app-bar-chart>
     </mat-card>
     
     <mat-card class="card card-liquidez">
-        <app-bar-chart #liquidez titulo="Liquidez" direction="vertical"></app-bar-chart>
+        <mat-card-title>Liquidez</mat-card-title>
+        <app-bar-chart #liquidez direction="vertical"></app-bar-chart>
+    </mat-card>
+    
+    <mat-card class="card card-dividendos">
+        <mat-card-title>Dividendos</mat-card-title>
+        <app-stacked-bar-chart #dividendos></app-stacked-bar-chart>
+    </mat-card>
+
+    <mat-card class="card card-renda-variavel">
+        <mat-card-title>Investimentos de renda variável</mat-card-title>
+        <app-bar-chart #proporcaoRV></app-bar-chart>
     </mat-card>
 </div>

@@ -27,6 +27,7 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { StackedBarChartComponent } from './dashboard/stacked-bar-chart/stacked-bar-chart.component';
 
 registerLocaleData(localePt, 'pt');
 
@@ -41,6 +42,7 @@ registerLocaleData(localePt, 'pt');
     TabelaProdutosComponent,
     BarChartComponent,
     PieChartComponent,
+    StackedBarChartComponent,
     SummaryComponent
   ],
   imports: [

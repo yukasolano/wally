@@ -12,7 +12,10 @@ import { Component, OnInit, Input } from '@angular/core';
 
     public barChartOptions = {
       scaleShowVerticalLines: false,
-      responsive: true
+      responsive: true,
+      legend: {
+        display: false
+      }
     };
     public barChartType;
     public barChartLegend = true;

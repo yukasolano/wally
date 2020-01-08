@@ -12,4 +12,6 @@ public interface MovimentacaoRepository extends CrudRepository<MovimentacaoEntit
 	
 	public List<MovimentacaoEntity> findByDataLessThan(LocalDate data);
 	
+	//public List<MovimentacaoEntity> findDistinctByCodigoAndDataLessThan(LocalDate data);
+	
 }

@@ -15,5 +15,6 @@ public class GraficosVO {
 	GraficoDados proporcaoRV;
 	GraficoDados instituicoes;
 	GraficoDados liquidez;
+	GraficoMultiDados dividendos;
 
 }

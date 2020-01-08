@@ -10,7 +10,7 @@
     margin-bottom: 10px;
 }
 .card-resumo {
-    width: calc(20% - 3rem);
+    width: calc(30% - 3rem);
 }
 .card-categoria, .card-renda-variavel {
     width: calc(40% - 3rem);
@@ -18,4 +18,8 @@
 
 .card-liquidez, .card-instituicoes {
     width:calc(50% - 3rem);
+}
+
+.card-dividendos {
+    width:calc(60% - 3rem);
 }

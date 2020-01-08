@@ -80,6 +80,7 @@ public class ProdutoController {
 		graficos.setProporcaoRV(graficoTransformador.transforma(portfolio.getProporcoesRV()));
 		graficos.setInstituicoes(graficoTransformador.transforma(portfolio.getPorInstituicoes(), true));
 		graficos.setLiquidez(graficoTransformador.transforma(portfolio.getLiquidez(), true));
+		graficos.setDividendos(portfolioActor.getDividendos(data));
 		return graficos;
 	}
 

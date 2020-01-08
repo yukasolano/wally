@@ -12,4 +12,8 @@ public interface DividendoRepository extends CrudRepository<DividendoEntity, Lon
 	public List<DividendoEntity> findByDataLessThan(LocalDate data);
 	
 	public List<DividendoEntity> findByCodigoAndDataLessThanOrderByDataDesc(String codigo, LocalDate data);
+	
+	public List<DividendoEntity> findByCodigoAndDataBetweenOrderByDataDesc(String codigo, LocalDate dataInicio, LocalDate dataFim);
+	
+	public List<DividendoEntity> findByDataBetweenOrderByData(LocalDate dataInicio, LocalDate dataFim);
 }

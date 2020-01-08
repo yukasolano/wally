@@ -2,9 +2,6 @@ package com.warren.wally.grafico;
 
 import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 public class GraficoTransformador {
 
 	private Cores cores = new Cores();
@@ -28,13 +25,6 @@ public class GraficoTransformador {
 			graficoDados.setCores(cores.getCores(dados.size()));
 			graficoDados.setCoresSecundarias(cores.getCoresHover(dados.size()));
 		}
-
-		//try {
-		//	String json = new ObjectMapper().writeValueAsString(graficoDados);
-		//	return json;
-		//} catch (JsonProcessingException e) {
-		//	e.printStackTrace();
-		//}
 
 		return graficoDados;
 

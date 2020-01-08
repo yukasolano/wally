@@ -3,6 +3,9 @@ package com.warren.wally;
 import com.warren.wally.db.WallyTestCase;
 import com.warren.wally.model.investimento.ProdutoFIIActor;
 import com.warren.wally.model.investimento.ProdutoFIIVO;
+import com.warren.wally.repository.DividendoEntity;
+import com.warren.wally.repository.DividendoRepository;
+import com.warren.wally.repository.MovimentacaoEntity;
 import com.warren.wally.repository.MovimentacaoRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static com.warren.wally.utils.DateUtils.dateOf;
 import static org.junit.Assert.assertEquals;
 
 
@@ -22,45 +26,55 @@ public class TestaProdutoFII extends WallyTestCase {
 
 	@Resource
 	private MovimentacaoRepository movimentacaoRepository;
-
-	/*@Before
-	public void inicializa() {
-		movimentacaoRepository.deleteAll();
-		MovimentacaoEntity mov1 = new MovimentacaoEntity(LocalDate.of(2018, 04, 04), "VRTA11", 105.0, 2);
-		MovimentacaoEntity mov2 = new MovimentacaoEntity(LocalDate.of(2018, 07, 27), "VRTA11", 106.3, 2);
-		movimentacaoRepository.save(mov1);
-		movimentacaoRepository.save(mov2);
-		
-		MovimentacaoEntity mov3 = new MovimentacaoEntity(LocalDate.of(2018, 4, 4), "BCRI11", 102.36, 2);
-		MovimentacaoEntity mov4 = new MovimentacaoEntity(LocalDate.of(2018, 8, 27), "BCRI11", 104.61, 2);
-		MovimentacaoEntity mov5 = new MovimentacaoEntity(LocalDate.of(2018, 10, 25), "BCRI11", 106.0, 3);
-		movimentacaoRepository.save(mov3);
-		movimentacaoRepository.save(mov4);
-		movimentacaoRepository.save(mov5);
-	}*/
+	
+	@Resource 
+	private DividendoRepository dividendoRepository;
 
 	@Test
 	public void test() {
 
-		LocalDate hoje = LocalDate.of(2018, 12, 10);
+		LocalDate hoje = dateOf("20/08/2018");
 
+		MovimentacaoEntity movimento1 = new MovimentacaoEntity();
+		movimento1.setCodigo("VRTA11");
+		movimento1.setData(dateOf("04/06/2018"));
+		movimento1.setQuantidade(2);
+		movimento1.setValorUnitario(105.0);
+		movimentacaoRepository.save(movimento1);
+		
+		MovimentacaoEntity movimento2 = new MovimentacaoEntity();
+		movimento2.setCodigo("VRTA11");
+		movimento2.setData(dateOf("27/07/2018"));
+		movimento2.setQuantidade(2);
+		movimento2.setValorUnitario(106.3);
+		movimentacaoRepository.save(movimento2);
+		
+		DividendoEntity dividendo1 = new DividendoEntity();
+		dividendo1.setCodigo("VRTA11");
+		dividendo1.setData(dateOf("15/07/2018"));
+		dividendo1.setQuantidade(2);
+		dividendo1.setValorUnitario(0.6);
+		dividendoRepository.save(dividendo1);
+		
+		DividendoEntity dividendo2 = new DividendoEntity();
+		dividendo2.setCodigo("VRTA11");
+		dividendo2.setData(dateOf("15/08/2018"));
+		dividendo2.setQuantidade(4);
+		dividendo2.setValorUnitario(0.65);
+		dividendoRepository.save(dividendo2);
+		
+		DividendoEntity dividendo3 = new DividendoEntity();
+		dividendo3.setCodigo("VRTA11");
+		dividendo3.setData(dateOf("15/09/2018"));
+		dividendo3.setQuantidade(4);
+		dividendo3.setValorUnitario(0.7);
+		dividendoRepository.save(dividendo3);
+		
 		ProdutoFIIVO produtoActual = actor.run(hoje, "VRTA11");
 
 		assertEquals(105.65, produtoActual.getPrecoMedio(), 0.01);
 		assertEquals(4, produtoActual.getQuantidade(), 0.01);
-	}
-	
-	@Test
-	public void testList() {
-
-		LocalDate hoje = LocalDate.of(2018, 12, 10);
-
-		List<ProdutoFIIVO> produtos = actor.run(hoje);
-		Optional<ProdutoFIIVO> vo1 = produtos.stream().filter(it -> it.getCodigo().equals("BCRI11")).findFirst();
-		
-		assertEquals(104.56, vo1.get().getPrecoMedio(), 0.01);
-		assertEquals(7, vo1.get().getQuantidade(), 0.01);
-
+		assertEquals(0.075, produtoActual.getRentabilidadeDividendo(), 0.01);
 	}
 
 }

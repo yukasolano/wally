@@ -1,14 +1,19 @@
 package com.warren.wally.portfolio;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.warren.wally.grafico.GraficoMultiDados;
 import com.warren.wally.model.calculadora.CalculadoraResolver;
 import com.warren.wally.model.investimento.Investimento;
 import com.warren.wally.model.investimento.InvestimentoResolver;
@@ -63,6 +68,45 @@ public class PortfolioActor {
 
 	public List<ProdutoFIIVO> getProdutosRV(LocalDate dataRef) {
 		return actorFII.run(dataRef);
+	}
+
+	public GraficoMultiDados getDividendos(LocalDate dataRef) {
+
+		Map<String, Map<String, Double>> todos = new HashMap<>();
+
+		actorFII.getDividendos(dataRef).stream().forEach(dividendo -> {
+			todos.putIfAbsent(dividendo.getCodigo(), new TreeMap<String, Double>());
+			todos.get(dividendo.getCodigo()).put(YearMonth.from(dividendo.getData()).toString(),
+					dividendo.getValorUnitario() * dividendo.getQuantidade());
+		});
+
+		double[][] dados = new double[todos.size()][12];
+
+		String[] series = new String[todos.size()];
+		String[] labels = new String[12];
+
+		YearMonth mesAno = YearMonth.from(dataRef);
+		for (int i = 11; i >= 0; i--) {
+			labels[i] = mesAno.toString();
+			mesAno = mesAno.minusMonths(1);
+		}
+
+		int row = 0;
+		for (String codigo : todos.keySet()) {
+			series[row] = codigo;
+			for (int col = 0; col < 12; col++) {
+				String label = labels[col];
+				try {
+					dados[row][col] = todos.get(codigo).get(label);
+				} catch (Exception e) {
+					dados[row][col] = 0.0;
+				}
+			}
+
+			row++;
+		}
+
+		return new GraficoMultiDados(labels, series, dados);
 	}
 
 }

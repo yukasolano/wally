@@ -9,6 +9,12 @@ import { Component, OnInit, Input } from '@angular/core';
 
     @Input() titulo;
 
+    public chartOptions = {
+        responsive: true,
+        legend: {
+            position: 'right'
+        }
+    };
     public chartType = 'doughnut';
     public chartLabels = [];
     public chartData = [];
