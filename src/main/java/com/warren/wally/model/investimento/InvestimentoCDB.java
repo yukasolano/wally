@@ -30,11 +30,11 @@ public class InvestimentoCDB extends InvestimentoAbstract {
 	}
 
 	@Override
-	public ProdutoVO calc(LocalDate dataRef, ProdutoEntity entity) {
+	public ProdutoRFVO calc(LocalDate dataRef, ProdutoEntity entity) {
 
 		validaData(dataRef, entity.getDtAplicacao(), entity.getVencimento());
 
-		ProdutoVO vo = ProdutoVO.builder().corretora(entity.getCorretora()).dtAplicacao(entity.getDtAplicacao())
+		ProdutoRFVO vo = ProdutoRFVO.builder().corretora(entity.getCorretora()).dtAplicacao(entity.getDtAplicacao())
 				.dtVencimento(entity.getVencimento()).instituicao(entity.getInstituicao()).taxa(entity.getTaxa())
 				.valorAplicado(entity.getValorAplicado()).tipoInvestimento(entity.getTipoInvestimento())
 				.tipoRentabilidade(entity.getTipoRentabilidade()).dataReferencia(dataRef)
@@ -52,7 +52,7 @@ public class InvestimentoCDB extends InvestimentoAbstract {
 		return vo;
 	}
 
-	protected double getValorPresente(ProdutoVO vo, double VPBruto) {
+	protected double getValorPresente(ProdutoRFVO vo, double VPBruto) {
 		double ir = leao.getIR(VPBruto - vo.getValorAplicado(), vo.getDtAplicacao(), vo.getDataReferencia());
 		return VPBruto - ir;
 	}

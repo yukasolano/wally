@@ -5,9 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ProdutoFIIVO {
+public class ProdutoRVVO {
 
-	public ProdutoFIIVO(String codigo) {
+	public ProdutoRVVO(String codigo) {
 		super();
 		this.codigo = codigo;
 	}
@@ -17,16 +17,8 @@ public class ProdutoFIIVO {
 	private int quantidade = 0;
 	private double cotacao = 0.0;
 	private double rentabilidadeDividendo = 0.0;
-
-	public double getPrecoMedio() {
-		return this.precoTotal / this.quantidade;
-	}
-
-	public double getValorPresente() {
-		return getQuantidade() * cotacao;
-	}
-
-	public double getResultado() {
-		return getValorPresente() - getPrecoTotal();
-	}
+	private TipoInvestimento tipoInvestimento;
+	private double precoMedio;
+	private double valorPresente;
+	private double resultado;
 }

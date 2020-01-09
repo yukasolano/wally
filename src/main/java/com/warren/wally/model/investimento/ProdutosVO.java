@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProdutosVO {
-	List<ProdutoVO> produtosRF;
-	List<ProdutoFIIVO> produtosRV;
+	List<ProdutoRFVO> produtosRF;
+	List<ProdutoRVVO> produtosRV;
 
 }

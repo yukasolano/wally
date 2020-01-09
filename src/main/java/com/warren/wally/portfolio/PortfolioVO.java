@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.warren.wally.model.calculadora.TipoRentabilidade;
-import com.warren.wally.model.investimento.ProdutoFIIVO;
-import com.warren.wally.model.investimento.ProdutoVO;
+import com.warren.wally.model.investimento.ProdutoRVVO;
+import com.warren.wally.model.investimento.ProdutoRFVO;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -19,9 +19,9 @@ import lombok.Setter;
 @Builder
 public class PortfolioVO {
 
-	private List<ProdutoVO> produtosRF;
+	private List<ProdutoRFVO> produtosRF;
 
-	private List<ProdutoFIIVO> produtosRV;
+	private List<ProdutoRVVO> produtosRV;
 
 	private double accrual;
 

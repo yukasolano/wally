@@ -1,5 +1,7 @@
 package com.warren.wally.controller;
 
+import static com.warren.wally.utils.DateUtils.dateOf;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -30,9 +32,10 @@ import com.warren.wally.grafico.GraficoTransformador;
 import com.warren.wally.grafico.GraficosVO;
 import com.warren.wally.model.calculadora.TipoRentabilidade;
 import com.warren.wally.model.investimento.ProdutoRVInfoVO;
-import com.warren.wally.model.investimento.ProdutoVO;
+import com.warren.wally.model.investimento.ProdutoRFVO;
 import com.warren.wally.model.investimento.ProdutosVO;
 import com.warren.wally.model.investimento.TipoInvestimento;
+import com.warren.wally.model.investimento.TipoMovimento;
 import com.warren.wally.portfolio.MultiPortfolio;
 import com.warren.wally.portfolio.PortfolioActor;
 import com.warren.wally.portfolio.PortfolioVO;
@@ -125,19 +128,11 @@ public class ProdutoController {
 	public ProdutoRVInfoVO criarProdutoRV(
 			@RequestBody ProdutoRVInfoVO produto) {
 		if(produto.getTipo().equals("dividendo")) {
-			DividendoEntity dividendo = new DividendoEntity();
-			dividendo.setCodigo(produto.getCodigo());
-			dividendo.setData(produto.getData());
-			dividendo.setQuantidade(produto.getQuantidade());
-			dividendo.setValorUnitario(produto.getValorUnitario());
-			dividendoRepository.save(dividendo);
+			dividendoRepository.save(new DividendoEntity(TipoInvestimento.FII, TipoMovimento.DIVIDENDO,
+					produto.getData(), produto.getCodigo(), produto.getQuantidade(), produto.getValorUnitario()));
 		} else {
-			MovimentacaoEntity mov = new MovimentacaoEntity();
-			mov.setCodigo(produto.getCodigo());
-			mov.setData(produto.getData());
-			mov.setQuantidade(produto.getQuantidade());
-			mov.setValorUnitario(produto.getValorUnitario());
-			movimentacaoRepository.save(mov);
+			movimentacaoRepository.save(new MovimentacaoEntity(TipoInvestimento.FII, TipoMovimento.COMPRA,
+					produto.getData(), produto.getCodigo(), produto.getQuantidade(), produto.getValorUnitario()));
 		}
 		return produto;
 	}

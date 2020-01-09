@@ -17,16 +17,16 @@ import com.warren.wally.grafico.GraficoMultiDados;
 import com.warren.wally.model.calculadora.CalculadoraResolver;
 import com.warren.wally.model.investimento.Investimento;
 import com.warren.wally.model.investimento.InvestimentoResolver;
-import com.warren.wally.model.investimento.ProdutoFIIActor;
-import com.warren.wally.model.investimento.ProdutoFIIVO;
-import com.warren.wally.model.investimento.ProdutoVO;
+import com.warren.wally.model.investimento.ProdutoRFVO;
+import com.warren.wally.model.investimento.ProdutoRVActor;
+import com.warren.wally.model.investimento.ProdutoRVVO;
 import com.warren.wally.repository.ProdutoRepository;
 
 @Component
 public class PortfolioActor {
 
 	@Resource
-	private ProdutoFIIActor actorFII;
+	private ProdutoRVActor actorFII;
 
 	@Autowired
 	private ProdutoRepository repository;
@@ -38,22 +38,22 @@ public class PortfolioActor {
 	private InvestimentoResolver investimentoResolver;
 
 	public PortfolioVO run(LocalDate dataRef) {
-		List<ProdutoVO> produtosRF = getProdutosRF(dataRef);
-		List<ProdutoFIIVO> produtosRV = getProdutosRV(dataRef);
+		List<ProdutoRFVO> produtosRF = getProdutosRF(dataRef);
+		List<ProdutoRVVO> produtosRV = getProdutosRV(dataRef);
 
 		return PortfolioVO.builder().dataRef(dataRef).produtosRF(produtosRF).produtosRV(produtosRV)
 				.accrual(calcAccrual(produtosRF, produtosRV)).build();
 	}
 
-	public double calcAccrual(List<ProdutoVO> produtosRF, List<ProdutoFIIVO> produtosRV) {
+	public double calcAccrual(List<ProdutoRFVO> produtosRF, List<ProdutoRVVO> produtosRV) {
 		double accrual = 0.0;
 		accrual += produtosRF.stream().mapToDouble(it -> it.getValorPresente()).sum();
 		accrual += produtosRV.stream().mapToDouble(it -> it.getValorPresente()).sum();
 		return accrual;
 	}
 
-	public List<ProdutoVO> getProdutosRF(LocalDate dataRef) {
-		List<ProdutoVO> produtos = new ArrayList<>();
+	public List<ProdutoRFVO> getProdutosRF(LocalDate dataRef) {
+		List<ProdutoRFVO> produtos = new ArrayList<>();
 
 		repository.findAll().forEach(p -> {
 			try {
@@ -66,7 +66,7 @@ public class PortfolioActor {
 		return produtos;
 	}
 
-	public List<ProdutoFIIVO> getProdutosRV(LocalDate dataRef) {
+	public List<ProdutoRVVO> getProdutosRV(LocalDate dataRef) {
 		return actorFII.run(dataRef);
 	}
 

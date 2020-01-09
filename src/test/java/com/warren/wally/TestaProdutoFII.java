@@ -1,8 +1,10 @@
 package com.warren.wally;
 
 import com.warren.wally.db.WallyTestCase;
-import com.warren.wally.model.investimento.ProdutoFIIActor;
-import com.warren.wally.model.investimento.ProdutoFIIVO;
+import com.warren.wally.model.investimento.ProdutoRVActor;
+import com.warren.wally.model.investimento.ProdutoRVVO;
+import com.warren.wally.model.investimento.TipoInvestimento;
+import com.warren.wally.model.investimento.TipoMovimento;
 import com.warren.wally.repository.DividendoEntity;
 import com.warren.wally.repository.DividendoRepository;
 import com.warren.wally.repository.MovimentacaoEntity;
@@ -22,7 +24,7 @@ import static org.junit.Assert.assertEquals;
 public class TestaProdutoFII extends WallyTestCase {
 
 	@Autowired
-	private ProdutoFIIActor actor;
+	private ProdutoRVActor actor;
 
 	@Resource
 	private MovimentacaoRepository movimentacaoRepository;
@@ -35,42 +37,23 @@ public class TestaProdutoFII extends WallyTestCase {
 
 		LocalDate hoje = dateOf("20/08/2018");
 
-		MovimentacaoEntity movimento1 = new MovimentacaoEntity();
-		movimento1.setCodigo("VRTA11");
-		movimento1.setData(dateOf("04/06/2018"));
-		movimento1.setQuantidade(2);
-		movimento1.setValorUnitario(105.0);
-		movimentacaoRepository.save(movimento1);
+		movimentacaoRepository.save(new MovimentacaoEntity(TipoInvestimento.FII, TipoMovimento.COMPRA,
+				dateOf("04/06/2018"), "VRTA11", 2, 105.0));
 		
-		MovimentacaoEntity movimento2 = new MovimentacaoEntity();
-		movimento2.setCodigo("VRTA11");
-		movimento2.setData(dateOf("27/07/2018"));
-		movimento2.setQuantidade(2);
-		movimento2.setValorUnitario(106.3);
-		movimentacaoRepository.save(movimento2);
+		movimentacaoRepository.save(new MovimentacaoEntity(TipoInvestimento.FII, TipoMovimento.COMPRA,
+				dateOf("27/07/2018"), "VRTA11", 2, 106.3));
 		
-		DividendoEntity dividendo1 = new DividendoEntity();
-		dividendo1.setCodigo("VRTA11");
-		dividendo1.setData(dateOf("15/07/2018"));
-		dividendo1.setQuantidade(2);
-		dividendo1.setValorUnitario(0.6);
-		dividendoRepository.save(dividendo1);
+		dividendoRepository.save(new DividendoEntity(TipoInvestimento.FII, TipoMovimento.DIVIDENDO,
+				dateOf("15/07/2018"), "VRTA11", 2, 0.6));
 		
-		DividendoEntity dividendo2 = new DividendoEntity();
-		dividendo2.setCodigo("VRTA11");
-		dividendo2.setData(dateOf("15/08/2018"));
-		dividendo2.setQuantidade(4);
-		dividendo2.setValorUnitario(0.65);
-		dividendoRepository.save(dividendo2);
+		dividendoRepository.save(new DividendoEntity(TipoInvestimento.FII, TipoMovimento.DIVIDENDO,
+				dateOf("15/08/2018"), "VRTA11", 4, 0.65));
 		
-		DividendoEntity dividendo3 = new DividendoEntity();
-		dividendo3.setCodigo("VRTA11");
-		dividendo3.setData(dateOf("15/09/2018"));
-		dividendo3.setQuantidade(4);
-		dividendo3.setValorUnitario(0.7);
-		dividendoRepository.save(dividendo3);
+		dividendoRepository.save(new DividendoEntity(TipoInvestimento.FII, TipoMovimento.DIVIDENDO,
+				dateOf("15/09/2018"), "VRTA11", 4, 0.7));
 		
-		ProdutoFIIVO produtoActual = actor.run(hoje, "VRTA11");
+		
+		ProdutoRVVO produtoActual = actor.run(hoje, "VRTA11");
 
 		assertEquals(105.65, produtoActual.getPrecoMedio(), 0.01);
 		assertEquals(4, produtoActual.getQuantidade(), 0.01);

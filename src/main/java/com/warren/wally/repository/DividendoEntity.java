@@ -6,59 +6,42 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import com.warren.wally.model.investimento.TipoInvestimento;
+import com.warren.wally.model.investimento.TipoMovimento;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity(name = "dividendo")
+@Getter
+@Setter
+@NoArgsConstructor
 public class DividendoEntity {
 
 	@Id
 	@GeneratedValue
 	private Long id;
-	
-	public DividendoEntity(LocalDate data, String codigo, double valorUnitario, int quantidade) {
-		super();
-		this.data = data;
-		this.codigo = codigo;
-		this.valorUnitario = valorUnitario;
-		this.quantidade = quantidade;
-	}
-	
-	public DividendoEntity() {
-		super();
-	}
+
+	private TipoInvestimento tipoInvestimento;
+	private TipoMovimento tipoMovimento;
 	private LocalDate data;
 	private String codigo;
 	private double valorUnitario;
 	private int quantidade;
 	
-	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public LocalDate getData() {
-		return data;
-	}
-	public void setData(LocalDate data) {
+	public DividendoEntity(TipoInvestimento tipoInvestimento, TipoMovimento tipoMovimento, LocalDate data,
+			String codigo, int quantidade, double valorUnitario) {
+		super();
+		this.tipoInvestimento = tipoInvestimento;
+		this.tipoMovimento = tipoMovimento;
 		this.data = data;
-	}
-	public String getCodigo() {
-		return codigo;
-	}
-	public void setCodigo(String codigo) {
 		this.codigo = codigo;
-	}
-	public double getValorUnitario() {
-		return valorUnitario;
-	}
-	public void setValorUnitario(double valorUnitario) {
+		this.quantidade = quantidade;
 		this.valorUnitario = valorUnitario;
 	}
-	public int getQuantidade() {
-		return quantidade;
-	}
-	public void setQuantidade(int quantidade) {
-		this.quantidade = quantidade;
-	}
 	
+
+
 }

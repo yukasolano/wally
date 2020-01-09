@@ -8,6 +8,6 @@ public interface Investimento {
 
 	TipoInvestimento getTipoInvestimento();
 
-	ProdutoVO calc(LocalDate hoje, ProdutoEntity produto);
+	ProdutoRFVO calc(LocalDate hoje, ProdutoEntity produto);
 
 }

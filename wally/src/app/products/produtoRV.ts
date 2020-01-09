@@ -17,13 +17,23 @@ export class ProdutoRV {
                 pipe: DecimalPipe,
                 args: ['0.0-0']
             },
-            precoTotal: {
-                name: 'Preço Total',
+            precoMedio: {
+                name: 'Preço médio',
                 pipe: DecimalPipe,
                 args: ['0.2-2']
             },
             cotacao: {
                 name: 'Cotação',
+                pipe: DecimalPipe,
+                args: ['0.2-2']
+            },
+            valorPresente: {
+                name: 'Valor presente',
+                pipe: DecimalPipe,
+                args: ['0.2-2']
+            },
+            resultado: {
+                name: 'Resultado',
                 pipe: DecimalPipe,
                 args: ['0.2-2']
             },

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.warren.wally.model.investimento.TipoInvestimento;
+import com.warren.wally.model.investimento.TipoMovimento;
 import com.warren.wally.repository.DividendoEntity;
 import com.warren.wally.repository.DividendoRepository;
 import com.warren.wally.repository.MovimentacaoEntity;
@@ -29,49 +31,33 @@ public class FileUploadMovimentos implements FileUpload {
 		try {
 
 			XSSFWorkbook wb = new XSSFWorkbook(file.getInputStream());
-			XSSFSheet sheet = wb.getSheetAt(0);
-			int rows = sheet.getPhysicalNumberOfRows();
-
-			for (int r = 1; r < rows; r++) {
-				XSSFRow row = sheet.getRow(r);
-				try {
-					String codigo = row.getCell(0).getStringCellValue();
-					LocalDate data = row.getCell(1).getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
-							.toLocalDate();
-					double valorUnitario = row.getCell(3).getNumericCellValue();
-					int quantidade = (int) row.getCell(2).getNumericCellValue();
-
-					MovimentacaoEntity movimentacao = new MovimentacaoEntity();
-					movimentacao.setCodigo(codigo);
-					movimentacao.setData(data);
-					movimentacao.setQuantidade(quantidade);
-					movimentacao.setValorUnitario(valorUnitario);
-					movimentacaoRepository.save(movimentacao);
-				} catch (Exception e) {
-					System.out.println("Erro na linha" + r);
-				}
-			}
-
-			XSSFSheet sheet2 = wb.getSheetAt(1);
-			int rows2 = sheet2.getPhysicalNumberOfRows();
-
-			for (int r = 1; r < rows2; r++) {
-				XSSFRow row = sheet2.getRow(r);
-				try {
-					String codigo = row.getCell(0).getStringCellValue();
-					LocalDate data = row.getCell(1).getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
-							.toLocalDate();
-					double valorUnitario = row.getCell(3).getNumericCellValue();
-					int quantidade = (int) row.getCell(2).getNumericCellValue();
-
-					DividendoEntity dividendo = new DividendoEntity();
-					dividendo.setCodigo(codigo);
-					dividendo.setData(data);
-					dividendo.setQuantidade(quantidade);
-					dividendo.setValorUnitario(valorUnitario);
-					dividendoRepository.save(dividendo);
-				} catch (Exception e) {
-					System.out.println("Erro na linha" + r);
+			
+			for (int iSheet = 0; iSheet < wb.getNumberOfSheets(); iSheet++) {		
+				XSSFSheet sheet = wb.getSheetAt(iSheet);
+				
+				for (int r = 1; r < sheet.getPhysicalNumberOfRows(); r++) {
+					XSSFRow row = sheet.getRow(r);
+					try {
+						TipoInvestimento tipoInvestimento = TipoInvestimento.valueOf(row.getCell(0).getStringCellValue());
+						TipoMovimento tipoMovimento = TipoMovimento.valueOf(row.getCell(1).getStringCellValue());
+						String codigo = row.getCell(2).getStringCellValue();
+						LocalDate data = row.getCell(3).getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
+								.toLocalDate();
+						int quantidade = (int) row.getCell(4).getNumericCellValue();
+						double valorUnitario = row.getCell(5).getNumericCellValue();
+						
+						if(tipoMovimento.equals(TipoMovimento.COMPRA)) {							
+							movimentacaoRepository.save(new MovimentacaoEntity(tipoInvestimento, tipoMovimento, 
+									data, codigo, quantidade, valorUnitario));
+						} else if(tipoMovimento.equals(TipoMovimento.DIVIDENDO)) {
+							dividendoRepository.save(new DividendoEntity(tipoInvestimento, tipoMovimento, 
+									data, codigo, quantidade, valorUnitario));
+						} else {
+							throw new Exception("TIpo de movimento não tratado");
+						}
+					} catch (Exception e) {
+						System.out.println("Erro na linha" + r + ": " + e.getMessage());
+					}
 				}
 			}
 			wb.close();

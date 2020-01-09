@@ -20,11 +20,11 @@ public abstract class InvestimentoAbstract implements Investimento {
 
 
 
-	protected double getRentabilidadeLiquida(ProdutoVO vo) {
+	protected double getRentabilidadeLiquida(ProdutoRFVO vo) {
 		return vo.getValorPresente() / vo.getValorAplicado() - 1;
 	}
 
-	protected double getTaxaAnualLiquida(ProdutoVO vo) {
+	protected double getTaxaAnualLiquida(ProdutoRFVO vo) {
 		if (vo.getDu() == 0) {
 			return 0;
 		}
@@ -35,7 +35,7 @@ public abstract class InvestimentoAbstract implements Investimento {
 		}
 	}
 
-	protected double getTaxaMensalLiquida(ProdutoVO vo) {
+	protected double getTaxaMensalLiquida(ProdutoRFVO vo) {
 		if (vo.getDu() == 0) {
 			return 0;
 		}

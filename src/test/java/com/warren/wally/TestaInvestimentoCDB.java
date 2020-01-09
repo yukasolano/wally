@@ -14,7 +14,7 @@ import com.warren.wally.model.calculadora.CalculadoraResolver;
 import com.warren.wally.model.calculadora.TipoRentabilidade;
 import com.warren.wally.model.investimento.Investimento;
 import com.warren.wally.model.investimento.InvestimentoResolver;
-import com.warren.wally.model.investimento.ProdutoVO;
+import com.warren.wally.model.investimento.ProdutoRFVO;
 import com.warren.wally.model.investimento.TipoInvestimento;
 import com.warren.wally.repository.ProdutoEntity;
 
@@ -39,7 +39,7 @@ public class TestaInvestimentoCDB extends WallyTestCase {
 		LocalDate hoje = dateOf("10/12/2018");
 
 		Investimento invest = investimentoResolver.resolve(entity.getTipoInvestimento());
-		ProdutoVO produto = invest.calc(hoje, entity);
+		ProdutoRFVO produto = invest.calc(hoje, entity);
 		assertEquals(12764.67, produto.getValorPresente(), 0.01);
 		assertEquals(27.65, produto.getRentabilidadeLiquida() * 100, 0.01);
 		assertEquals(10.50, produto.getTaxaAnualLiquida() * 100, 0.01);
@@ -59,7 +59,7 @@ public class TestaInvestimentoCDB extends WallyTestCase {
 		LocalDate hoje = dateOf("10/12/2018");
 
 		Investimento invest = investimentoResolver.resolve(entity.getTipoInvestimento());
-		ProdutoVO produto = invest.calc(hoje, entity);
+		ProdutoRFVO produto = invest.calc(hoje, entity);
 		assertEquals(12606.04, produto.getValorPresente(), 0.01);
 		assertEquals(26.06, produto.getRentabilidadeLiquida() * 100, 0.01);
 		assertEquals(9.94, produto.getTaxaAnualLiquida() * 100, 0.01);
@@ -78,7 +78,7 @@ public class TestaInvestimentoCDB extends WallyTestCase {
 		LocalDate hoje = dateOf("10/12/2018");
 
 		Investimento invest = investimentoResolver.resolve(entity.getTipoInvestimento());
-		ProdutoVO produto = invest.calc(hoje, entity);
+		ProdutoRFVO produto = invest.calc(hoje, entity);
 
 		assertEquals(1008.03, produto.getValorPresente(), 0.01);
 		assertEquals(0.80, produto.getRentabilidadeLiquida() * 100, 0.01);
@@ -99,7 +99,7 @@ public class TestaInvestimentoCDB extends WallyTestCase {
 		LocalDate hoje = dateOf("10/12/2018");
 
 		Investimento invest = investimentoResolver.resolve(entity.getTipoInvestimento());
-		ProdutoVO produto = invest.calc(hoje, entity);
+		ProdutoRFVO produto = invest.calc(hoje, entity);
 		assertEquals(13252.55, produto.getValorPresente(), 0.01);
 		assertEquals(32.53, produto.getRentabilidadeLiquida() * 100, 0.01);
 		assertEquals(12.21, produto.getTaxaAnualLiquida() * 100, 0.01);
