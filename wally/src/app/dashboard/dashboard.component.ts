@@ -5,6 +5,7 @@ import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { SummaryComponent } from './summary/summary.component';
 import { StackedBarChartComponent } from './stacked-bar-chart/stacked-bar-chart.component';
+import { LineChartComponent } from './line-chart/line-chart.component';
 
 @Component({
     selector: 'app-dashboard',
@@ -21,6 +22,8 @@ import { StackedBarChartComponent } from './stacked-bar-chart/stacked-bar-chart.
     @ViewChild('instituicoes', {static: true}) instituicoes: BarChartComponent;
     @ViewChild('liquidez', {static: true}) liquidez: BarChartComponent;
     @ViewChild('dividendos', {static: true}) dividendos: StackedBarChartComponent;
+    @ViewChild('evolucao', {static: true}) evolucao: LineChartComponent;
+    @ViewChild('rentabilidade', {static: true}) rentabilidade: LineChartComponent;
 
 
     ngOnInit() {
@@ -32,6 +35,7 @@ import { StackedBarChartComponent } from './stacked-bar-chart/stacked-bar-chart.
         this.instituicoes.update(resp.instituicoes.valores, resp.instituicoes.legendas);
         this.liquidez.update(resp.liquidez.valores, resp.liquidez.legendas);
         this.dividendos.update(resp.dividendos.data, resp.dividendos.labels, resp.dividendos.series);
+        this.evolucao.update(resp.evolucao.data, resp.evolucao.labels, resp.evolucao.series);
       });
     }
 }

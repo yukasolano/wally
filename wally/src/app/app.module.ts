@@ -28,6 +28,7 @@ import {
 } from '@angular/material-moment-adapter';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { StackedBarChartComponent } from './dashboard/stacked-bar-chart/stacked-bar-chart.component';
+import { LineChartComponent } from './dashboard/line-chart/line-chart.component';
 
 registerLocaleData(localePt, 'pt');
 
@@ -43,7 +44,8 @@ registerLocaleData(localePt, 'pt');
     BarChartComponent,
     PieChartComponent,
     StackedBarChartComponent,
-    SummaryComponent
+    SummaryComponent,
+    LineChartComponent
   ],
   imports: [
     CommonModule,

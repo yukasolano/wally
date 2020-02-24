@@ -40,7 +40,7 @@ public class WallyApplication {
     private Properties aditionalProperties() {
         Properties props = new Properties();
         // Setar a property "hibernate.dialect" se/quando tivermos um WallyAplicationH2, por exemplo.
-        props.setProperty("hibernate.show_sql", "true");
+        props.setProperty("hibernate.show_sql", "false");
         props.setProperty("hibernate.hbm2ddl.auto", "update");
         return props;
     }

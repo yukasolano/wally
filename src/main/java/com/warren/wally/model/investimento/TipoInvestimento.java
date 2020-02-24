@@ -1,5 +1,5 @@
 package com.warren.wally.model.investimento;
 
 public enum TipoInvestimento {
-	CDB, LC, LCI, DEBENTURE, TESOURO, FII, ACAO
+	CDB, LC, LCI, DEBENTURE, TESOURO, FII, ACAO, ETF, FUNDO
 }

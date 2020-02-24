@@ -76,8 +76,9 @@ public class PortfolioActor {
 
 		actorFII.getDividendos(dataRef).stream().forEach(dividendo -> {
 			todos.putIfAbsent(dividendo.getCodigo(), new TreeMap<String, Double>());
-			todos.get(dividendo.getCodigo()).put(YearMonth.from(dividendo.getData()).toString(),
-					dividendo.getValorUnitario() * dividendo.getQuantidade());
+			Double valor = todos.get(dividendo.getCodigo()).getOrDefault(YearMonth.from(dividendo.getData()).toString(), 0.0);
+			todos.get(dividendo.getCodigo())
+				.put(YearMonth.from(dividendo.getData()).toString(), valor + dividendo.getValorUnitario() * dividendo.getQuantidade());
 		});
 
 		double[][] dados = new double[todos.size()][12];

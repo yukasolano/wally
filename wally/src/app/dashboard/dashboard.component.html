@@ -3,9 +3,19 @@
         <app-summary #summary titulo="Resumo"></app-summary>
     </mat-card>
     
+    <mat-card class="card card-evolucao">
+        <mat-card-title>Evolução do patrimônio</mat-card-title>
+        <app-line-chart #evolucao></app-line-chart>
+    </mat-card>
+
     <mat-card class="card card-categoria">
         <mat-card-title>Categoria de investimento</mat-card-title>
         <app-pie-chart #proporcao></app-pie-chart>
+    </mat-card>
+
+    <mat-card class="card card-rentabilidade">
+        <mat-card-title>Rentabilidade</mat-card-title>
+        <app-line-chart #rentabilidade></app-line-chart>
     </mat-card>
     
     <mat-card class="card card-instituicoes">
@@ -27,4 +37,5 @@
         <mat-card-title>Investimentos de renda variável</mat-card-title>
         <app-bar-chart #proporcaoRV></app-bar-chart>
     </mat-card>
+
 </div>

@@ -31,29 +31,37 @@ public class FileUploadMovimentos implements FileUpload {
 		try {
 
 			XSSFWorkbook wb = new XSSFWorkbook(file.getInputStream());
-			
-			for (int iSheet = 0; iSheet < wb.getNumberOfSheets(); iSheet++) {		
+
+			for (int iSheet = 0; iSheet < wb.getNumberOfSheets(); iSheet++) {
 				XSSFSheet sheet = wb.getSheetAt(iSheet);
-				
+
 				for (int r = 1; r < sheet.getPhysicalNumberOfRows(); r++) {
 					XSSFRow row = sheet.getRow(r);
 					try {
-						TipoInvestimento tipoInvestimento = TipoInvestimento.valueOf(row.getCell(0).getStringCellValue());
+						TipoInvestimento tipoInvestimento = TipoInvestimento
+								.valueOf(row.getCell(0).getStringCellValue());
 						TipoMovimento tipoMovimento = TipoMovimento.valueOf(row.getCell(1).getStringCellValue());
 						String codigo = row.getCell(2).getStringCellValue();
 						LocalDate data = row.getCell(3).getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
 								.toLocalDate();
 						int quantidade = (int) row.getCell(4).getNumericCellValue();
 						double valorUnitario = row.getCell(5).getNumericCellValue();
-						
-						if(tipoMovimento.equals(TipoMovimento.COMPRA)) {							
-							movimentacaoRepository.save(new MovimentacaoEntity(tipoInvestimento, tipoMovimento, 
-									data, codigo, quantidade, valorUnitario));
-						} else if(tipoMovimento.equals(TipoMovimento.DIVIDENDO)) {
-							dividendoRepository.save(new DividendoEntity(tipoInvestimento, tipoMovimento, 
-									data, codigo, quantidade, valorUnitario));
+
+						if (tipoInvestimento.equals(TipoInvestimento.ACAO)
+								|| tipoInvestimento.equals(TipoInvestimento.FII)) {
+
+							if (tipoMovimento.equals(TipoMovimento.COMPRA)) {
+								movimentacaoRepository.save(new MovimentacaoEntity(tipoInvestimento, tipoMovimento,
+										data, codigo, quantidade, valorUnitario));
+							} else if (tipoMovimento.equals(TipoMovimento.DIVIDENDO)) {
+								dividendoRepository.save(new DividendoEntity(tipoInvestimento, tipoMovimento, data,
+										codigo, quantidade, valorUnitario));
+							} else {
+								System.out.println("Tipo de movimento não tratado " + tipoMovimento);
+								// throw new Exception("Tipo de movimento não tratado");
+							}
 						} else {
-							throw new Exception("TIpo de movimento não tratado");
+							System.out.println("Tipo de investimento não tratado para movimentos " + tipoMovimento);
 						}
 					} catch (Exception e) {
 						System.out.println("Erro na linha" + r + ": " + e.getMessage());

@@ -18,6 +18,7 @@ public class GraficoTransformador {
 			graficoDados.addValor(Math.floor(value * 100) / 100.0);
 		});
 
+		/*
 		if (coresClaras) {
 			graficoDados.setCores(cores.getCoresBorda(dados.size()));
 			graficoDados.setCoresSecundarias(cores.getCoresClaras(dados.size()));
@@ -25,7 +26,7 @@ public class GraficoTransformador {
 			graficoDados.setCores(cores.getCores(dados.size()));
 			graficoDados.setCoresSecundarias(cores.getCoresHover(dados.size()));
 		}
-
+*/
 		return graficoDados;
 
 	}

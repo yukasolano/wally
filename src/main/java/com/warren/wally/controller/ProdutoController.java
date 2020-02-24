@@ -67,7 +67,7 @@ public class ProdutoController {
 	@Autowired
 	private DividendoRepository dividendoRepository;
 
-	private LocalDate data = LocalDate.of(2019, 07, 01); // LocalDate.now();
+	private LocalDate data = LocalDate.of(2020, 01, 31); // LocalDate.now();
 	
 	@Autowired
 	private FileExporterResolver fileExporterResolver;
@@ -84,6 +84,8 @@ public class ProdutoController {
 		graficos.setInstituicoes(graficoTransformador.transforma(portfolio.getPorInstituicoes(), true));
 		graficos.setLiquidez(graficoTransformador.transforma(portfolio.getLiquidez(), true));
 		graficos.setDividendos(portfolioActor.getDividendos(data));
+		graficos.setEvolucao(multiportfolio.calculaEvolucao(portfolio));
+		
 		return graficos;
 	}
 
