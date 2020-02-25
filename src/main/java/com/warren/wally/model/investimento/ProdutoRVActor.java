@@ -11,8 +11,6 @@ import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.warren.wally.repository.DividendoEntity;
-import com.warren.wally.repository.DividendoRepository;
 import com.warren.wally.repository.MovimentacaoEntity;
 import com.warren.wally.repository.MovimentacaoRepository;
 
@@ -22,21 +20,19 @@ public class ProdutoRVActor {
 	@Resource
 	private MovimentacaoRepository movimentacaoRepository;
 
-	@Resource
-	private DividendoRepository dividendoRepository;
-
 	@Autowired
 	private DataMarketEquities dm;
 
 	// TODO filtrar por tipo de movimentacao
 	public ProdutoRVVO run(LocalDate dataPosicao, String codigo) {
-		List<MovimentacaoEntity> movimentacoes = movimentacaoRepository.findByCodigoAndDataLessThan(codigo,
-				dataPosicao);
+		List<MovimentacaoEntity> movimentacoes = movimentacaoRepository
+				.findByCodigoAndTipoMovimentoAndDataLessThan(codigo, TipoMovimento.COMPRA, dataPosicao);
 		ProdutoRVVO produto = new ProdutoRVVO(codigo);
 		movimentacoes.stream().forEach(it -> adicionaMovimentacao(it, produto));
 		produto.setCotacao(dm.get(produto.getCodigo(), dataPosicao));
 		produto.setPrecoMedio(produto.getPrecoTotal() / produto.getQuantidade());
-		produto.setValorPresente(produto.getCotacao() == 0 ? produto.getPrecoTotal() : produto.getQuantidade() * produto.getCotacao());
+		produto.setValorPresente(
+				produto.getCotacao() == 0 ? produto.getPrecoTotal() : produto.getQuantidade() * produto.getCotacao());
 		produto.setResultado(produto.getValorPresente() - produto.getPrecoTotal());
 		produto.setRentabilidadeDividendo(getRentabilidade(produto, dataPosicao));
 		return produto;
@@ -44,7 +40,8 @@ public class ProdutoRVActor {
 
 	public List<ProdutoRVVO> run(LocalDate dataPosicao) {
 
-		List<MovimentacaoEntity> movimentacoes = movimentacaoRepository.findByDataLessThan(dataPosicao);
+		List<MovimentacaoEntity> movimentacoes = movimentacaoRepository
+				.findByTipoMovimentoAndDataLessThan(TipoMovimento.COMPRA, dataPosicao);
 
 		Map<String, ProdutoRVVO> produtos = new HashMap<>();
 
@@ -61,7 +58,8 @@ public class ProdutoRVActor {
 		produtos.values().stream().forEach(produto -> {
 			produto.setCotacao(dm.get(produto.getCodigo(), dataPosicao));
 			produto.setPrecoMedio(produto.getPrecoTotal() / produto.getQuantidade());
-			produto.setValorPresente(produto.getCotacao() == 0 ? produto.getPrecoTotal() : produto.getQuantidade() * produto.getCotacao());
+			produto.setValorPresente(produto.getCotacao() == 0 ? produto.getPrecoTotal()
+					: produto.getQuantidade() * produto.getCotacao());
 			produto.setResultado(produto.getValorPresente() - produto.getPrecoTotal());
 			produto.setRentabilidadeDividendo(getRentabilidade(produto, dataPosicao));
 		});
@@ -75,8 +73,8 @@ public class ProdutoRVActor {
 	}
 
 	private Double getRentabilidade(ProdutoRVVO produto, LocalDate dataPosicao) {
-		List<DividendoEntity> dividendos = getDividendos(produto.getCodigo(), dataPosicao);
-		Double somaDividendos = dividendos.stream().mapToDouble(DividendoEntity::getValorUnitario).sum();
+		List<MovimentacaoEntity> dividendos = getDividendos(produto.getCodigo(), dataPosicao);
+		Double somaDividendos = dividendos.stream().mapToDouble(MovimentacaoEntity::getValorUnitario).sum();
 		Double rentabilidade = somaDividendos / produto.getPrecoMedio();
 		if (produto.getTipoInvestimento().equals(TipoInvestimento.ACAO)) {
 			return rentabilidade;
@@ -86,12 +84,17 @@ public class ProdutoRVActor {
 		return rentabilidadeAnualizada;
 	}
 
-	public List<DividendoEntity> getDividendos(String codigo, LocalDate dataPosicao) {
-		return dividendoRepository.findByCodigoAndDataBetweenOrderByDataDesc(codigo, dataPosicao.minusYears(1),
-				dataPosicao);
+	public List<MovimentacaoEntity> getDividendos(String codigo, LocalDate dataPosicao) {
+		return movimentacaoRepository.findByCodigoAndTipoMovimentoAndDataBetweenOrderByDataDesc(codigo,
+				TipoMovimento.DIVIDENDO, dataPosicao.minusYears(1), dataPosicao);
 	}
 
-	public List<DividendoEntity> getDividendos(LocalDate dataPosicao) {
-		return dividendoRepository.findByDataBetweenOrderByData(dataPosicao.minusYears(1), dataPosicao);
+	public List<MovimentacaoEntity> getDividendos(LocalDate dataPosicao) {
+		return movimentacaoRepository.findByTipoMovimentoAndDataBetweenOrderByData(TipoMovimento.DIVIDENDO,
+				dataPosicao.minusYears(1), dataPosicao);
+	}
+	
+	public List<MovimentacaoEntity> getExtrato(LocalDate dataPosicao) {
+		return movimentacaoRepository.findByDataBetweenOrderByData(dataPosicao.minusYears(1), dataPosicao);
 	}
 }

@@ -13,5 +13,13 @@
        downloadPath="produtos/arquivo-renda-variavel/download"></app-tabela-produtos> 
     </mat-card-content>
 </mat-card>
+
+<mat-card>
+    <mat-card-title>Extrato</mat-card-title>
+    <mat-card-content>
+       <app-tabela-produtos #tabelaExtrato [tableInfo]="extrato.getTableInfo()"
+       downloadPath="produtos/extrato/download"></app-tabela-produtos> 
+    </mat-card-content>
+</mat-card>
         
           

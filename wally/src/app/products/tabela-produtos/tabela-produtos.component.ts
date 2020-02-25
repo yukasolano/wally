@@ -36,7 +36,8 @@ export class TabelaProdutosComponent implements OnInit {
   }
 
   onDownload() {
-    this.http.get(`${environment.baseUrl}${this.downloadPath}`,
+    console.log(this.dataSource.data);
+    this.http.post(`${environment.baseUrl}${this.downloadPath}`,  this.dataSource.data ,
     { observe: 'response' as 'response', responseType: 'arraybuffer' as 'blob'}).subscribe( response => {
       const blob = new Blob([response.body], { type: response.headers.get('Content-Type') });
       const headerName = response.headers.get('content-disposition');

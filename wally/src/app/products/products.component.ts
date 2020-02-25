@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { ProdutoRF } from './produtoRF';
 import { TabelaProdutosComponent } from './tabela-produtos/tabela-produtos.component';
 import { ProdutoRV } from './produtoRV';
+import { Extrato } from './extrato';
 
 
 @Component({
@@ -15,10 +16,11 @@ import { ProdutoRV } from './produtoRV';
 
     produtoRF = new ProdutoRF();
     produtoRV = new ProdutoRV();
+    extrato = new Extrato();
 
     @ViewChild('tabelaProdutosRF', {static: true}) tabelaProdutosRF: TabelaProdutosComponent;
     @ViewChild('tabelaProdutosRV', {static: true}) tabelaProdutosRV: TabelaProdutosComponent;
-
+    @ViewChild('tabelaExtrato', {static: true}) tabelaExtrato: TabelaProdutosComponent;
     constructor(private http: HttpClient ) { }
 
     ngOnInit() {
@@ -26,6 +28,7 @@ import { ProdutoRV } from './produtoRV';
         console.log(resp);
         this.tabelaProdutosRF.updateData(resp.produtosRF);
         this.tabelaProdutosRV.updateData(resp.produtosRV);
+        this.tabelaExtrato.updateData(resp.extrato);
       });
     }
 

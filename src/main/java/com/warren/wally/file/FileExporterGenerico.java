@@ -1,5 +1,7 @@
 package com.warren.wally.file;
 
+import java.util.List;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -15,13 +17,18 @@ import com.warren.wally.repository.MovimentacaoEntity;
 import com.warren.wally.repository.MovimentacaoRepository;
 
 @Component
-public class FileExporterMovimentos extends AbstractFileExporter {
+public class FileExporterGenerico extends AbstractFileExporter {
 
 	@Autowired
 	private MovimentacaoRepository movimentacaoRepository;
+	
+	private List<MovimentacaoEntity> movimentacoes;
 
 	private static String[] columnsCompra = { "Código", "Data", "Quantidade", "Valor unitário" };
 
+	public void setData(List<MovimentacaoEntity> movimentacao) {
+		this.movimentacoes = movimentacao;
+	}
 	public ExportedFile export() {
 		Workbook workbook = new XSSFWorkbook();
 
@@ -59,8 +66,7 @@ public class FileExporterMovimentos extends AbstractFileExporter {
 		// Create Other rows and cells with employees data
 		int rowNum = 1;
 
-		Iterable<MovimentacaoEntity> produtos = movimentacaoRepository.findAll();
-		for (MovimentacaoEntity produto : produtos) {
+		for (MovimentacaoEntity produto : this.movimentacoes) {
 			Row row = sheetCompra.createRow(rowNum++);
 
 			row.createCell(0).setCellValue(produto.getCodigo());

@@ -12,8 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.warren.wally.model.investimento.TipoInvestimento;
 import com.warren.wally.model.investimento.TipoMovimento;
-import com.warren.wally.repository.DividendoEntity;
-import com.warren.wally.repository.DividendoRepository;
 import com.warren.wally.repository.MovimentacaoEntity;
 import com.warren.wally.repository.MovimentacaoRepository;
 
@@ -22,9 +20,6 @@ public class FileUploadMovimentos implements FileUpload {
 
 	@Autowired
 	private MovimentacaoRepository movimentacaoRepository;
-
-	@Autowired
-	private DividendoRepository dividendoRepository;
 
 	@Override
 	public void read(MultipartFile file) {
@@ -47,22 +42,20 @@ public class FileUploadMovimentos implements FileUpload {
 						int quantidade = (int) row.getCell(4).getNumericCellValue();
 						double valorUnitario = row.getCell(5).getNumericCellValue();
 
-						if (tipoInvestimento.equals(TipoInvestimento.ACAO)
-								|| tipoInvestimento.equals(TipoInvestimento.FII)) {
-
-							if (tipoMovimento.equals(TipoMovimento.COMPRA)) {
-								movimentacaoRepository.save(new MovimentacaoEntity(tipoInvestimento, tipoMovimento,
-										data, codigo, quantidade, valorUnitario));
-							} else if (tipoMovimento.equals(TipoMovimento.DIVIDENDO)) {
-								dividendoRepository.save(new DividendoEntity(tipoInvestimento, tipoMovimento, data,
-										codigo, quantidade, valorUnitario));
-							} else {
-								System.out.println("Tipo de movimento não tratado " + tipoMovimento);
-								// throw new Exception("Tipo de movimento não tratado");
-							}
-						} else {
-							System.out.println("Tipo de investimento não tratado para movimentos " + tipoMovimento);
+						if (!tipoInvestimento.equals(TipoInvestimento.ACAO)
+								&& !tipoInvestimento.equals(TipoInvestimento.FII)) {
+							System.out.println("Tipo de investimento não tratado para movimentos " + tipoInvestimento);
+							continue;
 						}
+
+						if (!tipoMovimento.equals(TipoMovimento.COMPRA)
+								&& !tipoMovimento.equals(TipoMovimento.DIVIDENDO)) {
+							System.out.println("Tipo de movimento não tratado " + tipoMovimento);
+							continue;
+						}
+						movimentacaoRepository.save(new MovimentacaoEntity(tipoInvestimento, tipoMovimento, data,
+								codigo, quantidade, valorUnitario));
+
 					} catch (Exception e) {
 						System.out.println("Erro na linha" + r + ": " + e.getMessage());
 					}

@@ -20,13 +20,14 @@ import com.warren.wally.model.investimento.InvestimentoResolver;
 import com.warren.wally.model.investimento.ProdutoRFVO;
 import com.warren.wally.model.investimento.ProdutoRVActor;
 import com.warren.wally.model.investimento.ProdutoRVVO;
+import com.warren.wally.repository.MovimentacaoEntity;
 import com.warren.wally.repository.ProdutoRepository;
 
 @Component
 public class PortfolioActor {
 
 	@Resource
-	private ProdutoRVActor actorFII;
+	private ProdutoRVActor produtoRVActor;
 
 	@Autowired
 	private ProdutoRepository repository;
@@ -67,14 +68,14 @@ public class PortfolioActor {
 	}
 
 	public List<ProdutoRVVO> getProdutosRV(LocalDate dataRef) {
-		return actorFII.run(dataRef);
+		return produtoRVActor.run(dataRef);
 	}
 
 	public GraficoMultiDados getDividendos(LocalDate dataRef) {
 
 		Map<String, Map<String, Double>> todos = new HashMap<>();
 
-		actorFII.getDividendos(dataRef).stream().forEach(dividendo -> {
+		produtoRVActor.getDividendos(dataRef).stream().forEach(dividendo -> {
 			todos.putIfAbsent(dividendo.getCodigo(), new TreeMap<String, Double>());
 			Double valor = todos.get(dividendo.getCodigo()).getOrDefault(YearMonth.from(dividendo.getData()).toString(), 0.0);
 			todos.get(dividendo.getCodigo())
@@ -108,6 +109,10 @@ public class PortfolioActor {
 		}
 
 		return new GraficoMultiDados(labels, series, dados);
+	}
+
+	public List<MovimentacaoEntity> getExtrato(LocalDate dataPosicao) {
+		return produtoRVActor.getDividendos(dataPosicao);
 	}
 
 }
