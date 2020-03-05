@@ -24,7 +24,7 @@ public class FileExporterGenerico extends AbstractFileExporter {
 	
 	private List<MovimentacaoEntity> movimentacoes;
 
-	private static String[] columnsCompra = { "Código", "Data", "Quantidade", "Valor unitário" };
+	private static String[] columns = { "Código", "Data", "Quantidade", "Valor unitário" };
 
 	public void setData(List<MovimentacaoEntity> movimentacao) {
 		this.movimentacoes = movimentacao;
@@ -57,9 +57,9 @@ public class FileExporterGenerico extends AbstractFileExporter {
 		Row headerRow = sheetCompra.createRow(0);
 
 		// Create cells
-		for (int i = 0; i < columnsCompra.length; i++) {
+		for (int i = 0; i < columns.length; i++) {
 			Cell cell = headerRow.createCell(i);
-			cell.setCellValue(columnsCompra[i]);
+			cell.setCellValue(columns[i]);
 			cell.setCellStyle(headerCellStyle);
 		}
 
@@ -81,7 +81,7 @@ public class FileExporterGenerico extends AbstractFileExporter {
 		}
 
 		// Resize all columns to fit the content size
-		for (int i = 0; i < columnsCompra.length; i++) {
+		for (int i = 0; i < columns.length; i++) {
 			sheetCompra.autoSizeColumn(i);
 		}
 
