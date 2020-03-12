@@ -1,7 +1,9 @@
 package com.warren.wally.file;
 
-public interface FileExporter {
+import java.util.List;
 
-	ExportedFile export();
-	
+public interface FileExporter<T> {
+
+    ExportedFile export(List<T> dados);
+
 }

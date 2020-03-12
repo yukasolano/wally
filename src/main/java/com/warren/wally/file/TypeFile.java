@@ -1,5 +1,5 @@
 package com.warren.wally.file;
 
 public enum TypeFile {
-	INVESTIMENTOS, MOVIMENTOS, GENERICO;
+    PRODUTOS_RF, PRODUTOS_RV, MOVIMENTOS, INVESTIMENTOS;
 }
