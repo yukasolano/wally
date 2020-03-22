@@ -1,0 +1,16 @@
+<mat-card>
+    <mat-card-content class="comandos">
+        <button mat-raised-button (click)="onAtualiza()" color="primary">Atualiza dados de mercado</button>
+        <button mat-raised-button (click)="onBusca()" color="primary">Mostra dados de mercado</button>
+    </mat-card-content>
+</mat-card>
+
+<mat-card *ngIf="dadosMercado">
+    <mat-card-content>
+        <mat-tab-group>
+            <mat-tab *ngFor="let serie of dadosMercado.dados" [label]="serie.nome">
+                <app-tabela-produtos [dados]="serie.valores" [tableInfo]="getTableInfo()"></app-tabela-produtos>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-card-content>
+</mat-card>

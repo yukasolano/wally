@@ -1,12 +1,25 @@
 package com.warren.wally.utils;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class DataValor implements Comparable<DataValor>{
 
 	private LocalDate data;
 	private double valor;
+
+	public DataValor(String data, String valor) {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		this.data = LocalDate.parse(data, dtf);
+		this.valor = Double.parseDouble(valor);
+	}
 
 	public DataValor(String data, double valor) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -16,25 +29,6 @@ public class DataValor implements Comparable<DataValor>{
 	
 	public DataValor(LocalDate data, double valor) {
 		this.data = data;
-		this.valor = valor;
-	}
-
-	public DataValor() {
-	}
-
-	public LocalDate getData() {
-		return data;
-	}
-
-	public void setData(LocalDate data) {
-		this.data = data;
-	}
-
-	public double getValor() {
-		return valor;
-	}
-
-	public void setValor(double valor) {
 		this.valor = valor;
 	}
 

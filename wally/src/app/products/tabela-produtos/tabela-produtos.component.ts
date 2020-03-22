@@ -18,6 +18,10 @@ export class TabelaProdutosComponent implements OnInit {
   @Input() tableInfo;
   @Input() downloadPath = '';
 
+  @Input() set dados(dados: []) {
+    this.updateData(dados);
+  }
+
   displayedColumns: string[];
   dataSource = new MatTableDataSource();
 

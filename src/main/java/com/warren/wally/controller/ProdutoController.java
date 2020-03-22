@@ -6,6 +6,7 @@ import com.warren.wally.file.FileUploadResolver;
 import com.warren.wally.file.TypeFile;
 import com.warren.wally.grafico.GraficoTransformador;
 import com.warren.wally.grafico.GraficosVO;
+import com.warren.wally.model.dadosmercado.DadosMercadoActor;
 import com.warren.wally.model.investimento.ProdutoRFVO;
 import com.warren.wally.model.investimento.ProdutoRVInfoVO;
 import com.warren.wally.model.investimento.ProdutoRVVO;
@@ -19,18 +20,20 @@ import com.warren.wally.repository.MovimentacaoEntity;
 import com.warren.wally.repository.MovimentacaoRepository;
 import com.warren.wally.repository.ProdutoEntity;
 import com.warren.wally.repository.ProdutoRepository;
-import java.time.LocalDate;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDate;
+import java.util.List;
 
 import static com.warren.wally.file.TypeFile.MOVIMENTOS;
 import static com.warren.wally.file.TypeFile.PRODUTOS_RV;
@@ -54,6 +57,9 @@ public class ProdutoController {
     private MovimentacaoRepository movimentacaoRepository;
 
     private LocalDate data = LocalDate.of(2020, 01, 31); // LocalDate.now();
+
+    @Autowired
+    private DadosMercadoActor dadosMercadoActor;
 
     @Autowired
     private FileExporterResolver fileExporterResolver;
@@ -160,6 +166,16 @@ public class ProdutoController {
                 .contentLength(resource.getFile().contentLength())
                 .contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(resource.getFile());
 
+    }
+
+    @GetMapping(value = "dados-mercado/atualiza")
+    public void atualizaDadosMercado() {
+        dadosMercadoActor.atualizaDadosMercado();
+    }
+
+    @GetMapping(value = "dados-mercado/busca")
+    public DadosMercadoVO mostraDadosMercado() {
+        return dadosMercadoActor.busca();
     }
 
 }

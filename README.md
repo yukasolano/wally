@@ -1,7 +1,7 @@
 # Wally
 Sistema para controle de investimentos
 
-Ferramentas utilizadas: Spring, MySQL5.7, Bootstrap
+Ferramentas utilizadas: Spring, MySQL5.7, Angular 8
 
 Antes de rodar a aplicação, atualize o application.properties com as configurações do seu banco de dados.
 ```
@@ -18,17 +18,37 @@ create database wally;
 
 ## TODO
 
-- planilha de cadastro / importação não copia para dentro da pasta do wally - recuperar produtos na lista!!!
-- calculo da ação - tipo de investimento ACAO
-- total do patrimonio incluir FII 
-- buscar dividendos
-- calcular e mostrar na tabela dividend yield para FII
-- calcular e mostrar na tabela dividend yield para ACAO
-- subir dados de feriados de forma automática
-- buscar dados de indice de forma automatica ou melhorar cadastro de dados de mercado
-- grafico da evolução da rentabilidade (com divend yield)
-- grafico da evolução do patrimonio
+
+### FRONTEND:
+- mvn com front-end
+- subir aplicação com frontend	
+- linha com total
+- snackbar com mesnagens
+- loading bar
+- modularizar produtos
+
+### CALCULOS
+- Adicionar estrutura de mapa para salvar resultado do portfolio para cada dia  
+- Adicionar tratamento de venda
+- Agrupar DIVIDENDO, ATUALIZACAO e JCP
+- Refatorar cálculo para FII 
+	Dividend Yield = somatório do valor unitário dos dividendos do último ano dividido pelo preço médio
+- rever calculo do ipca
+- multidata
+- calculo do imposto de renda
+- Refatorar tratamento de produtos.
+	Juntar renda fixa e renda variável (tudo será movimentação: compra, dividendo, amortização, etc). 
 - calculo do titulo publico
-- atualizar lista de dividendos passados
-- atualizar valores de mercado de CDI e IPCA (ok até junho)
-- patrimonio total está mudando de valor quando muda a tela.
+- tratamento para fundos
+- usar cache para nao precisar recalcular toda vez
+
+### DADOS DE MERCADO
+- atualizar valores de mercado de CDI e IPCA (ok)
+- arrumar calculos usando nova estrutura de dados de mercado (CDI e IPCA)
+- atualizar lista de dividendos passados 
+- atualizar feriados
+
+### GRAFICOS
+- grafico da evolução da rentabilidade (com divend yield)
+
+
