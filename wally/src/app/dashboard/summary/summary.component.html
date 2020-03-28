@@ -1,7 +1,8 @@
 
 <div *ngIf="temDados()" style="display: block" >
 
-    <h1>R$ {{patrimonioTotal | number: '0.2-2'}}</h1>
+    <small class="description">Valor total do patrimônio</small>
+    <h1 class="title">R$ {{patrimonioTotal | number: '0.2-2'}}</h1>
 
     <table mat-table [dataSource]="dataSource">
         <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">

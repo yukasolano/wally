@@ -9,10 +9,12 @@
     margin-right: 1rem;
     margin-bottom: 10px;
 }
+
 .card-resumo {
     width: calc(30% - 3rem);
 }
-.card-categoria, .card-renda-variavel {
+
+.card-renda-variavel {
     width: calc(40% - 3rem);
 }
 
@@ -20,10 +22,18 @@
     width:calc(50% - 3rem);
 }
 
-.card-dividendos, .card-rentabilidade {
+.card-dividendos {
     width:calc(60% - 3rem);
 }
 
 .card-evolucao {
     width:calc(70% - 3rem);
+}
+
+.card-rentabilidade {
+    width: 100%;
+}
+
+.proporcao {
+    margin-top: 0.5rem;
 }

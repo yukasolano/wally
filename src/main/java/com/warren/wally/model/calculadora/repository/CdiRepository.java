@@ -7,9 +7,11 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface CdiRepository extends CrudRepository<CdiEntity, Long> {
 
-	public List<CdiEntity> findAllByOrderByDataDesc();
+	List<CdiEntity> findAllByOrderByDataDesc();
 
-	public List<CdiEntity> findByDataBetween(LocalDate dataInicio, LocalDate dataFim);
+	List<CdiEntity> findAllByOrderByData();
 
-	public List<CdiEntity> findByData(LocalDate data);
+	List<CdiEntity> findByDataBetween(LocalDate dataInicio, LocalDate dataFim);
+
+	List<CdiEntity> findByData(LocalDate data);
 }

@@ -7,11 +7,13 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface IpcaRepository extends CrudRepository<IpcaEntity, Long> {
 
-	public List<IpcaEntity> findAllByOrderByDataDesc();
+	List<IpcaEntity> findAllByOrderByDataDesc();
 
-	public List<IpcaEntity> findFirstByOrderByDataDesc();
+	List<IpcaEntity> findFirstByOrderByDataDesc();
 
-	public List<IpcaEntity> findByDataBetween(LocalDate dataInicio, LocalDate dataFim);
+	List<IpcaEntity> findAllByOrderByData();
 
-	public List<IpcaEntity> findByData(LocalDate data);
+	List<IpcaEntity> findByDataBetween(LocalDate dataInicio, LocalDate dataFim);
+
+	List<IpcaEntity> findByData(LocalDate data);
 }

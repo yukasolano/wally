@@ -38,22 +38,33 @@ public class PortfolioActor {
 	@Resource
 	private InvestimentoResolver investimentoResolver;
 
-	public PortfolioVO run(LocalDate dataRef) {
-		List<ProdutoRFVO> produtosRF = getProdutosRF(dataRef);
-		List<ProdutoRVVO> produtosRV = getProdutosRV(dataRef);
+	private Map<LocalDate, PortfolioVO> mapDiaPortfolio = new HashMap<>();
 
-		return PortfolioVO.builder().dataRef(dataRef).produtosRF(produtosRF).produtosRV(produtosRV)
-				.accrual(calcAccrual(produtosRF, produtosRV)).build();
+	public PortfolioVO run(LocalDate dataRef) {
+		PortfolioVO portfolioVO = mapDiaPortfolio.get(dataRef);
+
+		if(portfolioVO == null) {
+			List<ProdutoRFVO> produtosRF = getProdutosRF(dataRef);
+			List<ProdutoRVVO> produtosRV = getProdutosRV(dataRef);
+			portfolioVO = PortfolioVO.builder().dataRef(dataRef).produtosRF(produtosRF).produtosRV(produtosRV)
+					.accrual(calcAccrual(produtosRF, produtosRV)).build();
+			mapDiaPortfolio.put(dataRef, portfolioVO);
+		}
+		return portfolioVO;
 	}
 
-	public double calcAccrual(List<ProdutoRFVO> produtosRF, List<ProdutoRVVO> produtosRV) {
+	public void limpaMapa() {
+		mapDiaPortfolio.clear();
+	}
+
+	private double calcAccrual(List<ProdutoRFVO> produtosRF, List<ProdutoRVVO> produtosRV) {
 		double accrual = 0.0;
-		accrual += produtosRF.stream().mapToDouble(it -> it.getValorPresente()).sum();
-		accrual += produtosRV.stream().mapToDouble(it -> it.getValorPresente()).sum();
+		accrual += produtosRF.stream().mapToDouble(ProdutoRFVO::getValorPresente).sum();
+		accrual += produtosRV.stream().mapToDouble(ProdutoRVVO::getValorPresente).sum();
 		return accrual;
 	}
 
-	public List<ProdutoRFVO> getProdutosRF(LocalDate dataRef) {
+	private List<ProdutoRFVO> getProdutosRF(LocalDate dataRef) {
 		List<ProdutoRFVO> produtos = new ArrayList<>();
 
 		repository.findAll().forEach(p -> {
@@ -67,7 +78,7 @@ public class PortfolioActor {
 		return produtos;
 	}
 
-	public List<ProdutoRVVO> getProdutosRV(LocalDate dataRef) {
+	private List<ProdutoRVVO> getProdutosRV(LocalDate dataRef) {
 		return produtoRVActor.run(dataRef);
 	}
 

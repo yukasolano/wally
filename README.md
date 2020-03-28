@@ -28,13 +28,12 @@ create database wally;
 - modularizar produtos
 
 ### CALCULOS
-- Adicionar estrutura de mapa para salvar resultado do portfolio para cada dia  
+- Adicionar estrutura de mapa para salvar resultado do portfolio para cada dia  (ok)
 - Adicionar tratamento de venda
 - Agrupar DIVIDENDO, ATUALIZACAO e JCP
 - Refatorar cálculo para FII 
 	Dividend Yield = somatório do valor unitário dos dividendos do último ano dividido pelo preço médio
-- rever calculo do ipca
-- multidata
+- multidata (ok)
 - calculo do imposto de renda
 - Refatorar tratamento de produtos.
 	Juntar renda fixa e renda variável (tudo será movimentação: compra, dividendo, amortização, etc). 
@@ -44,11 +43,11 @@ create database wally;
 
 ### DADOS DE MERCADO
 - atualizar valores de mercado de CDI e IPCA (ok)
-- arrumar calculos usando nova estrutura de dados de mercado (CDI e IPCA)
+- arrumar calculos usando nova estrutura de dados de mercado (CDI e IPCA) (ok)
 - atualizar lista de dividendos passados 
 - atualizar feriados
 
 ### GRAFICOS
-- grafico da evolução da rentabilidade (com divend yield)
+- grafico da evolução da rentabilidade (com dividend yield)
 
 

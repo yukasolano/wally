@@ -1,16 +1,20 @@
 <div class="dashboard">
     <mat-card class="card card-resumo">
+        <mat-form-field>
+            <mat-label>Selecione a data</mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="date" (dateChange)="dateChanged()">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
         <app-summary #summary titulo="Resumo"></app-summary>
+        <div class="proporcao">
+            <app-pie-chart #proporcao></app-pie-chart>
+        </div>
     </mat-card>
     
     <mat-card class="card card-evolucao">
         <mat-card-title>Evolução do patrimônio</mat-card-title>
         <app-line-chart #evolucao></app-line-chart>
-    </mat-card>
-
-    <mat-card class="card card-categoria">
-        <mat-card-title>Categoria de investimento</mat-card-title>
-        <app-pie-chart #proporcao></app-pie-chart>
     </mat-card>
 
     <mat-card class="card card-rentabilidade">

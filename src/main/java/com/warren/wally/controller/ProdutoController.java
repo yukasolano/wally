@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.websocket.server.PathParam;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -65,7 +66,8 @@ public class ProdutoController {
     private FileExporterResolver fileExporterResolver;
 
     @RequestMapping("/portfolio-graficos")
-    public GraficosVO index(Model model) {
+    public GraficosVO index(@PathParam("date") String date ) {
+        data = LocalDate.parse(date);
         GraficoTransformador graficoTransformador = new GraficoTransformador();
         PortfolioVO portfolio = portfolioActor.run(data);
         GraficosVO graficos = new GraficosVO();
@@ -104,7 +106,7 @@ public class ProdutoController {
         novoProduto.setTaxa(produto.getTaxa());
         novoProduto.setValorAplicado(produto.getValorAplicado());
         produtoRepository.save(novoProduto);
-
+        portfolioActor.limpaMapa();
         return produto;
     }
 
@@ -112,7 +114,7 @@ public class ProdutoController {
     public ProdutoInfoVO salvarArquivo(@RequestBody MultipartFile arquivo) {
         produtoRepository.deleteAll();
         fileUploadResolver.resolve(TypeFile.INVESTIMENTOS).read(arquivo);
-
+        portfolioActor.limpaMapa();
         return null;
     }
 
@@ -123,7 +125,7 @@ public class ProdutoController {
 
         movimentacaoRepository.save(new MovimentacaoEntity(TipoInvestimento.FII, tipoMovimento, produto.getData(),
                 produto.getCodigo(), produto.getQuantidade(), produto.getValorUnitario()));
-
+        portfolioActor.limpaMapa();
         return produto;
     }
 
@@ -131,7 +133,7 @@ public class ProdutoController {
     public ProdutoRVInfoVO salvarArquivoRV(@RequestBody MultipartFile arquivo) {
         movimentacaoRepository.deleteAll();
         fileUploadResolver.resolve(MOVIMENTOS).read(arquivo);
-
+        portfolioActor.limpaMapa();
         return null;
     }
 
@@ -171,6 +173,7 @@ public class ProdutoController {
     @GetMapping(value = "dados-mercado/atualiza")
     public void atualizaDadosMercado() {
         dadosMercadoActor.atualizaDadosMercado();
+        portfolioActor.limpaMapa();
     }
 
     @GetMapping(value = "dados-mercado/busca")
