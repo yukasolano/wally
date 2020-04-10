@@ -14,7 +14,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
     formFileRF: FormGroup;
     formRF: FormGroup;
     formRV: FormGroup;
-    formFileRV: FormGroup;
+
+    formMovMain: FormGroup;
+    formMovFile: FormGroup;
+    formMov: FormGroup;
 
     constructor(
       private formBuilder: FormBuilder,
@@ -26,7 +29,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
         });
 
         this.formRF = this.formBuilder.group({
-          corretora: ['', Validators.required],
           instituicao: ['', Validators.required],
           tipoInvestimento: ['', Validators.required],
           tipoRentabilidade: ['', Validators.required],
@@ -41,15 +43,27 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
         });
 
         this.formRV = this.formBuilder.group({
-          tipo: ['dividendo', Validators.required],
+          tipoInvestimento: ['', Validators.required],
           codigo: ['', Validators.required],
           data: ['', Validators.required],
           valorUnitario: ['', Validators.required],
           quantidade: ['', Validators.required],
         });
 
-        this.formFileRV = this.formBuilder.group({
+        this.formMovMain = this.formBuilder.group({
+          importaArquivo: [false]
+        });
+
+        this.formMovFile = this.formBuilder.group({
           arquivo: [''],
+        });
+
+        this.formMov = this.formBuilder.group({
+          tipoInvestimento: ['', Validators.required],
+          codigo: ['', Validators.required],
+          data: ['', Validators.required],
+          valorUnitario: ['', Validators.required],
+          quantidade: ['', Validators.required],
         });
     }
 
@@ -62,27 +76,34 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
     }
 
     formInvalid() {
-      if (this.form.value.categoria === 'RF') {
-        return this.form.value.importaArquivo ? this.formFileRF.invalid : this.formRF.invalid;
+      if (this.form.value.importaArquivo ) {
+        return this.formFileRF.invalid;
       }
-      return this.form.value.importaArquivo ? this.formFileRV.invalid : this.formRV.invalid;
+      return this.form.value.categoria === 'RF' ? this.formRF.invalid : this.formRV.invalid;
     }
-    onSubmit() {
-      if (this.form.value.categoria === 'RF') {
 
-        if (this.form.value.importaArquivo) {
-          console.log( this.formFileRF.value.arquivo._files[0]);
-          const formData = new FormData();
-          formData.append('arquivo', this.formFileRF.value.arquivo._files[0], this.formFileRF.value.arquivo._files[0].name);
-          this.http.post(`${environment.baseUrl}produtos/arquivo-renda-fixa`, formData).subscribe(
-            resp => {
-            console.log('sucesooo', resp);
-            this.formFileRF.reset();
-          },
-            error => {
-            console.log('errrou', error);
-          });
-        } else {
+    formMovInvalid() {
+      if (this.formMovMain.value.importaArquivo ) {
+        return this.formMovFile.invalid;
+      }
+      return this.formMov.invalid;
+    }
+
+    onSubmit() {
+      if (this.form.value.importaArquivo) {
+        console.log( this.formFileRF.value.arquivo._files[0]);
+        const formData = new FormData();
+        formData.append('arquivo', this.formFileRF.value.arquivo._files[0], this.formFileRF.value.arquivo._files[0].name);
+        this.http.post(`${environment.baseUrl}produtos/arquivo-produto`, formData).subscribe(
+          resp => {
+          console.log('sucesooo', resp);
+          this.formFileRF.reset();
+        },
+          error => {
+          console.log('errrou', error);
+        });
+      } else {
+        if (this.form.value.categoria === 'RF') {
 
           this.http.post(`${environment.baseUrl}produtos/renda-fixa`, this.formRF.value, this.httpOptions).subscribe(
             resp => {
@@ -92,23 +113,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
             error => {
             console.log('errrou', error);
           });
-        }
-      } else {
-
-        if (this.form.value.importaArquivo) {
-          console.log( this.formFileRV.value.arquivo._files[0]);
-          const formData = new FormData();
-          formData.append('arquivo', this.formFileRV.value.arquivo._files[0], this.formFileRV.value.arquivo._files[0].name);
-          this.http.post(`${environment.baseUrl}produtos/arquivo-renda-variavel`, formData).subscribe(
-            resp => {
-            console.log('sucesooo', resp);
-            this.formFileRV.reset();
-          },
-            error => {
-            console.log('errrou', error);
-          });
         } else {
-
           this.http.post(`${environment.baseUrl}produtos/renda-variavel`, this.formRV.value, this.httpOptions).subscribe(
             resp => {
             console.log('sucesooo', resp);
@@ -120,5 +125,41 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
         }
       }
     }
+
+
+    onSubmitMov() {
+      if (this.formMovMain.value.importaArquivo) {
+        console.log( this.formMovFile.value.arquivo._files[0]);
+        const formData = new FormData();
+        formData.append('arquivo', this.formMovFile.value.arquivo._files[0], this.formMovFile.value.arquivo._files[0].name);
+        this.http.post(`${environment.baseUrl}produtos/arquivo-movimento`, formData).subscribe(
+          resp => {
+          console.log('sucesooo', resp);
+          this.formMovFile.reset();
+        },
+          error => {
+          console.log('errrou', error);
+        });
+      } else {
+          this.http.post(`${environment.baseUrl}produtos/movimento`, this.formMov.value, this.httpOptions).subscribe(
+            resp => {
+            console.log('sucesooo', resp);
+            this.formMov.reset();
+          },
+            error => {
+            console.log('errrou', error);
+          });
+      }
+    }
+
+    limpar() {
+            this.http.post(`${environment.baseUrl}produtos/limpar`, {}, this.httpOptions).subscribe(
+              resp => {
+              console.log('sucesooo', resp);
+            },
+              error => {
+              console.log('errrou', error);
+            });
+        }
 
   }

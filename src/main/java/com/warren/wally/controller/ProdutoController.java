@@ -6,7 +6,9 @@ import com.warren.wally.file.FileUploadResolver;
 import com.warren.wally.file.TypeFile;
 import com.warren.wally.grafico.GraficoTransformador;
 import com.warren.wally.grafico.GraficosVO;
+import com.warren.wally.model.calculadora.TipoRentabilidade;
 import com.warren.wally.model.dadosmercado.DadosMercadoActor;
+import com.warren.wally.model.investimento.MovimentoInfoVO;
 import com.warren.wally.model.investimento.ProdutoRFVO;
 import com.warren.wally.model.investimento.ProdutoRVInfoVO;
 import com.warren.wally.model.investimento.ProdutoRVVO;
@@ -66,7 +68,7 @@ public class ProdutoController {
     private FileExporterResolver fileExporterResolver;
 
     @RequestMapping("/portfolio-graficos")
-    public GraficosVO index(@PathParam("date") String date ) {
+    public GraficosVO index(@PathParam("date") String date) {
         data = LocalDate.parse(date);
         GraficoTransformador graficoTransformador = new GraficoTransformador();
         PortfolioVO portfolio = portfolioActor.run(data);
@@ -87,54 +89,109 @@ public class ProdutoController {
     public ProdutosVO produtos(Model model) {
         PortfolioVO portfolio = portfolioActor.run(data);
         ProdutosVO vo = new ProdutosVO();
-        vo.setProdutosRF(portfolio.getProdutosRF());
-        vo.setProdutosRV(portfolio.getProdutosRV());
+        vo.setProdutos(portfolio.getProdutos());
         vo.setExtrato(portfolioActor.getExtrato(data));
         return vo;
 
     }
 
     @PostMapping(value = "produtos/renda-fixa")
-    public ProdutoInfoVO salvar(@RequestBody ProdutoInfoVO produto) {
-        ProdutoEntity novoProduto = new ProdutoEntity();
-        novoProduto.setCorretora(produto.getCorretora());
-        novoProduto.setInstituicao(produto.getInstituicao());
-        novoProduto.setTipoInvestimento(produto.getTipoInvestimento());
-        novoProduto.setTipoRentabilidade(produto.getTipoRentabilidade());
-        novoProduto.setVencimento(produto.getDtVencimento());
-        novoProduto.setDtAplicacao(produto.getDtAplicacao());
-        novoProduto.setTaxa(produto.getTaxa());
-        novoProduto.setValorAplicado(produto.getValorAplicado());
-        produtoRepository.save(novoProduto);
+    public void criaProdutoRF(@RequestBody ProdutoRFInfoVO produto) {
+
+        String codigo = String.format("%s-%s-%s-%.4f-%s", produto.getInstituicao(), produto.getTipoInvestimento(),
+                produto.getTipoRentabilidade(), produto.getTaxa(), produto.getDtVencimento());
+        //cadastra produto
+        ProdutoEntity entity = new ProdutoEntity();
+
+        entity.setCodigo(codigo);
+        entity.setInstituicao(produto.getInstituicao());
+        entity.setVencimento(produto.getDtVencimento());
+        entity.setTaxa(produto.getTaxa());
+        entity.setTipoInvestimento(produto.getTipoInvestimento());
+        entity.setTipoRentabilidade(produto.getTipoRentabilidade());
+        produtoRepository.save(entity);
+
+        //adiciona movimentacao de compra
+        MovimentacaoEntity mov = new MovimentacaoEntity();
+        mov.setTipoMovimento(TipoMovimento.COMPRA);
+        mov.setCodigo(codigo);
+        mov.setData(produto.getDtAplicacao());
+        mov.setQuantidade(1);
+        mov.setValorUnitario(produto.getValorAplicado());
+        movimentacaoRepository.save(mov);
         portfolioActor.limpaMapa();
-        return produto;
     }
 
-    @PostMapping(value = "produtos/arquivo-renda-fixa")
-    public ProdutoInfoVO salvarArquivo(@RequestBody MultipartFile arquivo) {
-        produtoRepository.deleteAll();
+
+    @PostMapping(value = "produtos/arquivo-produto")
+    public ProdutoRFInfoVO salvarArquivo(@RequestBody MultipartFile arquivo) {
         fileUploadResolver.resolve(TypeFile.INVESTIMENTOS).read(arquivo);
         portfolioActor.limpaMapa();
         return null;
     }
 
     @PostMapping(value = "produtos/renda-variavel")
-    public ProdutoRVInfoVO criarProdutoRV(@RequestBody ProdutoRVInfoVO produto) {
-        TipoMovimento tipoMovimento = produto.getTipo().equals("dividendo") ? TipoMovimento.DIVIDENDO
-                : TipoMovimento.COMPRA;
+    public void criaProdutoRV(@RequestBody ProdutoRVInfoVO produto) {
 
-        movimentacaoRepository.save(new MovimentacaoEntity(TipoInvestimento.FII, tipoMovimento, produto.getData(),
-                produto.getCodigo(), produto.getQuantidade(), produto.getValorUnitario()));
+        //cadastra produto
+        ProdutoEntity entity = new ProdutoEntity();
+
+        entity.setCodigo(produto.getCodigo());
+        entity.setTipoInvestimento(produto.getTipoInvestimento());
+        entity.setTipoRentabilidade(getTipoRentabilidade(produto.getTipoInvestimento()));
+        entity.setInstituicao("Renda variável");
+        produtoRepository.save(entity);
+
+        //adiciona movimentacao de compra
+        MovimentacaoEntity mov = new MovimentacaoEntity();
+        mov.setTipoMovimento(TipoMovimento.COMPRA);
+        mov.setCodigo(produto.getCodigo());
+        mov.setData(produto.getData());
+        mov.setQuantidade(produto.getQuantidade());
+        mov.setValorUnitario(produto.getValorUnitario());
+        movimentacaoRepository.save(mov);
         portfolioActor.limpaMapa();
-        return produto;
     }
 
-    @PostMapping(value = "produtos/arquivo-renda-variavel")
+    private TipoRentabilidade getTipoRentabilidade(TipoInvestimento tipoInvestimento) {
+        for (TipoRentabilidade tipoRentabilidade : TipoRentabilidade.values()) {
+            if (tipoRentabilidade.toString().equals(tipoInvestimento.toString())) {
+                return tipoRentabilidade;
+            }
+        }
+        return null;
+    }
+
+    @PostMapping(value = "produtos/arquivo-movimento")
     public ProdutoRVInfoVO salvarArquivoRV(@RequestBody MultipartFile arquivo) {
-        movimentacaoRepository.deleteAll();
         fileUploadResolver.resolve(MOVIMENTOS).read(arquivo);
         portfolioActor.limpaMapa();
         return null;
+    }
+
+    @PostMapping(value = "produtos/limpar")
+    public void limpar() {
+        produtoRepository.deleteAll();
+        movimentacaoRepository.deleteAll();
+        portfolioActor.limpaMapa();
+    }
+
+    @PostMapping(value = "produtos/movimento")
+    public void criaMovimento(@RequestBody MovimentoInfoVO movimento) {
+
+        List<ProdutoEntity> produtos = produtoRepository.findByCodigo(movimento.getCodigo());
+        if (produtos.isEmpty()) {
+            System.out.println("Produto não cadastrado " + movimento.getCodigo());
+        } else {
+            MovimentacaoEntity entity = new MovimentacaoEntity();
+            entity.setTipoMovimento(movimento.getTipoMovimento());
+            entity.setValorUnitario(movimento.getValorUnitario());
+            entity.setQuantidade(movimento.getQunatidade());
+            entity.setData(movimento.getData());
+            entity.setCodigo(movimento.getCodigo());
+            movimentacaoRepository.save(entity);
+        }
+        portfolioActor.limpaMapa();
     }
 
     @PostMapping(value = "produtos/produtos-renda-fixa/download")

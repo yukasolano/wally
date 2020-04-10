@@ -36,7 +36,6 @@ public class FileExporterMovimentos extends AbstractFileExporter<MovimentacaoEnt
         for (MovimentacaoEntity produto : dados) {
             Row row = sheet.createRow(rowNum++);
 
-            row.createCell(0).setCellValue(produto.getTipoInvestimento().toString());
             row.createCell(1).setCellValue(produto.getTipoMovimento().toString());
             Cell data = row.createCell(2);
             data.setCellValue(convertToDate(produto.getData()));

@@ -1,13 +1,14 @@
 package com.warren.wally.repository;
 
-import java.util.List;
-
+import com.warren.wally.model.investimento.TipoInvestimento;
 import org.springframework.data.repository.CrudRepository;
 
-import com.warren.wally.model.investimento.TipoInvestimento;
+import java.util.List;
 
 
-public interface ProdutoRepository extends CrudRepository<ProdutoEntity, Long>{
+public interface ProdutoRepository extends CrudRepository<ProdutoEntity, Long> {
 
-	List<ProdutoEntity> findByTipoInvestimento(TipoInvestimento tipoInvestimento);
+    List<ProdutoEntity> findByTipoInvestimento(TipoInvestimento tipoInvestimento);
+
+    List<ProdutoEntity> findByCodigo(String codigo);
 }

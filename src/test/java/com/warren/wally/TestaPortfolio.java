@@ -1,89 +1,108 @@
 package com.warren.wally;
 
-import static com.warren.wally.utils.DateUtils.dateOf;
-import static org.junit.Assert.assertEquals;
-
-import java.time.LocalDate;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.warren.wally.db.WallyTestCase;
 import com.warren.wally.model.calculadora.TipoRentabilidade;
 import com.warren.wally.model.investimento.TipoInvestimento;
+import com.warren.wally.model.investimento.TipoMovimento;
 import com.warren.wally.portfolio.MultiPortfolio;
 import com.warren.wally.portfolio.PortfolioActor;
 import com.warren.wally.portfolio.PortfolioVO;
 import com.warren.wally.portfolio.VariacaoVO;
+import com.warren.wally.repository.MovimentacaoEntity;
+import com.warren.wally.repository.MovimentacaoRepository;
 import com.warren.wally.repository.ProdutoEntity;
 import com.warren.wally.repository.ProdutoRepository;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.Resource;
+import java.time.LocalDate;
+
+import static com.warren.wally.model.calculadora.TipoRentabilidade.CDI;
+import static com.warren.wally.model.calculadora.TipoRentabilidade.IPCA;
+import static com.warren.wally.model.calculadora.TipoRentabilidade.PRE;
+import static com.warren.wally.model.investimento.TipoInvestimento.CDB;
+import static com.warren.wally.utils.DateUtils.dateOf;
+import static org.junit.Assert.assertEquals;
 
 public class TestaPortfolio extends WallyTestCase {
 
-	@Autowired
-	private ProdutoRepository produtoRepository;
+    @Autowired
+    private ProdutoRepository produtoRepository;
 
-	@Autowired
-	private PortfolioActor portfolioActor;
-	
-	@Autowired
-	private MultiPortfolio multiPortfolio;
+    @Autowired
+    private PortfolioActor portfolioActor;
 
-	private LocalDate dataRef;
-	
-	@Before
-	public void inicializa() {
-		dataRef = dateOf("10/12/2018");
-		
-		ProdutoEntity entityPre = new ProdutoEntity();
-		entityPre.setDtAplicacao(dateOf("24/06/2016"));
-		entityPre.setVencimento(dateOf("31/05/2021"));
-		entityPre.setValorAplicado(10000);
-		entityPre.setTaxa(0.1221);
-		entityPre.setTipoInvestimento(TipoInvestimento.CDB);
-		entityPre.setTipoRentabilidade(TipoRentabilidade.PRE);
-		produtoRepository.save(entityPre);
+    @Autowired
+    private MultiPortfolio multiPortfolio;
 
-		ProdutoEntity entityCdi = new ProdutoEntity();
-		entityCdi.setDtAplicacao(dateOf("24/06/2016"));
-		entityCdi.setVencimento(dateOf("31/05/2021"));
-		entityCdi.setValorAplicado(10000);
-		entityCdi.setTaxa(1.22);
-		entityCdi.setTipoInvestimento(TipoInvestimento.CDB);
-		entityCdi.setTipoRentabilidade(TipoRentabilidade.CDI);
-		produtoRepository.save(entityCdi);
-		
-		ProdutoEntity entityIpca = new ProdutoEntity();
-		entityIpca.setDtAplicacao(dateOf("23/10/2018"));
-		entityIpca.setVencimento(dateOf("15/12/2024"));
-		entityIpca.setValorAplicado(1000);
-		entityIpca.setTaxa(0.07);
-		entityIpca.setTipoInvestimento(TipoInvestimento.CDB);
-		entityIpca.setTipoRentabilidade(TipoRentabilidade.IPCA);
-		produtoRepository.save(entityIpca);
-	}
-	
+    private LocalDate dataRef;
 
-	@After
-	public void clear() {
-		produtoRepository.deleteAll();
-	}
+    @Resource
+    private MovimentacaoRepository movimentacaoRepository;
 
-	@Test
-	public void testAccrual() {
-		PortfolioVO portfolio = portfolioActor.run(dataRef);
-		assertEquals(26378.74, portfolio.getAccrual(), 0.01);
-	}
-	
-	@Test
-	public void testMultiportfolio() {
-		PortfolioVO portfolio = portfolioActor.run(dataRef);
-		VariacaoVO variacao = multiPortfolio.calculaVariacoes(portfolio);
-		assertEquals(3132.92, variacao.getAnualAbsoluto(), 0.01);
-		assertEquals(174.39, variacao.getMensalAbsoluto(), 0.01);
-	}
+    @Before
+    public void inicializa() {
+        dataRef = dateOf("10/12/2018");
+
+
+        createProduto("MAXIMA-CDB-PRE", dateOf("31/05/2021"),
+                0.1221, CDB, PRE, 10000d, dateOf("24/06/2016"));
+
+        createProduto("MAXIMA-CDB-CDI", dateOf("31/05/2021"),
+                1.22, CDB, CDI, 10000d, dateOf("24/06/2016"));
+
+        createProduto("MAXIMA-CDB-IPCA", dateOf("15/12/2024"),
+                0.07, CDB, IPCA, 1000d, dateOf("23/10/2018"));
+
+    }
+
+
+    @After
+    public void clear() {
+        produtoRepository.deleteAll();
+    }
+
+    @Test
+    public void testAccrual() {
+        PortfolioVO portfolio = portfolioActor.run(dataRef);
+        assertEquals(26378.74, portfolio.getAccrual(), 0.01);
+    }
+
+    @Test
+    public void testMultiportfolio() {
+        PortfolioVO portfolio = portfolioActor.run(dataRef);
+        VariacaoVO variacao = multiPortfolio.calculaVariacoes(portfolio);
+        assertEquals(3132.92, variacao.getAnualAbsoluto(), 0.01);
+        assertEquals(174.39, variacao.getMensalAbsoluto(), 0.01);
+    }
+
+    private void createProduto(String codigo,
+                               LocalDate vencimento,
+                               Double taxa,
+                               TipoInvestimento tipoInvestimento,
+                               TipoRentabilidade tipoRentabilidade,
+                               Double valor,
+                               LocalDate dataAplicacao) {
+        //cadastra produto
+        ProdutoEntity entity = new ProdutoEntity();
+        entity.setCodigo(codigo);
+        entity.setVencimento(vencimento);
+        entity.setTaxa(taxa);
+        entity.setTipoInvestimento(tipoInvestimento);
+        entity.setTipoRentabilidade(tipoRentabilidade);
+        produtoRepository.save(entity);
+
+        //adiciona movimentacao de compra
+        MovimentacaoEntity mov = new MovimentacaoEntity();
+        mov.setTipoMovimento(TipoMovimento.COMPRA);
+        mov.setCodigo(codigo);
+        mov.setData(dataAplicacao);
+        mov.setQuantidade(1);
+        mov.setValorUnitario(valor);
+        movimentacaoRepository.save(mov);
+    }
 
 }

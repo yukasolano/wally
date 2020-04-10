@@ -1,18 +1,14 @@
 package com.warren.wally.repository;
 
-import java.time.LocalDate;
+import com.warren.wally.model.investimento.TipoMovimento;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
-import com.warren.wally.model.investimento.TipoInvestimento;
-import com.warren.wally.model.investimento.TipoMovimento;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.time.LocalDate;
 
 @Entity(name = "movimentacao")
 @Getter
@@ -20,28 +16,31 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MovimentacaoEntity {
 
-	@Id
-	@GeneratedValue
-	private Long id;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-	private TipoInvestimento tipoInvestimento;
-	private TipoMovimento tipoMovimento;
-	private LocalDate data;
-	private String codigo;
-	private int quantidade;
-	private double valorUnitario;
-	
-	public MovimentacaoEntity(TipoInvestimento tipoInvestimento, TipoMovimento tipoMovimento, LocalDate data,
-			String codigo, int quantidade, double valorUnitario) {
-		super();
-		this.tipoInvestimento = tipoInvestimento;
-		this.tipoMovimento = tipoMovimento;
-		this.data = data;
-		this.codigo = codigo;
-		this.quantidade = quantidade;
-		this.valorUnitario = valorUnitario;
-	}
-	
-	
+    private String codigo;
+
+    private String corretora;
+
+    private TipoMovimento tipoMovimento;
+    private LocalDate data;
+    private int quantidade;
+    private double valorUnitario;
+
+    public MovimentacaoEntity(TipoMovimento tipoMovimento,
+                              LocalDate data,
+                              String codigo,
+                              int quantidade,
+                              double valorUnitario) {
+        super();
+        this.tipoMovimento = tipoMovimento;
+        this.data = data;
+        this.codigo = codigo;
+        this.quantidade = quantidade;
+        this.valorUnitario = valorUnitario;
+    }
+
 
 }

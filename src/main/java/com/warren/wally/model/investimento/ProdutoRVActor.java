@@ -1,17 +1,11 @@
 package com.warren.wally.model.investimento;
 
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import javax.annotation.Resource;
 
+import com.warren.wally.model.dadosmercado.DataMarketEquities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.warren.wally.repository.MovimentacaoEntity;
 import com.warren.wally.repository.MovimentacaoRepository;
 
 @Component
@@ -23,6 +17,7 @@ public class ProdutoRVActor {
 	@Autowired
 	private DataMarketEquities dm;
 
+	/*
 	// TODO filtrar por tipo de movimentacao
 	public ProdutoRVVO run(LocalDate dataPosicao, String codigo) {
 		List<MovimentacaoEntity> movimentacoes = movimentacaoRepository
@@ -97,4 +92,6 @@ public class ProdutoRVActor {
 	public List<MovimentacaoEntity> getExtrato(LocalDate dataPosicao) {
 		return movimentacaoRepository.findByDataBetweenOrderByData(dataPosicao.minusYears(1), dataPosicao);
 	}
+
+	 */
 }

@@ -1,17 +1,15 @@
 package com.warren.wally.model.investimento;
 
-import java.util.List;
-
 import com.warren.wally.repository.MovimentacaoEntity;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
 public class ProdutosVO {
-	List<ProdutoRFVO> produtosRF;
-	List<ProdutoRVVO> produtosRV;
-	List<MovimentacaoEntity> extrato;
+    List<ProdutoVO> produtos;
+    List<MovimentacaoEntity> extrato;
 
 }

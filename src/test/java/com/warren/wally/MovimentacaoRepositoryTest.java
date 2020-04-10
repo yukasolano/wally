@@ -1,6 +1,5 @@
 package com.warren.wally;
 
-import com.warren.wally.model.investimento.TipoInvestimento;
 import com.warren.wally.model.investimento.TipoMovimento;
 import com.warren.wally.repository.MovimentacaoEntity;
 import com.warren.wally.repository.MovimentacaoRepository;
@@ -25,8 +24,13 @@ public class MovimentacaoRepositoryTest {
 
     @Test
     public void movimentacaoSavedWithSuccess() {
-        MovimentacaoEntity entity = new MovimentacaoEntity(TipoInvestimento.FII, TipoMovimento.COMPRA, 
-        		DateUtils.dateOf("23/10/2019"), "1", 100, 2.5d);
+
+        MovimentacaoEntity entity = new MovimentacaoEntity();
+        entity.setTipoMovimento(TipoMovimento.COMPRA);
+        entity.setCodigo("1");
+        entity.setData(DateUtils.dateOf("23/10/2019"));
+        entity.setQuantidade(100);
+        entity.setValorUnitario(2.5d);
 
         MovimentacaoEntity savedEntity = this.movimentacaoRepository.save(entity);
 

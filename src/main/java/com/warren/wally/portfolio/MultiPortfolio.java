@@ -1,64 +1,64 @@
 package com.warren.wally.portfolio;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.warren.wally.grafico.GraficoMultiDados;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.warren.wally.grafico.GraficoMultiDados;
-import com.warren.wally.repository.ProdutoRepository;
+import java.time.LocalDate;
+import java.time.YearMonth;
 
 @Component
 public class MultiPortfolio {
-	
-	@Autowired
-	private PortfolioActor portfolioActor;
 
-	public VariacaoVO calculaVariacoes(PortfolioVO portfolio) {
+    @Autowired
+    private PortfolioActor portfolioActor;
 
-		VariacaoVO variacao = new VariacaoVO();
-		
-		// variacao mensal
-		PortfolioVO portfolioMesAnterior = portfolioActor.run(portfolio.getDataRef().minusMonths(1));
-		variacao.setMensalAbsoluto(portfolio.getAccrual() - portfolioMesAnterior.getAccrual());
-		variacao.setMensalPorcentagem(variacao.getMensalAbsoluto() / portfolioMesAnterior.getAccrual());
+    public VariacaoVO calculaVariacoes(PortfolioVO portfolio) {
 
-		// variacao anual
-		PortfolioVO portfolioAnoAnterior = portfolioActor.run(portfolio.getDataRef().minusYears(1));
-		variacao.setAnualAbsoluto(portfolio.getAccrual() - portfolioAnoAnterior.getAccrual());
-		variacao.setAnualPorcentagem(variacao.getAnualAbsoluto() / portfolioAnoAnterior.getAccrual());
+        VariacaoVO variacao = new VariacaoVO();
 
-		return variacao;
-	}
-	
-	public GraficoMultiDados calculaEvolucao(PortfolioVO portfolio) {
+        // variacao mensal
+        PortfolioVO portfolioMesAnterior = portfolioActor.run(portfolio.getDataRef().minusMonths(1));
+        variacao.setMensalAbsoluto(portfolio.getAccrual() - portfolioMesAnterior.getAccrual());
+        if (portfolioMesAnterior.getAccrual() > 0) {
+            variacao.setMensalPorcentagem(variacao.getMensalAbsoluto() / portfolioMesAnterior.getAccrual());
+        }
 
-		double[][] dados = new double[1][12];
+        // variacao anual
+        PortfolioVO portfolioAnoAnterior = portfolioActor.run(portfolio.getDataRef().minusYears(1));
+        variacao.setAnualAbsoluto(portfolio.getAccrual() - portfolioAnoAnterior.getAccrual());
+        if (portfolioAnoAnterior.getAccrual() > 0) {
+            variacao.setAnualPorcentagem(variacao.getAnualAbsoluto() / portfolioAnoAnterior.getAccrual());
+        }
 
-		String[] series = new String[1];
-		String[] labels = new String[12];
+        return variacao;
+    }
 
-		YearMonth mesAno = YearMonth.from(portfolio.getDataRef());
-		for (int i = 11; i >= 0; i--) {
-			labels[i] = mesAno.toString();
-			mesAno = mesAno.minusMonths(1);
-		}
+    public GraficoMultiDados calculaEvolucao(PortfolioVO portfolio) {
 
-		series[0] = "Patrimônio";
-		for (int col = 0; col < 12; col++) {
-			String label = labels[col];
-			try {
-				LocalDate data = LocalDate.parse(label+ "-" + "01");
-				data.withDayOfMonth(data.lengthOfMonth());
-				dados[0][col] = portfolioActor.run(data.withDayOfMonth(data.lengthOfMonth())).getAccrual();
-			} catch (Exception e) {
-				dados[0][col] = 0.0;
-			}
-		}	
+        double[][] dados = new double[1][12];
 
-		return new GraficoMultiDados(labels, series, dados);
-	}
+        String[] series = new String[1];
+        String[] labels = new String[12];
+
+        YearMonth mesAno = YearMonth.from(portfolio.getDataRef());
+        for (int i = 11; i >= 0; i--) {
+            labels[i] = mesAno.toString();
+            mesAno = mesAno.minusMonths(1);
+        }
+
+        series[0] = "Patrimônio";
+        for (int col = 0; col < 12; col++) {
+            String label = labels[col];
+            try {
+                LocalDate data = LocalDate.parse(label + "-" + "01");
+                data.withDayOfMonth(data.lengthOfMonth());
+                dados[0][col] = portfolioActor.run(data.withDayOfMonth(data.lengthOfMonth())).getAccrual();
+            } catch (Exception e) {
+                dados[0][col] = 0.0;
+            }
+        }
+
+        return new GraficoMultiDados(labels, series, dados);
+    }
 }

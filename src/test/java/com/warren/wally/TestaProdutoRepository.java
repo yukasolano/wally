@@ -22,20 +22,17 @@ public class TestaProdutoRepository extends WallyTestCase {
     public void testaAdicionaProduto() {
         repository.deleteAll();
         ProdutoEntity produto = new ProdutoEntity();
-        produto.setCorretora("EASYNVEST");
         produto.setInstituicao("FIBRA");
-        produto.setValorAplicado(6000.12);
         produto.setTaxa(0.1221);
         produto.setTipoInvestimento(TipoInvestimento.CDB);
         produto.setTipoRentabilidade(TipoRentabilidade.PRE);
-        produto.setDtAplicacao(dateOf("01/12/2017"));
         produto.setVencimento(dateOf("01/12/2018"));
         repository.save(produto);
 
         List<ProdutoEntity> produtosFromDB = repository.findByTipoInvestimento(TipoInvestimento.CDB);
         ProdutoEntity produtoFromDB = produtosFromDB.get(0);
-        assertEquals(produto.getCorretora(), produtoFromDB.getCorretora());
-        assertEquals(produto.getDtAplicacao(), produtoFromDB.getDtAplicacao());
+        assertEquals(produto.getInstituicao(), produtoFromDB.getInstituicao());
+        assertEquals(produto.getVencimento(), produtoFromDB.getVencimento());
         assertEquals(produto.getTipoInvestimento(), produtoFromDB.getTipoInvestimento());
     }
 

@@ -28,24 +28,34 @@ create database wally;
 - modularizar produtos
 
 ### CALCULOS
-- Adicionar estrutura de mapa para salvar resultado do portfolio para cada dia  (ok)
+- Refatorar tratamento de produtos.
+	Juntar renda fixa e renda variável (tudo será movimentação: compra, dividendo, amortização, etc). (ok)
+	Importação de arquivo produto
+	Tela de cadastro movimento 
+	Importacao de arquivo movimento
+	Tela de produtos
+	Cadastro de produto ja adiciona movimentacao de compra
+	Cadastro de movimento - se nao existe ignora
+	Realizar mias testes para cadastro
+	padronizar e segregar tratamento de adição de produto e movimento
 - Adicionar tratamento de venda
 - Agrupar DIVIDENDO, ATUALIZACAO e JCP
-- Refatorar cálculo para FII 
-	Dividend Yield = somatório do valor unitário dos dividendos do último ano dividido pelo preço médio
-- multidata (ok)
 - calculo do imposto de renda
-- Refatorar tratamento de produtos.
-	Juntar renda fixa e renda variável (tudo será movimentação: compra, dividendo, amortização, etc). 
 - calculo do titulo publico
 - tratamento para fundos
 - usar cache para nao precisar recalcular toda vez
 
+- Adicionar estrutura de mapa para salvar resultado do portfolio para cada dia  (ok)
+- Refatorar cálculo para FII (ok)
+	Dividend Yield = somatório do valor unitário dos dividendos do último ano dividido pelo preço médio
+- multidata (ok)
+
 ### DADOS DE MERCADO
+- atualizar lista de dividendos passados 
+- puxar preços tickers
+- atualizar feriados
 - atualizar valores de mercado de CDI e IPCA (ok)
 - arrumar calculos usando nova estrutura de dados de mercado (CDI e IPCA) (ok)
-- atualizar lista de dividendos passados 
-- atualizar feriados
 
 ### GRAFICOS
 - grafico da evolução da rentabilidade (com dividend yield)
