@@ -1,12 +1,13 @@
 package com.warren.wally.file;
 
+import com.warren.wally.model.cadastro.CadastroProdutoResolver;
+import com.warren.wally.model.cadastro.ProdutoInfoVO;
 import com.warren.wally.model.calculadora.TipoRentabilidade;
 import com.warren.wally.model.investimento.TipoInvestimento;
 import com.warren.wally.model.investimento.TipoMovimento;
-import com.warren.wally.repository.MovimentacaoEntity;
 import com.warren.wally.repository.MovimentacaoRepository;
-import com.warren.wally.repository.ProdutoEntity;
 import com.warren.wally.repository.ProdutoRepository;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -14,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.List;
 
 @Component
 public class FileUploadMovimentos implements FileUpload {
@@ -26,6 +27,9 @@ public class FileUploadMovimentos implements FileUpload {
 
     @Autowired
     private ProdutoRepository produtoRepository;
+
+    @Resource
+    private CadastroProdutoResolver cadastroProdutoResolver;
 
     @Override
     public void read(MultipartFile file) {
@@ -43,54 +47,31 @@ public class FileUploadMovimentos implements FileUpload {
                                 .valueOf(row.getCell(0).getStringCellValue());
                         TipoMovimento tipoMovimento = TipoMovimento.valueOf(row.getCell(1).getStringCellValue());
                         String codigo = row.getCell(2).getStringCellValue();
-                        LocalDate data = row.getCell(3).getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
-                                .toLocalDate();
-                        int quantidade = (int) row.getCell(4).getNumericCellValue();
-                        double valorUnitario = row.getCell(5).getNumericCellValue();
 
-                        if (!tipoInvestimento.equals(TipoInvestimento.ACAO)
-                                && !tipoInvestimento.equals(TipoInvestimento.FII)) {
-                            System.out.println("Tipo de investimento não tratado para movimentos " + tipoInvestimento);
-                            continue;
-                        }
+                        TipoRentabilidade tipoRentabilidade = TipoRentabilidade.valueOf(row.getCell(3).getStringCellValue());
+                        String instituicao = getString(row.getCell(4));
+                        LocalDate vencimento = getDate(row.getCell(5));
+                        double taxa = getNumber(row.getCell(6));
 
-                        if (!tipoMovimento.equals(TipoMovimento.COMPRA) && !tipoMovimento.equals(TipoMovimento.DIVIDENDO) &&
-                                !tipoMovimento.equals(TipoMovimento.JCP) && !tipoMovimento.equals(TipoMovimento.ATUALIZACAO)) {
-                            System.out.println("Tipo de movimento não tratado " + tipoMovimento);
-                            continue;
-                        }
+                        LocalDate data = getDate(row.getCell(7));
+                        int quantidade = (int) getNumber(row.getCell(8));
+                        double valorUnitario = getNumber(row.getCell(9));
+                        String corretora = getString(row.getCell(10));
 
-                        List<ProdutoEntity> produto = produtoRepository.findByCodigo(codigo);
-                        if (produto.isEmpty()) {
-                            System.out.println("Produto não cadastrado " + codigo);
-                            if (tipoInvestimento.equals(TipoInvestimento.ACAO)
-                                    || tipoInvestimento.equals(TipoInvestimento.FII)) {
-                                //vou cadastrar pois tenho tadas as infos
-                                ProdutoEntity novoProduto = new ProdutoEntity();
-                                novoProduto.setCodigo(codigo);
-                                novoProduto.setTipoInvestimento(tipoInvestimento);
-                                novoProduto.setTipoRentabilidade(getTipoRentabilidade(tipoInvestimento));
-                                novoProduto.setInstituicao("Renda variável");
-                                produtoRepository.save(novoProduto);
+                        ProdutoInfoVO vo = new ProdutoInfoVO();
+                        vo.setTipoInvestimento(tipoInvestimento);
+                        vo.setTipoMovimento(tipoMovimento);
+                        vo.setCodigo(codigo);
+                        vo.setInstituicao(instituicao);
+                        vo.setTipoRentabilidade(tipoRentabilidade);
+                        vo.setTaxa(taxa);
+                        vo.setDtVencimento(vencimento);
+                        vo.setData(data);
+                        vo.setQuantidade(quantidade);
+                        vo.setValorUnitario(valorUnitario);
+                        vo.setCorretora(corretora);
 
-                                MovimentacaoEntity entity = new MovimentacaoEntity();
-                                entity.setTipoMovimento(tipoMovimento);
-                                entity.setValorUnitario(valorUnitario);
-                                entity.setQuantidade(quantidade);
-                                entity.setData(data);
-                                entity.setCodigo(codigo);
-                                movimentacaoRepository.save(entity);
-                            }
-                        } else {
-                            MovimentacaoEntity entity = new MovimentacaoEntity();
-                            entity.setTipoMovimento(tipoMovimento);
-                            entity.setValorUnitario(valorUnitario);
-                            entity.setQuantidade(quantidade);
-                            entity.setData(data);
-                            entity.setCodigo(codigo);
-                            movimentacaoRepository.save(entity);
-                        }
-
+                        cadastroProdutoResolver.resolve(tipoInvestimento, tipoMovimento).saveGeneric(vo);
 
                     } catch (Exception e) {
                         System.out.println("Erro na linha" + r + ": " + e.getMessage());
@@ -111,6 +92,23 @@ public class FileUploadMovimentos implements FileUpload {
             }
         }
         return null;
+    }
+
+
+    private LocalDate getDate(XSSFCell cell) {
+        if (cell != null && cell.getDateCellValue() != null) {
+            return cell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+        }
+        return null;
+    }
+
+    private String getString(XSSFCell cell) {
+        return cell != null ? cell.getStringCellValue() : null;
+    }
+
+    private double getNumber(XSSFCell cell) {
+        return cell != null ? cell.getNumericCellValue() : 0d;
     }
 
 }

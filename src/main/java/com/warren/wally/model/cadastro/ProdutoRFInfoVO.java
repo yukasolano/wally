@@ -1,4 +1,4 @@
-package com.warren.wally.controller;
+package com.warren.wally.model.cadastro;
 
 import com.warren.wally.model.calculadora.TipoRentabilidade;
 import com.warren.wally.model.investimento.TipoInvestimento;

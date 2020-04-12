@@ -1,5 +1,6 @@
-package com.warren.wally.model.investimento;
+package com.warren.wally.model.cadastro;
 
+import com.warren.wally.model.investimento.TipoMovimento;
 import lombok.Getter;
 import lombok.Setter;
 

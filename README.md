@@ -26,25 +26,20 @@ create database wally;
 - snackbar com mesnagens
 - loading bar
 - modularizar produtos
+- tabela de movimentação
+- exportar movimentoacaç
 
 ### CALCULOS
-- Refatorar tratamento de produtos.
-	Juntar renda fixa e renda variável (tudo será movimentação: compra, dividendo, amortização, etc). (ok)
-	Importação de arquivo produto
-	Tela de cadastro movimento 
-	Importacao de arquivo movimento
-	Tela de produtos
-	Cadastro de produto ja adiciona movimentacao de compra
-	Cadastro de movimento - se nao existe ignora
-	Realizar mias testes para cadastro
-	padronizar e segregar tratamento de adição de produto e movimento
 - Adicionar tratamento de venda
 - Agrupar DIVIDENDO, ATUALIZACAO e JCP
 - calculo do imposto de renda
 - calculo do titulo publico
 - tratamento para fundos
 - usar cache para nao precisar recalcular toda vez
+- fluxos de debenture
 
+- Refatorar tratamento de produtos.
+	Juntar renda fixa e renda variável (tudo será movimentação: compra, dividendo, amortização, etc). (ok)
 - Adicionar estrutura de mapa para salvar resultado do portfolio para cada dia  (ok)
 - Refatorar cálculo para FII (ok)
 	Dividend Yield = somatório do valor unitário dos dividendos do último ano dividido pelo preço médio

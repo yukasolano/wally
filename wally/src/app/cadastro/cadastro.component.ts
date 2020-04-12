@@ -11,7 +11,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   export class CadastroComponent implements OnInit {
 
     form: FormGroup;
-    formFileRF: FormGroup;
     formRF: FormGroup;
     formRV: FormGroup;
 
@@ -25,7 +24,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
         this.form = this.formBuilder.group({
           categoria: ['RF'],
-          importaArquivo: [false]
         });
 
         this.formRF = this.formBuilder.group({
@@ -36,10 +34,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
           dtAplicacao: ['', Validators.required],
           taxa: ['', Validators.required],
           valorAplicado: ['', Validators.required]
-        });
-
-        this.formFileRF = this.formBuilder.group({
-          arquivo: [''],
         });
 
         this.formRV = this.formBuilder.group({
@@ -76,9 +70,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
     }
 
     formInvalid() {
-      if (this.form.value.importaArquivo ) {
-        return this.formFileRF.invalid;
-      }
       return this.form.value.categoria === 'RF' ? this.formRF.invalid : this.formRV.invalid;
     }
 
@@ -90,19 +81,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
     }
 
     onSubmit() {
-      if (this.form.value.importaArquivo) {
-        console.log( this.formFileRF.value.arquivo._files[0]);
-        const formData = new FormData();
-        formData.append('arquivo', this.formFileRF.value.arquivo._files[0], this.formFileRF.value.arquivo._files[0].name);
-        this.http.post(`${environment.baseUrl}produtos/arquivo-produto`, formData).subscribe(
-          resp => {
-          console.log('sucesooo', resp);
-          this.formFileRF.reset();
-        },
-          error => {
-          console.log('errrou', error);
-        });
-      } else {
         if (this.form.value.categoria === 'RF') {
 
           this.http.post(`${environment.baseUrl}produtos/renda-fixa`, this.formRF.value, this.httpOptions).subscribe(
@@ -123,13 +101,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
             console.log('errrou', error);
           });
         }
-      }
     }
 
 
     onSubmitMov() {
       if (this.formMovMain.value.importaArquivo) {
-        console.log( this.formMovFile.value.arquivo._files[0]);
         const formData = new FormData();
         formData.append('arquivo', this.formMovFile.value.arquivo._files[0], this.formMovFile.value.arquivo._files[0].name);
         this.http.post(`${environment.baseUrl}produtos/arquivo-movimento`, formData).subscribe(

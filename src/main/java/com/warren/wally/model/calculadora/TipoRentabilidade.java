@@ -6,5 +6,7 @@ public enum TipoRentabilidade {
     CDI,
     PRE,
     FII,
-    ACAO
+    ACAO,
+    FUNDO,
+    ETF
 }
