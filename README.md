@@ -26,8 +26,8 @@ create database wally;
 - snackbar com mesnagens
 - loading bar
 - modularizar produtos
-- tabela de movimentação
-- exportar movimentoacaç
+- tabela de movimentação (ok)
+- exportar movimentoacaç (ok)
 
 ### CALCULOS
 - Adicionar tratamento de venda

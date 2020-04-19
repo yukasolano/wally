@@ -117,7 +117,6 @@
             
                 <mat-form-field>
                     <mat-select placeholder="Tipo de movimento" formControlName="tipoMovimento" required>
-                        <mat-option value="COMPRA">COMPRA</mat-option>
                         <mat-option value="DIVIDENDO">DIVIDENDO</mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -147,4 +146,12 @@
         </mat-card>
     </mat-tab>
 </mat-tab-group>
+
+<mat-card>
+    <mat-card-title>Extrato</mat-card-title>
+    <mat-card-content>
+       <app-tabela-produtos #tabelaExtrato [tableInfo]="extrato.getTableInfo()"
+       downloadPath="produtos/extrato/download"></app-tabela-produtos> 
+    </mat-card-content>
+</mat-card>
 

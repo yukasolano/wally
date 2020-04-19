@@ -85,7 +85,7 @@ public abstract class AbstractFileExporter<T> implements FileExporter<T> {
         return java.util.Date.from(dateToConvert.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
     }
 
-    protected CellStyle getHeaderStyle(Workbook workbook) {
+    private CellStyle getHeaderStyle(Workbook workbook) {
         // Create a Font for styling header cells
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
@@ -96,5 +96,13 @@ public abstract class AbstractFileExporter<T> implements FileExporter<T> {
         headerCellStyle.setFont(headerFont);
 
         return headerCellStyle;
+    }
+
+    protected void addCellDate(Row row, int position, LocalDate data, CellStyle dateCellStyle) {
+        if(data != null) {
+            Cell cell = row.createCell(position);
+            cell.setCellValue(convertToDate(data));
+            cell.setCellStyle(dateCellStyle);
+        }
     }
 }

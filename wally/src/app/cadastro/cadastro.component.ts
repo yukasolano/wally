@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Extrato } from '../products/extrato';
+import { TabelaProdutosComponent } from '../products/tabela-produtos/tabela-produtos.component';
 
 @Component({
     selector: 'app-cadastro',
@@ -17,6 +19,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
     formMovMain: FormGroup;
     formMovFile: FormGroup;
     formMov: FormGroup;
+
+    extrato = new Extrato();
+
+    @ViewChild('tabelaExtrato', {static: true}) tabelaExtrato: TabelaProdutosComponent;
 
     constructor(
       private formBuilder: FormBuilder,
@@ -53,7 +59,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
         });
 
         this.formMov = this.formBuilder.group({
-          tipoInvestimento: ['', Validators.required],
+          tipoMovimento: ['', Validators.required],
           codigo: ['', Validators.required],
           data: ['', Validators.required],
           valorUnitario: ['', Validators.required],
@@ -67,6 +73,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
     };
 
     ngOnInit() {
+      this.updateExtrato();
+    }
+
+    updateExtrato() {
+      this.http.get<any>(`${environment.baseUrl}extrato`).subscribe( resp => {
+        this.tabelaExtrato.updateData(resp);
+      });
     }
 
     formInvalid() {
@@ -74,6 +87,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
     }
 
     formMovInvalid() {
+      console.log(this.formMov);
       if (this.formMovMain.value.importaArquivo ) {
         return this.formMovFile.invalid;
       }
@@ -86,6 +100,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
           this.http.post(`${environment.baseUrl}produtos/renda-fixa`, this.formRF.value, this.httpOptions).subscribe(
             resp => {
             console.log('sucesooo', resp);
+            this.updateExtrato();
             this.formRF.reset();
           },
             error => {
@@ -95,6 +110,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
           this.http.post(`${environment.baseUrl}produtos/renda-variavel`, this.formRV.value, this.httpOptions).subscribe(
             resp => {
             console.log('sucesooo', resp);
+            this.updateExtrato();
             this.formRV.reset();
           },
             error => {
@@ -111,6 +127,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
         this.http.post(`${environment.baseUrl}produtos/arquivo-movimento`, formData).subscribe(
           resp => {
           console.log('sucesooo', resp);
+          this.updateExtrato();
           this.formMovFile.reset();
         },
           error => {
@@ -120,6 +137,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
           this.http.post(`${environment.baseUrl}produtos/movimento`, this.formMov.value, this.httpOptions).subscribe(
             resp => {
             console.log('sucesooo', resp);
+            this.updateExtrato();
             this.formMov.reset();
           },
             error => {
@@ -132,6 +150,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
             this.http.post(`${environment.baseUrl}produtos/limpar`, {}, this.httpOptions).subscribe(
               resp => {
               console.log('sucesooo', resp);
+              this.updateExtrato();
             },
               error => {
               console.log('errrou', error);

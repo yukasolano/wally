@@ -29,7 +29,7 @@ public class CadastroMovimento implements CadastroProduto<MovimentoInfoVO> {
             MovimentacaoEntity entity = new MovimentacaoEntity();
             entity.setTipoMovimento(movimento.getTipoMovimento());
             entity.setValorUnitario(movimento.getValorUnitario());
-            entity.setQuantidade(movimento.getQunatidade());
+            entity.setQuantidade(movimento.getQuantidade());
             entity.setData(movimento.getData());
             entity.setCodigo(movimento.getCodigo());
             movimentacaoRepository.save(entity);

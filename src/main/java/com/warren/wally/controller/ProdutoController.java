@@ -7,6 +7,7 @@ import com.warren.wally.file.TypeFile;
 import com.warren.wally.grafico.GraficoTransformador;
 import com.warren.wally.grafico.GraficosVO;
 import com.warren.wally.model.cadastro.CadastroProdutoResolver;
+import com.warren.wally.model.cadastro.ExtratoActor;
 import com.warren.wally.model.cadastro.MovimentoInfoVO;
 import com.warren.wally.model.cadastro.ProdutoRFInfoVO;
 import com.warren.wally.model.cadastro.ProdutoRVInfoVO;
@@ -18,9 +19,6 @@ import com.warren.wally.model.investimento.TipoMovimento;
 import com.warren.wally.portfolio.MultiPortfolio;
 import com.warren.wally.portfolio.PortfolioActor;
 import com.warren.wally.portfolio.PortfolioVO;
-import com.warren.wally.repository.MovimentacaoEntity;
-import com.warren.wally.repository.MovimentacaoRepository;
-import com.warren.wally.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -45,9 +43,6 @@ import static com.warren.wally.file.TypeFile.PRODUTOS_RV;
 public class ProdutoController {
 
     @Autowired
-    private ProdutoRepository produtoRepository;
-
-    @Autowired
     private MultiPortfolio multiportfolio;
 
     @Autowired
@@ -56,11 +51,11 @@ public class ProdutoController {
     @Autowired
     private FileUploadResolver fileUploadResolver;
 
-    @Autowired
-    private MovimentacaoRepository movimentacaoRepository;
-
     @Resource
     private CadastroProdutoResolver cadastroProdutoResolver;
+
+    @Resource
+    private ExtratoActor extratoActor;
 
     private LocalDate data = LocalDate.of(2020, 01, 31); // LocalDate.now();
 
@@ -121,8 +116,7 @@ public class ProdutoController {
 
     @PostMapping(value = "produtos/limpar")
     public void limpar() {
-        produtoRepository.deleteAll();
-        movimentacaoRepository.deleteAll();
+        extratoActor.limpa();
         portfolioActor.limpaMapa();
     }
 
@@ -154,8 +148,13 @@ public class ProdutoController {
 
     }
 
+    @RequestMapping("extrato")
+    public List<ExtratoVO> extrato() {
+        return extratoActor.getExtrato();
+    }
+
     @PostMapping(value = "produtos/extrato/download")
-    public ResponseEntity exportaExtrato(@RequestBody List<MovimentacaoEntity> data) {
+    public ResponseEntity exportaExtrato(@RequestBody List<ExtratoVO> data) {
         ExportedFile resource = fileExporterResolver.resolve(MOVIMENTOS).export(data);
 
         return ResponseEntity.ok()

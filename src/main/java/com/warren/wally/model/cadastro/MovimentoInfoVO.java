@@ -13,6 +13,6 @@ public class MovimentoInfoVO {
     private String codigo;
     private TipoMovimento tipoMovimento;
     private LocalDate data;
-    private int qunatidade;
+    private int quantidade;
     private double valorUnitario;
 }
