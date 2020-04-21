@@ -47,10 +47,11 @@ create database wally;
 
 ### DADOS DE MERCADO
 - atualizar lista de dividendos passados 
-- puxar preços tickers
-- atualizar feriados
+- nao permitir salvar dados duplicaods
 - atualizar valores de mercado de CDI e IPCA (ok)
 - arrumar calculos usando nova estrutura de dados de mercado (CDI e IPCA) (ok)
+- atualizar feriados (ok)
+- puxar preços tickers (ok)
 
 ### GRAFICOS
 - grafico da evolução da rentabilidade (com dividend yield)

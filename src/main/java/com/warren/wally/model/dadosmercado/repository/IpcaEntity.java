@@ -1,4 +1,4 @@
-package com.warren.wally.utils;
+package com.warren.wally.model.dadosmercado.repository;
 
 import java.time.LocalDate;
 
@@ -9,14 +9,19 @@ import javax.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+@Entity(name = "ipca")
 @Getter
 @Setter
-@Entity(name = "feriado")
-public class FeriadoEntity {
+public class IpcaEntity {
 
 	@Id
 	@GeneratedValue
 	private Long id;
 
 	private LocalDate data;
+
+	private double valor;
+
+	private double valorAcum;
+
 }

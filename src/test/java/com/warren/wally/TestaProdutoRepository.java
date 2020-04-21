@@ -3,8 +3,8 @@ package com.warren.wally;
 import com.warren.wally.db.WallyTestCase;
 import com.warren.wally.model.calculadora.TipoRentabilidade;
 import com.warren.wally.model.investimento.TipoInvestimento;
-import com.warren.wally.repository.ProdutoEntity;
-import com.warren.wally.repository.ProdutoRepository;
+import com.warren.wally.model.investimento.repository.ProdutoEntity;
+import com.warren.wally.model.investimento.repository.ProdutoRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

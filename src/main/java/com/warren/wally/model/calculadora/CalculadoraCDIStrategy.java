@@ -1,6 +1,6 @@
 package com.warren.wally.model.calculadora;
 
-import com.warren.wally.model.calculadora.repository.CdiRepository;
+import com.warren.wally.model.dadosmercado.repository.CdiRepository;
 import com.warren.wally.model.dadosmercado.DMcdiActor;
 import com.warren.wally.utils.BussinessDaysCalendar;
 import com.warren.wally.utils.DataValor;

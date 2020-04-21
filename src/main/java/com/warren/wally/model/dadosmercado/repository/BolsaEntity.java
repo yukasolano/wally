@@ -1,4 +1,4 @@
-package com.warren.wally.repository;
+package com.warren.wally.model.dadosmercado.repository;
 
 import java.time.LocalDate;
 

@@ -1,4 +1,4 @@
-package com.warren.wally.model.calculadora.repository;
+package com.warren.wally.model.dadosmercado.repository;
 
 import java.time.LocalDate;
 
@@ -9,17 +9,14 @@ import javax.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name = "cdi")
 @Getter
 @Setter
-public class CdiEntity {
+@Entity(name = "feriado")
+public class FeriadoEntity {
 
 	@Id
 	@GeneratedValue
 	private Long id;
 
 	private LocalDate data;
-
-	private double valor;
-
 }

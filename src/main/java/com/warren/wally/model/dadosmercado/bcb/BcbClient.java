@@ -1,4 +1,4 @@
-package com.warren.wally.model.bcb;
+package com.warren.wally.model.dadosmercado.bcb;
 
 import com.warren.wally.utils.DataValor;
 import org.springframework.beans.factory.annotation.Autowired;

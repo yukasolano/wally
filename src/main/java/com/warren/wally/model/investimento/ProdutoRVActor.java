@@ -2,11 +2,11 @@ package com.warren.wally.model.investimento;
 
 import javax.annotation.Resource;
 
-import com.warren.wally.model.dadosmercado.DataMarketEquities;
+import com.warren.wally.model.dadosmercado.DMequitiesActor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.warren.wally.repository.MovimentacaoRepository;
+import com.warren.wally.model.investimento.repository.MovimentacaoRepository;
 
 @Component
 public class ProdutoRVActor {
@@ -15,7 +15,7 @@ public class ProdutoRVActor {
 	private MovimentacaoRepository movimentacaoRepository;
 
 	@Autowired
-	private DataMarketEquities dm;
+	private DMequitiesActor dm;
 
 	/*
 	// TODO filtrar por tipo de movimentacao

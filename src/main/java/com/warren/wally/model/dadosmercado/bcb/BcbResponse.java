@@ -1,4 +1,4 @@
-package com.warren.wally.model.bcb;
+package com.warren.wally.model.dadosmercado.bcb;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,6 @@
 package com.warren.wally.model.calculadora;
 
-import com.warren.wally.model.calculadora.repository.IpcaRepository;
+import com.warren.wally.model.dadosmercado.repository.IpcaRepository;
 import com.warren.wally.model.dadosmercado.DMipcaActor;
 import com.warren.wally.utils.BussinessDaysCalendar;
 import org.springframework.stereotype.Component;

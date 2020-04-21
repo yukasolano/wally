@@ -1,7 +1,7 @@
 package com.warren.wally;
 
 import com.warren.wally.db.WallyTestCase;
-import com.warren.wally.model.bcb.BcbClient;
+import com.warren.wally.model.dadosmercado.bcb.BcbClient;
 import com.warren.wally.utils.DataValor;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

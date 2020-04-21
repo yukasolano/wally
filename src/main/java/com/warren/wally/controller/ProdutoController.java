@@ -120,6 +120,11 @@ public class ProdutoController {
         portfolioActor.limpaMapa();
     }
 
+    @GetMapping(value = "dados-mercado/limpar")
+    public void limparDadosMercado() {
+        dadosMercadoActor.limpa();
+    }
+
     @PostMapping(value = "produtos/movimento")
     public void criaMovimento(@RequestBody MovimentoInfoVO movimento) {
         cadastroProdutoResolver.resolve(null, movimento.getTipoMovimento()).save(movimento);

@@ -1,9 +1,9 @@
 package com.warren.wally.model.dadosmercado;
 
 import com.warren.wally.controller.SerieVO;
-import com.warren.wally.model.bcb.BcbClient;
-import com.warren.wally.model.calculadora.repository.IpcaEntity;
-import com.warren.wally.model.calculadora.repository.IpcaRepository;
+import com.warren.wally.model.dadosmercado.bcb.BcbClient;
+import com.warren.wally.model.dadosmercado.repository.IpcaEntity;
+import com.warren.wally.model.dadosmercado.repository.IpcaRepository;
 import com.warren.wally.utils.DataValor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,6 +28,11 @@ public class DMipcaActor {
 
     private Double ipcaInical = 1046.2758;
     private LocalDate startDate = LocalDate.of(2015, 1, 1);
+
+    public void limpa() {
+        ipcaRepository.deleteAll();
+        ipca.clear();
+    }
 
     public void atualiza() {
         //verifica ultima data no banco

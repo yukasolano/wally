@@ -2,9 +2,9 @@ package com.warren.wally.model.investimento;
 
 import com.warren.wally.model.calculadora.CalculadoraResolver;
 import com.warren.wally.model.calculadora.TipoRentabilidade;
-import com.warren.wally.model.dadosmercado.DataMarketEquities;
-import com.warren.wally.repository.MovimentacaoEntity;
-import com.warren.wally.repository.ProdutoEntity;
+import com.warren.wally.model.dadosmercado.DMequitiesActor;
+import com.warren.wally.model.investimento.repository.MovimentacaoEntity;
+import com.warren.wally.model.investimento.repository.ProdutoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +21,7 @@ public class InvestimentoFII extends InvestimentoAbstract {
 
 
     @Autowired
-    private DataMarketEquities dm;
+    private DMequitiesActor dm;
 
 
     @Override

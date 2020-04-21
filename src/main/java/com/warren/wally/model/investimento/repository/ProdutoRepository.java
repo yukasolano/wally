@@ -1,4 +1,4 @@
-package com.warren.wally.repository;
+package com.warren.wally.model.investimento.repository;
 
 import com.warren.wally.model.investimento.TipoInvestimento;
 import org.springframework.data.repository.CrudRepository;

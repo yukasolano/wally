@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.warren.wally.model.dadosmercado.repository.FeriadoRepository;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -8,9 +8,9 @@ import com.warren.wally.model.investimento.ProdutoRVActor;
 import com.warren.wally.model.investimento.ProdutoRVVO;
 import com.warren.wally.model.investimento.TipoInvestimento;
 import com.warren.wally.model.investimento.TipoMovimento;
-import com.warren.wally.repository.MovimentacaoEntity;
-import com.warren.wally.repository.MovimentacaoRepository;
-import com.warren.wally.repository.ProdutoEntity;
+import com.warren.wally.model.investimento.repository.MovimentacaoEntity;
+import com.warren.wally.model.investimento.repository.MovimentacaoRepository;
+import com.warren.wally.model.investimento.repository.ProdutoEntity;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

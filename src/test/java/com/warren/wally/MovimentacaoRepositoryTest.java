@@ -1,8 +1,8 @@
 package com.warren.wally;
 
 import com.warren.wally.model.investimento.TipoMovimento;
-import com.warren.wally.repository.MovimentacaoEntity;
-import com.warren.wally.repository.MovimentacaoRepository;
+import com.warren.wally.model.investimento.repository.MovimentacaoEntity;
+import com.warren.wally.model.investimento.repository.MovimentacaoRepository;
 import com.warren.wally.utils.DateUtils;
 import org.junit.Assert;
 import org.junit.Test;

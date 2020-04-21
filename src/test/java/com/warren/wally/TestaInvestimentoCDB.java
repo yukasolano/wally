@@ -8,9 +8,9 @@ import com.warren.wally.model.investimento.InvestimentoResolver;
 import com.warren.wally.model.investimento.ProdutoRFVO;
 import com.warren.wally.model.investimento.TipoInvestimento;
 import com.warren.wally.model.investimento.TipoMovimento;
-import com.warren.wally.repository.MovimentacaoEntity;
-import com.warren.wally.repository.MovimentacaoRepository;
-import com.warren.wally.repository.ProdutoEntity;
+import com.warren.wally.model.investimento.repository.MovimentacaoEntity;
+import com.warren.wally.model.investimento.repository.MovimentacaoRepository;
+import com.warren.wally.model.investimento.repository.ProdutoEntity;
 import org.junit.Test;
 
 import javax.annotation.Resource;

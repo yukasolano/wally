@@ -7,9 +7,9 @@ import com.warren.wally.model.investimento.Investimento;
 import com.warren.wally.model.investimento.InvestimentoResolver;
 import com.warren.wally.model.investimento.ProdutoRVActor;
 import com.warren.wally.model.investimento.ProdutoVO;
-import com.warren.wally.repository.MovimentacaoEntity;
-import com.warren.wally.repository.MovimentacaoRepository;
-import com.warren.wally.repository.ProdutoRepository;
+import com.warren.wally.model.investimento.repository.MovimentacaoEntity;
+import com.warren.wally.model.investimento.repository.MovimentacaoRepository;
+import com.warren.wally.model.investimento.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

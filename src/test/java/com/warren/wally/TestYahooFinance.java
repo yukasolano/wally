@@ -1,7 +1,7 @@
 package com.warren.wally;
 
 import com.warren.wally.db.WallyTestCase;
-import com.warren.wally.model.dadosmercado.DataMarketEquities;
+import com.warren.wally.model.dadosmercado.DMequitiesActor;
 import org.junit.Test;
 
 import javax.annotation.Resource;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class TestYahooFinance extends WallyTestCase {
 
     @Resource
-    private DataMarketEquities dm;
+    private DMequitiesActor dm;
 
     @Test
     public void test() {

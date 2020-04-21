@@ -36,6 +36,17 @@ import { DatePipe, DecimalPipe } from '@angular/common';
         });
     }
 
+    onLimpa() {
+        this.http.get(`${environment.baseUrl}dados-mercado/limpar`).subscribe(
+        resp => {
+            console.log('sucesooo', resp);
+
+        },
+        error => {
+            console.log('errrou', error);
+        });
+    }
+
     onBusca() {
         this.http.get<DadosMercado>(`${environment.baseUrl}dados-mercado/busca`).subscribe(
         resp => {

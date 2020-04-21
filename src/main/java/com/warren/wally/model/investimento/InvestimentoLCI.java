@@ -2,7 +2,7 @@ package com.warren.wally.model.investimento;
 
 import com.warren.wally.model.calculadora.Calculadora;
 import com.warren.wally.model.calculadora.CalculadoraResolver;
-import com.warren.wally.repository.ProdutoEntity;
+import com.warren.wally.model.investimento.repository.ProdutoEntity;
 import com.warren.wally.utils.BussinessDaysCalendar;
 import org.springframework.stereotype.Component;
 

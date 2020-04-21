@@ -1,9 +1,9 @@
 package com.warren.wally.model.cadastro;
 
-import com.warren.wally.repository.MovimentacaoEntity;
-import com.warren.wally.repository.MovimentacaoRepository;
-import com.warren.wally.repository.ProdutoEntity;
-import com.warren.wally.repository.ProdutoRepository;
+import com.warren.wally.model.investimento.repository.MovimentacaoEntity;
+import com.warren.wally.model.investimento.repository.MovimentacaoRepository;
+import com.warren.wally.model.investimento.repository.ProdutoEntity;
+import com.warren.wally.model.investimento.repository.ProdutoRepository;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

@@ -1,6 +1,6 @@
 package com.warren.wally.model.investimento;
 
-import com.warren.wally.repository.MovimentacaoEntity;
+import com.warren.wally.model.investimento.repository.MovimentacaoEntity;
 import lombok.Getter;
 import lombok.Setter;
 

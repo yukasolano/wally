@@ -15,4 +15,8 @@ public class DadosMercadoVO {
     public void addSerie(SerieVO serie) {
         dados.add(serie);
     }
+
+    public void addSeries(List<SerieVO> series) {
+        dados.addAll(series);
+    }
 }

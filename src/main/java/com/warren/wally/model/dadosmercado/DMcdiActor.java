@@ -1,9 +1,9 @@
 package com.warren.wally.model.dadosmercado;
 
 import com.warren.wally.controller.SerieVO;
-import com.warren.wally.model.bcb.BcbClient;
-import com.warren.wally.model.calculadora.repository.CdiEntity;
-import com.warren.wally.model.calculadora.repository.CdiRepository;
+import com.warren.wally.model.dadosmercado.bcb.BcbClient;
+import com.warren.wally.model.dadosmercado.repository.CdiEntity;
+import com.warren.wally.model.dadosmercado.repository.CdiRepository;
 import com.warren.wally.utils.BussinessDaysCalendar;
 import com.warren.wally.utils.DataValor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +30,11 @@ public class DMcdiActor {
     private List<DataValor> cdi = new ArrayList<>();
 
     private LocalDate startDate = LocalDate.of(2015, 1, 1);
+
+    public void limpa() {
+        cdiRepository.deleteAll();
+        cdi.clear();
+    }
 
     public void atualiza() {
         //verifica ultima data no banco

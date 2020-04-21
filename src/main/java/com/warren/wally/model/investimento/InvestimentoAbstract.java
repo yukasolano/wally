@@ -1,8 +1,8 @@
 package com.warren.wally.model.investimento;
 
-import com.warren.wally.repository.MovimentacaoEntity;
-import com.warren.wally.repository.MovimentacaoRepository;
-import com.warren.wally.repository.ProdutoEntity;
+import com.warren.wally.model.investimento.repository.MovimentacaoEntity;
+import com.warren.wally.model.investimento.repository.MovimentacaoRepository;
+import com.warren.wally.model.investimento.repository.ProdutoEntity;
 import com.warren.wally.utils.BussinessDaysCalendar;
 
 import javax.annotation.Resource;
