@@ -30,14 +30,15 @@ create database wally;
 - exportar movimentoacaç (ok)
 
 ### CALCULOS
-- Adicionar tratamento de venda
-- Agrupar DIVIDENDO, ATUALIZACAO e JCP
 - calculo do imposto de renda
 - calculo do titulo publico
 - tratamento para fundos
 - usar cache para nao precisar recalcular toda vez
 - fluxos de debenture
+- contas apenas para dias uteis
 
+- Adicionar tratamento de venda (ok)
+- Agrupar DIVIDENDO, ATUALIZACAO e JCP  (ok)
 - Refatorar tratamento de produtos.
 	Juntar renda fixa e renda variável (tudo será movimentação: compra, dividendo, amortização, etc). (ok)
 - Adicionar estrutura de mapa para salvar resultado do portfolio para cada dia  (ok)

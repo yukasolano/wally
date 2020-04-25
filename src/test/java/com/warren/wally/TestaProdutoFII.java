@@ -37,7 +37,11 @@ public class TestaProdutoFII extends WallyTestCase {
     @Test
     public void test() {
 
-        LocalDate hoje = dateOf("20/08/2018");
+        LocalDate hoje = dateOf("17/08/2018");
+
+        LocalDate posVenda = dateOf("21/09/2018");
+
+        LocalDate zerado = dateOf("23/09/2018");
 
         //cadastra produto
         ProdutoEntity entity = new ProdutoEntity();
@@ -57,8 +61,13 @@ public class TestaProdutoFII extends WallyTestCase {
                 dateOf("15/08/2018"), "VRTA11", 4, 0.65));
 
         movimentacaoRepository.save(createMovimentacao(TipoMovimento.DIVIDENDO,
-                dateOf("15/09/2018"), "VRTA11", 4, 0.7));
+                dateOf("14/09/2018"), "VRTA11", 4, 0.7));
 
+        movimentacaoRepository.save(createMovimentacao(TipoMovimento.VENDA,
+                dateOf("20/09/2018"), "VRTA11", 2, 0.75));
+
+        movimentacaoRepository.save(createMovimentacao(TipoMovimento.VENDA,
+                dateOf("22/09/2018"), "VRTA11", 2, 0.80));
 
         Investimento invest = investimentoResolver.resolve(entity.getTipoInvestimento());
         ProdutoRVVO produto = (ProdutoRVVO) invest.calc(hoje, entity);
@@ -67,6 +76,23 @@ public class TestaProdutoFII extends WallyTestCase {
         assertEquals(105.65, produto.getPrecoMedio(), 0.01);
         assertEquals(4, produto.getQuantidade(), 0.01);
         assertEquals(0.075, produto.getRentabilidadeDividendo(), 0.01);
+
+
+        ProdutoRVVO produtoPosVenda = (ProdutoRVVO) invest.calc(posVenda, entity);
+
+        assertEquals(105.65, produtoPosVenda.getPrecoMedio(), 0.01);
+        assertEquals(2, produtoPosVenda.getQuantidade(), 0.01);
+        assertEquals(0.075, produtoPosVenda.getRentabilidadeDividendo(), 0.01);
+
+        ProdutoRVVO produtoZerado = (ProdutoRVVO) invest.calc(zerado, entity);
+
+        assertEquals(0.0, produtoZerado.getPrecoMedio(), 0.01);
+        assertEquals(0, produtoZerado.getQuantidade(), 0.01);
+        assertEquals(0.0, produtoZerado.getRentabilidadeDividendo(), 0.01);
+
+
+
+
     }
 
     private MovimentacaoEntity createMovimentacao(TipoMovimento tipoMovimento,

@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.warren.wally.model.investimento.TipoMovimento.VENDA;
+
 @Component
 public class InvestimentoFII extends InvestimentoAbstract {
 
@@ -30,7 +32,8 @@ public class InvestimentoFII extends InvestimentoAbstract {
     }
 
     @Override
-    public ProdutoVO calc(LocalDate dataRef, ProdutoEntity entity) {
+    public ProdutoVO calc(LocalDate dataRef,
+                          ProdutoEntity entity) {
 
         List<MovimentacaoEntity> movimentacoes = movimentacaoRepository
                 .findByCodigoAndDataLessThanOrderByData(entity.getCodigo(), dataRef);
@@ -40,14 +43,23 @@ public class InvestimentoFII extends InvestimentoAbstract {
         vo.setDataReferencia(dataRef);
         vo.setTipoRentabilidade(TipoRentabilidade.FII);
 
-        for ( MovimentacaoEntity mov : movimentacoes ) {
+        for (MovimentacaoEntity mov : movimentacoes) {
 
-            if(mov.getTipoMovimento().equals(TipoMovimento.COMPRA)) {
+            if (mov.getTipoMovimento().equals(TipoMovimento.COMPRA)) {
                 vo.setPrecoTotal(vo.getPrecoTotal() + mov.getValorUnitario() * mov.getQuantidade());
                 vo.setQuantidade(vo.getQuantidade() + mov.getQuantidade());
+                vo.setPrecoMedio(vo.getPrecoTotal() / vo.getQuantidade());
             }
 
-            if(mov.getTipoMovimento().equals(TipoMovimento.DIVIDENDO)) {
+            if (mov.getTipoMovimento().equals(VENDA)) {
+                vo.setQuantidade(vo.getQuantidade() - mov.getQuantidade());
+                if (vo.getQuantidade() == 0) {
+                    vo.setPrecoMedio(0d);
+                }
+                vo.setPrecoTotal(vo.getQuantidade() * vo.getPrecoMedio());
+            }
+
+            if (mov.getTipoMovimento().equals(TipoMovimento.DIVIDENDO)) {
                 DividendoVO dividendoVO = new DividendoVO();
                 dividendoVO.setCodigo(mov.getCodigo());
                 dividendoVO.setData(mov.getData());
@@ -60,7 +72,6 @@ public class InvestimentoFII extends InvestimentoAbstract {
 
 
         vo.setCotacao(dm.get(vo.getCodigo(), dataRef));
-        vo.setPrecoMedio(vo.getPrecoTotal() / vo.getQuantidade());
         vo.setValorPresente(
                 vo.getCotacao() == 0 ? vo.getPrecoTotal() : vo.getQuantidade() * vo.getCotacao());
         vo.setResultado(vo.getValorPresente() - vo.getPrecoTotal());
@@ -69,6 +80,10 @@ public class InvestimentoFII extends InvestimentoAbstract {
     }
 
     private Double getRentabilidade(ProdutoRVVO produto) {
+
+        if (produto.getQuantidade() == 0) {
+            return 0d;
+        }
 
         LocalDate anoAnterior = produto.getDataReferencia().minusYears(1);
         List<DividendoVO> dividendos = produto.getDividendos().stream().filter(it -> it.getData().isAfter(anoAnterior)).collect(Collectors.toList());
