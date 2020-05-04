@@ -11,7 +11,7 @@ import { DemoMaterialModule } from './material-module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProductsComponent } from './products/products.component';
 import { CadastroComponent } from './cadastro/cadastro.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DynamicPipe } from './dynamic.pipe';
 
 import localePt from '@angular/common/locales/pt';
@@ -30,6 +30,8 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { StackedBarChartComponent } from './dashboard/stacked-bar-chart/stacked-bar-chart.component';
 import { LineChartComponent } from './dashboard/line-chart/line-chart.component';
 import { DadosMercadoComponent } from './dados-mercado/dados-mercado.component';
+import { LoaderInterceptorService } from './loader/loader-interceptor.service';
+import { LoaderComponent } from './loader/loader.component';
 
 registerLocaleData(localePt, 'pt');
 
@@ -48,6 +50,7 @@ registerLocaleData(localePt, 'pt');
     SummaryComponent,
     LineChartComponent,
     DadosMercadoComponent,
+    LoaderComponent
   ],
   imports: [
     CommonModule,
@@ -72,7 +75,12 @@ registerLocaleData(localePt, 'pt');
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
     DecimalPipe,
     DatePipe,
-    PercentPipe
+    PercentPipe,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoaderInterceptorService,
+      multi: true
+    }
   ],
   entryComponents: [
     CadastroComponent
