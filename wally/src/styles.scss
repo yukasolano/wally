@@ -1,15 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
 /* Global Styles */
 
-  body, input[text], button {
-    color: #333;
-    font-family: Cambria, Georgia;
-    margin: 0px;
-  }
+body, input[text], button {
+  color: #333;
+  font-family: Cambria, Georgia;
+  margin: 0px;
+}
 
- 
-  
-  /* everywhere else */
-  * {
-    font-family: Arial, Helvetica, sans-serif;
-  }
+/* everywhere else */
+* {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* snackbar */
+.error-snackbar {
+    color: whitesmoke;
+    background-color: darkred;
+}
+
+.success-snackbar{
+    color: whitesmoke;
+    background-color: green;
+}
+
+.mat-simple-snackbar-action {
+  color: whitesmoke;
+}

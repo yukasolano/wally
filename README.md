@@ -23,9 +23,9 @@ create database wally;
 - mvn com front-end
 - subir aplicação com frontend	
 - linha com total
-- snackbar com mesnagens
-- loading bar
-- modularizar produtos
+- modularizar frontend
+- snackbar com mesnagens (ok)
+- loading bar (ok)
 - tabela de movimentação (ok)
 - exportar movimentoacaç (ok)
 

@@ -11,7 +11,6 @@ import com.warren.wally.model.cadastro.ExtratoActor;
 import com.warren.wally.model.cadastro.MovimentoInfoVO;
 import com.warren.wally.model.cadastro.ProdutoRFInfoVO;
 import com.warren.wally.model.cadastro.ProdutoRVInfoVO;
-import com.warren.wally.model.dadosmercado.DadosMercadoActor;
 import com.warren.wally.model.investimento.ProdutoRFVO;
 import com.warren.wally.model.investimento.ProdutoRVVO;
 import com.warren.wally.model.investimento.ProdutosVO;
@@ -24,7 +23,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,9 +58,6 @@ public class ProdutoController {
     private LocalDate data = LocalDate.of(2020, 01, 31); // LocalDate.now();
 
     @Autowired
-    private DadosMercadoActor dadosMercadoActor;
-
-    @Autowired
     private FileExporterResolver fileExporterResolver;
 
     @RequestMapping("/portfolio-graficos")
@@ -94,41 +89,40 @@ public class ProdutoController {
     }
 
     @PostMapping(value = "produtos/renda-fixa")
-    public void criaProdutoRF(@RequestBody ProdutoRFInfoVO produto) {
+    public MessageOutDTO criaProdutoRF(@RequestBody ProdutoRFInfoVO produto) {
         cadastroProdutoResolver.resolve(produto.getTipoInvestimento(), TipoMovimento.COMPRA).save(produto);
         portfolioActor.limpaMapa();
+        return MessageOutDTO.ok("Produto cadastrado com sucesso");
     }
 
     @PostMapping(value = "produtos/renda-variavel")
-    public void criaProdutoRV(@RequestBody ProdutoRVInfoVO produto) {
+    public MessageOutDTO criaProdutoRV(@RequestBody ProdutoRVInfoVO produto) {
         cadastroProdutoResolver.resolve(produto.getTipoInvestimento(), TipoMovimento.COMPRA).save(produto);
         portfolioActor.limpaMapa();
+        return MessageOutDTO.ok("Produto cadastrado com sucesso");
     }
-
 
 
     @PostMapping(value = "produtos/arquivo-movimento")
-    public ProdutoRVInfoVO salvarArquivoRV(@RequestBody MultipartFile arquivo) {
+    public MessageOutDTO salvarArquivoRV(@RequestBody MultipartFile arquivo) {
         fileUploadResolver.resolve(MOVIMENTOS).read(arquivo);
         portfolioActor.limpaMapa();
-        return null;
+        return MessageOutDTO.ok("Arquivo importado com sucesso");
     }
 
     @PostMapping(value = "produtos/limpar")
-    public void limpar() {
+    public MessageOutDTO limpar() {
         extratoActor.limpa();
         portfolioActor.limpaMapa();
+        return MessageOutDTO.ok("Produtos removidos com sucesso");
     }
 
-    @GetMapping(value = "dados-mercado/limpar")
-    public void limparDadosMercado() {
-        dadosMercadoActor.limpa();
-    }
 
     @PostMapping(value = "produtos/movimento")
-    public void criaMovimento(@RequestBody MovimentoInfoVO movimento) {
+    public MessageOutDTO criaMovimento(@RequestBody MovimentoInfoVO movimento) {
         cadastroProdutoResolver.resolve(null, movimento.getTipoMovimento()).save(movimento);
         portfolioActor.limpaMapa();
+        return MessageOutDTO.ok("Movimento cadastrado com sucesso");
     }
 
     @PostMapping(value = "produtos/produtos-renda-fixa/download")
@@ -169,15 +163,5 @@ public class ProdutoController {
 
     }
 
-    @GetMapping(value = "dados-mercado/atualiza")
-    public void atualizaDadosMercado() {
-        dadosMercadoActor.atualizaDadosMercado();
-        portfolioActor.limpaMapa();
-    }
-
-    @GetMapping(value = "dados-mercado/busca")
-    public DadosMercadoVO mostraDadosMercado() {
-        return dadosMercadoActor.busca();
-    }
 
 }

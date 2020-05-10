@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { DadosMercado } from './dados-mercado';
 import { DatePipe, DecimalPipe } from '@angular/common';
+
+import { DadosMercado } from './dados-mercado';
+import { HttpService } from '../services/http.service';
+
 
 @Component({
     selector: 'app-dados-mercado',
@@ -13,49 +14,21 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 
     dadosMercado: DadosMercado;
 
-    constructor(
-      private http: HttpClient ) {
-    }
-
-
-    httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-    };
+    constructor(private httpService: HttpService ) {}
 
     ngOnInit() {
     }
 
     onAtualiza() {
-        this.http.get(`${environment.baseUrl}dados-mercado/atualiza`).subscribe(
-        resp => {
-            console.log('sucesooo', resp);
-
-        },
-        error => {
-            console.log('errrou', error);
-        });
+        this.httpService.post('dados-mercado/atualiza', {});
     }
 
     onLimpa() {
-        this.http.get(`${environment.baseUrl}dados-mercado/limpar`).subscribe(
-        resp => {
-            console.log('sucesooo', resp);
-
-        },
-        error => {
-            console.log('errrou', error);
-        });
+        this.httpService.post('dados-mercado/limpa', {});
     }
 
     onBusca() {
-        this.http.get<DadosMercado>(`${environment.baseUrl}dados-mercado/busca`).subscribe(
-        resp => {
-            console.log('sucesooo', resp);
-            this.dadosMercado = resp;
-        },
-        error => {
-            console.log('errrou', error);
-        });
+        this.httpService.get<DadosMercado>('dados-mercado/busca').subscribe(resp => this.dadosMercado = resp);
     }
 
     getTableInfo() {
@@ -72,5 +45,4 @@ import { DatePipe, DecimalPipe } from '@angular/common';
             },
         };
     }
-
   }

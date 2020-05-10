@@ -6,6 +6,7 @@ import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { SummaryComponent } from './summary/summary.component';
 import { StackedBarChartComponent } from './stacked-bar-chart/stacked-bar-chart.component';
 import { LineChartComponent } from './line-chart/line-chart.component';
+import { HttpService } from '../services/http.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -14,7 +15,7 @@ import { LineChartComponent } from './line-chart/line-chart.component';
   })
   export class DashboardComponent implements OnInit {
 
-    constructor(private http: HttpClient) { }
+    constructor(private httpService: HttpService) { }
 
     date = new Date();
 
@@ -29,8 +30,6 @@ import { LineChartComponent } from './line-chart/line-chart.component';
 
 
     dateChanged() {
-      console.log('mudou');
-      console.log(this.date.toISOString());
       this.update();
     }
 
@@ -43,7 +42,7 @@ import { LineChartComponent } from './line-chart/line-chart.component';
 
     update() {
       if (this.date) {
-        this.http.get<any>(`${environment.baseUrl}portfolio-graficos?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
+        this.httpService.get<any>(`portfolio-graficos?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
           console.log(resp);
           this.summary.update(resp.variacao, resp.patrimonioTotal);
           this.proporcao.update(resp.proporcao.valores, resp.proporcao.legendas);

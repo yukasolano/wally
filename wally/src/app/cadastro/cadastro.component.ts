@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { environment } from 'src/environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Extrato } from '../products/extrato';
 import { TabelaProdutosComponent } from '../products/tabela-produtos/tabela-produtos.component';
+import { HttpService } from '../services/http.service';
 
 @Component({
     selector: 'app-cadastro',
@@ -26,7 +25,7 @@ import { TabelaProdutosComponent } from '../products/tabela-produtos/tabela-prod
 
     constructor(
       private formBuilder: FormBuilder,
-      private http: HttpClient ) {
+      private httpService: HttpService ) {
 
         this.form = this.formBuilder.group({
           categoria: ['RF'],
@@ -67,17 +66,17 @@ import { TabelaProdutosComponent } from '../products/tabela-produtos/tabela-prod
         });
     }
 
-
-    httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-    };
-
     ngOnInit() {
       this.updateExtrato();
     }
 
-    updateExtrato() {
-      this.http.get<any>(`${environment.baseUrl}extrato`).subscribe( resp => {
+    updateExtrato = (): void => {
+      this.formRF.reset();
+      this.formRV.reset();
+      this.formMov.reset();
+      this.formMovFile.reset();
+
+      this.httpService.get<Extrato>(`extrato`).subscribe( resp => {
         this.tabelaExtrato.updateData(resp);
       });
     }
@@ -87,7 +86,6 @@ import { TabelaProdutosComponent } from '../products/tabela-produtos/tabela-prod
     }
 
     formMovInvalid() {
-      console.log(this.formMov);
       if (this.formMovMain.value.importaArquivo ) {
         return this.formMovFile.invalid;
       }
@@ -96,65 +94,24 @@ import { TabelaProdutosComponent } from '../products/tabela-produtos/tabela-prod
 
     onSubmit() {
         if (this.form.value.categoria === 'RF') {
-
-          this.http.post(`${environment.baseUrl}produtos/renda-fixa`, this.formRF.value, this.httpOptions).subscribe(
-            resp => {
-            console.log('sucesooo', resp);
-            this.updateExtrato();
-            this.formRF.reset();
-          },
-            error => {
-            console.log('errrou', error);
-          });
+          this.httpService.post(`produtos/renda-fixa`, this.formRF.value, this.updateExtrato);
         } else {
-          this.http.post(`${environment.baseUrl}produtos/renda-variavel`, this.formRV.value, this.httpOptions).subscribe(
-            resp => {
-            console.log('sucesooo', resp);
-            this.updateExtrato();
-            this.formRV.reset();
-          },
-            error => {
-            console.log('errrou', error);
-          });
+          this.httpService.post(`produtos/renda-variavel`, this.formRV.value, this.updateExtrato);
         }
     }
-
 
     onSubmitMov() {
       if (this.formMovMain.value.importaArquivo) {
         const formData = new FormData();
         formData.append('arquivo', this.formMovFile.value.arquivo._files[0], this.formMovFile.value.arquivo._files[0].name);
-        this.http.post(`${environment.baseUrl}produtos/arquivo-movimento`, formData).subscribe(
-          resp => {
-          console.log('sucesooo', resp);
-          this.updateExtrato();
-          this.formMovFile.reset();
-        },
-          error => {
-          console.log('errrou', error);
-        });
+        this.httpService.post(`produtos/arquivo-movimento`, formData, this.updateExtrato);
       } else {
-          this.http.post(`${environment.baseUrl}produtos/movimento`, this.formMov.value, this.httpOptions).subscribe(
-            resp => {
-            console.log('sucesooo', resp);
-            this.updateExtrato();
-            this.formMov.reset();
-          },
-            error => {
-            console.log('errrou', error);
-          });
+          this.httpService.post(`produtos/movimento`, this.formMov.value, this.updateExtrato);
       }
     }
 
     limpar() {
-            this.http.post(`${environment.baseUrl}produtos/limpar`, {}, this.httpOptions).subscribe(
-              resp => {
-              console.log('sucesooo', resp);
-              this.updateExtrato();
-            },
-              error => {
-              console.log('errrou', error);
-            });
-        }
+      this.httpService.post(`produtos/limpar`, {}, this.updateExtrato);
+    }
 
   }
