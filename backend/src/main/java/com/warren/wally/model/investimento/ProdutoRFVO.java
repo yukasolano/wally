@@ -20,7 +20,7 @@ public class ProdutoRFVO implements ProdutoVO {
     private LocalDate dtVencimento;
     private TipoInvestimento tipoInvestimento;
     private TipoRentabilidade tipoRentabilidade;
-    private double valorAplicado;
+    private Double valorAplicado;
     private double taxa;
     private Double valorPresente;
     private double rentabilidadeLiquida;

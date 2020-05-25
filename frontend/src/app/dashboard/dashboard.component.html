@@ -24,7 +24,7 @@
     
     <mat-card class="card card-instituicoes">
         <mat-card-title>Instituições de renda fixa</mat-card-title>
-        <app-bar-chart #instituicoes titulo="Instituições"></app-bar-chart>
+        <app-bar-chart #instituicoes titulo="Instituições" direction="vertical"></app-bar-chart>
     </mat-card>
     
     <mat-card class="card card-liquidez">
@@ -35,11 +35,6 @@
     <mat-card class="card card-dividendos">
         <mat-card-title>Dividendos</mat-card-title>
         <app-stacked-bar-chart #dividendos></app-stacked-bar-chart>
-    </mat-card>
-
-    <mat-card class="card card-renda-variavel">
-        <mat-card-title>Investimentos de renda variável</mat-card-title>
-        <app-bar-chart #proporcaoRV></app-bar-chart>
     </mat-card>
 
 </div>

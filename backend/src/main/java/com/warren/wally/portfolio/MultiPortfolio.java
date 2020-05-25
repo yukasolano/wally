@@ -1,11 +1,12 @@
 package com.warren.wally.portfolio;
 
 import com.warren.wally.grafico.GraficoMultiDados;
+import com.warren.wally.utils.BussinessDaysCalendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.time.LocalDate;
-import java.time.YearMonth;
 
 @Component
 public class MultiPortfolio {
@@ -13,19 +14,22 @@ public class MultiPortfolio {
     @Autowired
     private PortfolioActor portfolioActor;
 
+    @Resource
+    private BussinessDaysCalendar bussinessDaysCalendar;
+
     public VariacaoVO calculaVariacoes(PortfolioVO portfolio) {
 
         VariacaoVO variacao = new VariacaoVO();
 
         // variacao mensal
-        PortfolioVO portfolioMesAnterior = portfolioActor.run(portfolio.getDataRef().minusMonths(1));
+        PortfolioVO portfolioMesAnterior = portfolioActor.run(bussinessDaysCalendar.getNextWorkDay(portfolio.getDataRef().minusMonths(1)));
         variacao.setMensalAbsoluto(portfolio.getAccrual() - portfolioMesAnterior.getAccrual());
         if (portfolioMesAnterior.getAccrual() > 0) {
             variacao.setMensalPorcentagem(variacao.getMensalAbsoluto() / portfolioMesAnterior.getAccrual());
         }
 
         // variacao anual
-        PortfolioVO portfolioAnoAnterior = portfolioActor.run(portfolio.getDataRef().minusYears(1));
+        PortfolioVO portfolioAnoAnterior = portfolioActor.run(bussinessDaysCalendar.getNextWorkDay(portfolio.getDataRef().minusYears(1)));
         variacao.setAnualAbsoluto(portfolio.getAccrual() - portfolioAnoAnterior.getAccrual());
         if (portfolioAnoAnterior.getAccrual() > 0) {
             variacao.setAnualPorcentagem(variacao.getAnualAbsoluto() / portfolioAnoAnterior.getAccrual());
@@ -34,31 +38,20 @@ public class MultiPortfolio {
         return variacao;
     }
 
-    public GraficoMultiDados calculaEvolucao(PortfolioVO portfolio) {
+    public GraficoMultiDados calculaEvolucao(LocalDate date) {
 
-        double[][] dados = new double[1][12];
+        LocalDate data = bussinessDaysCalendar.getNextWorkDay(date.minusYears(2));
+        GraficoSeries series = new GraficoSeries();
 
-        String[] series = new String[1];
-        String[] labels = new String[12];
-
-        YearMonth mesAno = YearMonth.from(portfolio.getDataRef());
-        for (int i = 11; i >= 0; i--) {
-            labels[i] = mesAno.toString();
-            mesAno = mesAno.minusMonths(1);
+        while (data.isBefore(date)) {
+            PortfolioVO portfolioVO = portfolioActor.run(data);
+            series.addDado("Patrimônio", data.toString(), portfolioVO.getAccrual());
+            series.addDado("Aplicação", data.toString(), portfolioVO.getValorAplicado());
+            data = bussinessDaysCalendar.getNextWorkDay(data.plusDays(1));
         }
 
-        series[0] = "Patrimônio";
-        for (int col = 0; col < 12; col++) {
-            String label = labels[col];
-            try {
-                LocalDate data = LocalDate.parse(label + "-" + "01");
-                data.withDayOfMonth(data.lengthOfMonth());
-                dados[0][col] = portfolioActor.run(data.withDayOfMonth(data.lengthOfMonth())).getAccrual();
-            } catch (Exception e) {
-                dados[0][col] = 0.0;
-            }
-        }
 
-        return new GraficoMultiDados(labels, series, dados);
+        return series.transforma();
     }
 }
+

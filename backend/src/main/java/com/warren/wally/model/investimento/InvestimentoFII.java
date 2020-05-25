@@ -42,7 +42,7 @@ public class InvestimentoFII extends InvestimentoAbstract {
         vo.setTipoInvestimento(entity.getTipoInvestimento());
         vo.setDataReferencia(dataRef);
         vo.setTipoRentabilidade(TipoRentabilidade.FII);
-
+        vo.setInstituicao(entity.getInstituicao());
         for (MovimentacaoEntity mov : movimentacoes) {
 
             if (mov.getTipoMovimento().equals(TipoMovimento.COMPRA)) {

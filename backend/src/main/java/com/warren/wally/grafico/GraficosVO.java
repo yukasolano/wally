@@ -12,9 +12,4 @@ public class GraficosVO {
 	double patrimonioTotal;
 	VariacaoVO variacao;
 	GraficoDados proporcao;
-	GraficoDados proporcaoRV;
-	GraficoDados instituicoes;
-	GraficoDados liquidez;
-	GraficoMultiDados dividendos;
-	GraficoMultiDados evolucao;
 }

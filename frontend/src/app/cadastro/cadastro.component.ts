@@ -50,7 +50,7 @@ import { HttpService } from '../services/http.service';
         });
 
         this.formMovMain = this.formBuilder.group({
-          importaArquivo: [false]
+          importaArquivo: []
         });
 
         this.formMovFile = this.formBuilder.group({
@@ -104,7 +104,7 @@ import { HttpService } from '../services/http.service';
       if (this.formMovMain.value.importaArquivo) {
         const formData = new FormData();
         formData.append('arquivo', this.formMovFile.value.arquivo._files[0], this.formMovFile.value.arquivo._files[0].name);
-        this.httpService.post(`produtos/arquivo-movimento`, formData, this.updateExtrato);
+        this.httpService.postFile(`produtos/arquivo-movimento`, formData, this.updateExtrato);
       } else {
           this.httpService.post(`produtos/movimento`, this.formMov.value, this.updateExtrato);
       }

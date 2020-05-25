@@ -46,6 +46,7 @@ public class InvestimentoACAO extends InvestimentoAbstract {
         vo.setTipoInvestimento(entity.getTipoInvestimento());
         vo.setTipoRentabilidade(TipoRentabilidade.ACAO);
         vo.setDataReferencia(dataRef);
+        vo.setInstituicao(entity.getInstituicao());
         for (MovimentacaoEntity mov : movimentacoes) {
 
             if (mov.getTipoMovimento().equals(COMPRA)) {

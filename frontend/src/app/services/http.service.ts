@@ -22,7 +22,15 @@ export class HttpService {
     }
 
     public post(endpoint: string, body: {} = null, posExecution = null): void {
-        this.http.post<any>(`${environment.baseUrl}${endpoint}`, body, this.httpOptions).subscribe(
+        this.callPost(endpoint, body, posExecution, this.httpOptions);
+    }
+
+    public postFile(endpoint: string, body: {} = null, posExecution = null): void {
+        this.callPost(endpoint, body, posExecution);
+    }
+
+    private callPost(endpoint: string, body: {} = null, posExecution = null, httpOptions = {}) {
+        this.http.post<any>(`${environment.baseUrl}${endpoint}`, body, httpOptions).subscribe(
             resp => {
                 if (posExecution) { posExecution(); }
                 this.showSuccess(resp.message);

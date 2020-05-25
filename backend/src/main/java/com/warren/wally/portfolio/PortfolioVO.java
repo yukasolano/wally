@@ -20,18 +20,13 @@ public class PortfolioVO {
 
     private double accrual;
 
+    private double valorAplicado;
+
     private LocalDate dataRef;
 
     public Map<String, Double> getProporcoes() {
         Map<String, Double> proporcoes = produtos.stream()
                 .collect(Collectors.groupingBy(produto -> produto.getTipoRentabilidade().toString(),
-                        Collectors.reducing(0.0, ProdutoVO::getValorPresente, Double::sum)));
-        return sortedByKey(proporcoes);
-    }
-
-    public Map<String, Double> getProporcoesRV() {
-        Map<String, Double> proporcoes = produtos.stream()
-                .collect(Collectors.groupingBy(ProdutoVO::getCodigo,
                         Collectors.reducing(0.0, ProdutoVO::getValorPresente, Double::sum)));
         return sortedByKey(proporcoes);
     }
@@ -52,8 +47,7 @@ public class PortfolioVO {
     }
 
     private Map<String, Double> sortedByKey(final Map<String, Double> inputMap) {
-        final Map<String, Double> sorted = inputMap.entrySet().stream().sorted(Map.Entry.comparingByKey())
+        return inputMap.entrySet().stream().filter(it -> it.getValue() > 0d).sorted(Map.Entry.comparingByKey())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-        return sorted;
     }
 }

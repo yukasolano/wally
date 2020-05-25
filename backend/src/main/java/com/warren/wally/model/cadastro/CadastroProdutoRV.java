@@ -33,7 +33,7 @@ public class CadastroProdutoRV implements CadastroProduto<ProdutoRVInfoVO> {
             entity.setCodigo(produto.getCodigo());
             entity.setTipoInvestimento(produto.getTipoInvestimento());
             entity.setTipoRentabilidade(getTipoRentabilidade(produto.getTipoInvestimento()));
-            entity.setInstituicao("Renda variável");
+            entity.setInstituicao(produto.getInstituicao() == null ? produto.getCodigo() : produto.getInstituicao());
             produtoRepository.save(entity);
         }
 
@@ -56,7 +56,7 @@ public class CadastroProdutoRV implements CadastroProduto<ProdutoRVInfoVO> {
             entity.setCodigo(vo.getCodigo());
             entity.setTipoInvestimento(vo.getTipoInvestimento());
             entity.setTipoRentabilidade(getTipoRentabilidade(vo.getTipoInvestimento()));
-            entity.setInstituicao("Renda variável");
+            entity.setInstituicao(vo.getInstituicao() == null ? vo.getCodigo() : vo.getInstituicao());
             produtoRepository.save(entity);
         }
 

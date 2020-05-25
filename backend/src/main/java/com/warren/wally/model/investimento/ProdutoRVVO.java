@@ -30,8 +30,9 @@ public class ProdutoRVVO implements ProdutoVO {
     private double precoMedio;
     private Double valorPresente;
     private double resultado;
-    private String instituicao = "Renda variável";
+    private String instituicao = "";
     private String anoVencimento = "Liquidez diária";
+
 
     private TipoRentabilidade tipoRentabilidade;
 
@@ -43,4 +44,8 @@ public class ProdutoRVVO implements ProdutoVO {
         dividendos.add(dividendoVO);
     }
 
+    @Override
+    public Double getValorAplicado() {
+        return this.precoMedio * this.quantidade;
+    }
 }

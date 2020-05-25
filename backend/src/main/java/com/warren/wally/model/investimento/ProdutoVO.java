@@ -17,4 +17,6 @@ public interface ProdutoVO {
     String getAnoVencimento();
 
     List<DividendoVO> getDividendos();
+
+    Double getValorAplicado();
 }

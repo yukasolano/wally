@@ -1,7 +1,7 @@
 # Wally
 Sistema para controle de investimentos
 
-Ferramentas utilizadas: Spring, MySQL5.7, Angular 8
+Ferramentas utilizadas: Maven, Spring, MySQL5.7, Angular 8
 
 Antes de rodar a aplicação, atualize o application.properties com as configurações do seu banco de dados.
 ```
@@ -20,10 +20,10 @@ create database wally;
 
 
 ### FRONTEND:
-- mvn com front-end
-- subir aplicação com frontend	
 - linha com total
 - modularizar frontend
+- mvn com front-end (ok)
+- subir aplicação com frontend	(ok)
 - snackbar com mesnagens (ok)
 - loading bar (ok)
 - tabela de movimentação (ok)
@@ -35,7 +35,7 @@ create database wally;
 - tratamento para fundos
 - usar cache para nao precisar recalcular toda vez
 - fluxos de debenture
-- contas apenas para dias uteis
+- contas apenas para dias uteis <<<<<
 
 - Adicionar tratamento de venda (ok)
 - Agrupar DIVIDENDO, ATUALIZACAO e JCP  (ok)
@@ -48,7 +48,7 @@ create database wally;
 
 ### DADOS DE MERCADO
 - atualizar lista de dividendos passados 
-- nao permitir salvar dados duplicaods
+- nao permitir salvar dados duplicaods <<<<<<
 - atualizar valores de mercado de CDI e IPCA (ok)
 - arrumar calculos usando nova estrutura de dados de mercado (CDI e IPCA) (ok)
 - atualizar feriados (ok)

@@ -17,5 +17,6 @@ public class ProdutoRVInfoVO {
     private double valorUnitario;
     private TipoInvestimento tipoInvestimento;
     private TipoRentabilidade tipoRentabilidade;
+    private String instituicao;
 
 }

@@ -18,12 +18,16 @@
     width: calc(40% - 3rem);
 }
 
-.card-liquidez, .card-instituicoes {
-    width:calc(50% - 3rem);
+.card-liquidez {
+    width:calc(40% - 3rem);
+}
+
+.card-instituicoes {
+    width:calc(60% - 3rem);
 }
 
 .card-dividendos {
-    width:calc(60% - 3rem);
+    width:100%;
 }
 
 .card-evolucao {

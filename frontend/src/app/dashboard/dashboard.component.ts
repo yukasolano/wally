@@ -42,15 +42,26 @@ import { HttpService } from '../services/http.service';
 
     update() {
       if (this.date) {
-        this.httpService.get<any>(`portfolio-graficos?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
-          console.log(resp);
+
+        this.httpService.get<any>(`portfolio/liquidez?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
+          this.liquidez.update(resp.valores, resp.legendas);
+        });
+
+        this.httpService.get<any>(`portfolio/instituicoes?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
+          this.instituicoes.update(resp.valores, resp.legendas);
+        });
+
+        this.httpService.get<any>(`portfolio/dividendos?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
+          this.dividendos.update(resp.data, resp.labels, resp.series);
+        });
+
+        this.httpService.get<any>(`portfolio/evolucao?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
+          this.evolucao.update(resp.data, resp.labels, resp.series);
+        });
+
+        this.httpService.get<any>(`portfolio/resumo?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
           this.summary.update(resp.variacao, resp.patrimonioTotal);
           this.proporcao.update(resp.proporcao.valores, resp.proporcao.legendas);
-          this.proporcaoRV.update(resp.proporcaoRV.valores, resp.proporcaoRV.legendas);
-          this.instituicoes.update(resp.instituicoes.valores, resp.instituicoes.legendas);
-          this.liquidez.update(resp.liquidez.valores, resp.liquidez.legendas);
-          this.dividendos.update(resp.dividendos.data, resp.dividendos.labels, resp.dividendos.series);
-          this.evolucao.update(resp.evolucao.data, resp.evolucao.labels, resp.evolucao.series);
         });
       }
     }

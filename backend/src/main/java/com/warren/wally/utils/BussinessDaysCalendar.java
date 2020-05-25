@@ -53,6 +53,17 @@ public class BussinessDaysCalendar {
 		return iterator;
 	}
 
+	public LocalDate getPreviousWorkDay(LocalDate date) {
+		if (isWorkDay(date)) {
+			return date;
+		}
+		LocalDate iterator = date.minusDays(1);
+		while (!isWorkDay(iterator)) {
+			iterator = iterator.minusDays(1);
+		}
+		return iterator;
+	}
+
 	private boolean isWorkDay(LocalDate date) {
 		return !isWeekEnd(date) && !isHoliday(date);
 	}
