@@ -30,6 +30,7 @@ create database wally;
 - exportar movimentoacaç (ok)
 
 ### CALCULOS
+- melhorar performance (rodar assim q subir...)
 - calculo do imposto de renda
 - calculo do titulo publico
 - tratamento para fundos
@@ -55,6 +56,7 @@ create database wally;
 - puxar preços tickers (ok)
 
 ### GRAFICOS
-- grafico da evolução da rentabilidade (com dividend yield)
+- grafico da evolução da rentabilidade (com dividend yield) (ok)
+- adicionar cdi/ipca para comparacao
 
 

@@ -33,6 +33,7 @@ public class ProdutoRVVO implements ProdutoVO {
     private String instituicao = "";
     private String anoVencimento = "Liquidez diária";
 
+    private LocalDate ultimaCompra = null;
 
     private TipoRentabilidade tipoRentabilidade;
 
@@ -47,5 +48,21 @@ public class ProdutoRVVO implements ProdutoVO {
     @Override
     public Double getValorAplicado() {
         return this.precoMedio * this.quantidade;
+    }
+
+    public Double getRentabilidade(ProdutoVO vo) {
+
+        if(vo == null) return 1d;
+        ProdutoRVVO vo1 = (ProdutoRVVO)vo;
+        Double p1 = vo1.getCotacao();
+        if(vo1.getDataReferencia().equals(vo1.getUltimaCompra())) {
+            p1 = vo1.getPrecoMedio();
+        }
+
+        Double p2 = this.getCotacao();
+        if(this.getDataReferencia().equals(this.getUltimaCompra())) {
+            p2 = this.getPrecoMedio();
+        }
+        return 1d + Math.log(p2/p1);
     }
 }

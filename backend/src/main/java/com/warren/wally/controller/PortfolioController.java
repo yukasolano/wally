@@ -61,6 +61,11 @@ public class PortfolioController {
         return portfolioActor.getPortfolios();
     }
 
+    @RequestMapping("/rentabilidade")
+    public GraficoMultiDados rentabilidade(@PathParam("date") String date) {
+        return multiportfolio.getRentabilidade(LocalDate.parse(date));
+    }
+
     @RequestMapping("/resumo")
     public GraficosVO index(@PathParam("date") String date) {
         PortfolioVO portfolio = portfolioActor.run(LocalDate.parse(date));

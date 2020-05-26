@@ -37,7 +37,6 @@ public class InvestimentoLCI extends InvestimentoAbstract {
         vo.setRentabilidadeLiquida(getRentabilidadeLiquida(vo));
         vo.setTaxaAnualLiquida(getTaxaAnualLiquida(vo));
         vo.setTaxaMensalLiquida(getTaxaMensalLiquida(vo));
-
         return vo;
     }
 

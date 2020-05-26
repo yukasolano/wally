@@ -19,4 +19,6 @@ public interface ProdutoVO {
     List<DividendoVO> getDividendos();
 
     Double getValorAplicado();
+
+    Double getRentabilidade(ProdutoVO vo);
 }

@@ -34,4 +34,6 @@ public interface MovimentacaoRepository extends CrudRepository<MovimentacaoEntit
     List<MovimentacaoEntity> findByDataBetweenOrderByData(LocalDate dataInicio,
                                                           LocalDate dataFim);
 
+    List<MovimentacaoEntity> findByTipoMovimentoAndData(TipoMovimento tipoMovimento, LocalDate data);
+
 }

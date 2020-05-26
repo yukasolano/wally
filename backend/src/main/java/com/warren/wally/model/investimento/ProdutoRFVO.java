@@ -32,7 +32,7 @@ public class ProdutoRFVO implements ProdutoVO {
     private String codigo;
 
     public String getAnoVencimento() {
-        return Integer.valueOf(this.dtVencimento.getYear()).toString();
+        return Integer.toString(this.dtVencimento.getYear());
     }
 
     @Override
@@ -44,6 +44,11 @@ public class ProdutoRFVO implements ProdutoVO {
     public String toString() {
         return String.format("%s %s %s %.2f %.2f %s ", tipoInvestimento, tipoRentabilidade, instituicao, taxa,
                 valorAplicado, dtAplicacao);
+    }
+
+    public Double getRentabilidade(ProdutoVO vo1) {
+        if(vo1 == null) return 1d;
+        return this.getValorPresente() / vo1.getValorPresente() + 1d;
     }
 
 }

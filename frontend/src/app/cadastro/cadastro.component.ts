@@ -76,7 +76,7 @@ import { HttpService } from '../services/http.service';
       this.formMov.reset();
       this.formMovFile.reset();
 
-      this.httpService.get<Extrato>(`extrato`).subscribe( resp => {
+      this.httpService.get<Extrato>(`produtos/extrato`).subscribe( resp => {
         this.tabelaExtrato.updateData(resp);
       });
     }

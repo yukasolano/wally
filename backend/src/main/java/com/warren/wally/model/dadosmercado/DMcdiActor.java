@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -68,7 +69,7 @@ public class DMcdiActor {
 
     public List<DataValor> filtraCDI(LocalDate dataInicio, LocalDate dataFim) {
 
-        return getCdis().stream()
+        return getCdis().stream().filter(Objects::nonNull)
                 .filter(dt -> dt.getData().isAfter(dataInicio)
                         && (dt.getData().isBefore(dataFim) || dt.getData().isEqual(dataFim)))
                 .collect(Collectors.toList());

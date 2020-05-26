@@ -7,6 +7,7 @@ import com.warren.wally.model.investimento.Investimento;
 import com.warren.wally.model.investimento.InvestimentoResolver;
 import com.warren.wally.model.investimento.ProdutoRVActor;
 import com.warren.wally.model.investimento.ProdutoVO;
+import com.warren.wally.model.investimento.TipoMovimento;
 import com.warren.wally.model.investimento.repository.MovimentacaoEntity;
 import com.warren.wally.model.investimento.repository.MovimentacaoRepository;
 import com.warren.wally.model.investimento.repository.ProdutoRepository;
@@ -108,6 +109,13 @@ public class PortfolioActor {
         });
 
         return graficoSeries.transforma();
+    }
+
+    public double ajustePorDia(LocalDate dataRef) {
+        double dividendos = movimentacaoRepository.findByTipoMovimentoAndData(TipoMovimento.DIVIDENDO, dataRef).stream().mapToDouble(it-> it.getValorUnitario()* it.getQuantidade()).sum();
+        double compra = movimentacaoRepository.findByTipoMovimentoAndData(TipoMovimento.COMPRA, dataRef).stream().mapToDouble(it-> it.getValorUnitario()* it.getQuantidade()).sum();
+        double resgate = movimentacaoRepository.findByTipoMovimentoAndData(TipoMovimento.RESGATE, dataRef).stream().mapToDouble(it-> it.getValorUnitario()* it.getQuantidade()).sum();
+        return compra - resgate - dividendos;
     }
 
     public List<MovimentacaoEntity> getExtrato(LocalDate dataRef) {

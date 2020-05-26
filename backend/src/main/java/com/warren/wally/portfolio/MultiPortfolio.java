@@ -40,7 +40,7 @@ public class MultiPortfolio {
 
     public GraficoMultiDados calculaEvolucao(LocalDate date) {
 
-        LocalDate data = bussinessDaysCalendar.getNextWorkDay(date.minusYears(2));
+        LocalDate data = bussinessDaysCalendar.getNextWorkDay(date.minusYears(1));
         GraficoSeries series = new GraficoSeries();
 
         while (data.isBefore(date)) {
@@ -51,6 +51,23 @@ public class MultiPortfolio {
         }
 
 
+        return series.transforma();
+    }
+
+    public GraficoMultiDados getRentabilidade(LocalDate date) {
+        LocalDate data = bussinessDaysCalendar.getNextWorkDay(date.minusYears(1));
+        GraficoSeries series = new GraficoSeries();
+        double acumulado = 1d;
+        double lastVP = 0d;
+
+        while (data.isBefore(date)) {
+            PortfolioVO portfolioVO = portfolioActor.run(data);
+            double r = lastVP == 0d ? 1d : (portfolioVO.getAccrual() - lastVP - portfolioActor.ajustePorDia(data))/ lastVP + 1d;
+            lastVP = portfolioVO.getAccrual();
+            acumulado *= r;
+            series.addDado("Rentabilidade", data.toString(), acumulado);
+            data = bussinessDaysCalendar.getNextWorkDay(data.plusDays(1));
+        }
         return series.transforma();
     }
 }

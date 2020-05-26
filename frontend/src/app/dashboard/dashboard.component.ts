@@ -1,6 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { SummaryComponent } from './summary/summary.component';
@@ -57,6 +55,11 @@ import { HttpService } from '../services/http.service';
 
         this.httpService.get<any>(`portfolio/evolucao?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
           this.evolucao.update(resp.data, resp.labels, resp.series);
+        });
+
+        this.httpService.get<any>(`portfolio/rentabilidade?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
+          console.log(resp);
+          this.rentabilidade.update(resp.data, resp.labels, resp.series);
         });
 
         this.httpService.get<any>(`portfolio/resumo?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {

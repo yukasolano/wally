@@ -2,7 +2,6 @@ package com.warren.wally.portfolio;
 
 import com.warren.wally.grafico.GraficoMultiDados;
 
-import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -36,7 +35,7 @@ public class GraficoSeries {
         }
 
         int s = 0;
-        for( Map.Entry<String, Map<String, Double>> entry : series.entrySet()) {
+        for (Map.Entry<String, Map<String, Double>> entry : series.entrySet()) {
             nomes[s] = entry.getKey();
             int a = 0;
 

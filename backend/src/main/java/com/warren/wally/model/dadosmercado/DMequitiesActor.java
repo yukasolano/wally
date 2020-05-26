@@ -47,16 +47,16 @@ public class DMequitiesActor {
 
     public double get(String ticker,
                       LocalDate data) {
-        List<BolsaEntity> cdiEntity = bolsaRepository.findByCodigoAndData(ticker, data);
+        List<BolsaEntity> bolsaEntity = bolsaRepository.findByCodigoAndData(ticker, data);
 
-        if (!cdiEntity.isEmpty()) {
-            return cdiEntity.get(0).getValor();
+        if (!bolsaEntity.isEmpty()) {
+            return bolsaEntity.get(0).getValor();
         }
 
-        cdiEntity = bolsaRepository.findByCodigoOrderByDataDesc(ticker);
+        bolsaEntity = bolsaRepository.findByCodigoAndDataLessThanOrderByDataDesc(ticker, data);
 
-        if (!cdiEntity.isEmpty()) {
-            return cdiEntity.get(0).getValor();
+        if (!bolsaEntity.isEmpty()) {
+            return bolsaEntity.get(0).getValor();
         }
         System.out.println("Ticker não encontrado: " + ticker);
         return 0.0;

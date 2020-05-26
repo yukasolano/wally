@@ -5,6 +5,7 @@ import com.warren.wally.model.calculadora.TipoRentabilidade;
 import com.warren.wally.model.dadosmercado.DMequitiesActor;
 import com.warren.wally.model.investimento.repository.MovimentacaoEntity;
 import com.warren.wally.model.investimento.repository.ProdutoEntity;
+import com.warren.wally.utils.BussinessDaysCalendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,9 @@ public class InvestimentoFII extends InvestimentoAbstract {
 
     @Autowired
     private DMequitiesActor dm;
+
+    @Resource
+    private BussinessDaysCalendar bc;
 
 
     @Override
@@ -49,6 +53,7 @@ public class InvestimentoFII extends InvestimentoAbstract {
                 vo.setPrecoTotal(vo.getPrecoTotal() + mov.getValorUnitario() * mov.getQuantidade());
                 vo.setQuantidade(vo.getQuantidade() + mov.getQuantidade());
                 vo.setPrecoMedio(vo.getPrecoTotal() / vo.getQuantidade());
+                vo.setUltimaCompra(mov.getData());
             }
 
             if (mov.getTipoMovimento().equals(VENDA)) {
@@ -57,6 +62,7 @@ public class InvestimentoFII extends InvestimentoAbstract {
                     vo.setPrecoMedio(0d);
                 }
                 vo.setPrecoTotal(vo.getQuantidade() * vo.getPrecoMedio());
+                vo.setUltimaCompra(mov.getData());
             }
 
             if (mov.getTipoMovimento().equals(TipoMovimento.DIVIDENDO)) {
@@ -75,11 +81,11 @@ public class InvestimentoFII extends InvestimentoAbstract {
         vo.setValorPresente(
                 vo.getCotacao() == 0 ? vo.getPrecoTotal() : vo.getQuantidade() * vo.getCotacao());
         vo.setResultado(vo.getValorPresente() - vo.getPrecoTotal());
-        vo.setRentabilidadeDividendo(getRentabilidade(vo));
+        vo.setRentabilidadeDividendo(getRentabilidadeDividendo(vo));
         return vo;
     }
 
-    private Double getRentabilidade(ProdutoRVVO produto) {
+    private Double getRentabilidadeDividendo(ProdutoRVVO produto) {
 
         if (produto.getQuantidade() == 0) {
             return 0d;

@@ -12,4 +12,6 @@ public interface BolsaRepository extends CrudRepository<BolsaEntity, Long> {
 	List<BolsaEntity> findByCodigoAndData(String codigo, LocalDate data);
 
 	List<BolsaEntity> findByCodigoOrderByDataDesc(String codigo);
+
+	List<BolsaEntity> findByCodigoAndDataLessThanOrderByDataDesc(String codigo,	LocalDate data);
 }
