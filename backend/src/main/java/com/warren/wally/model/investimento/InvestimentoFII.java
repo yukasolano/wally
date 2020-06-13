@@ -1,34 +1,19 @@
 package com.warren.wally.model.investimento;
 
-import com.warren.wally.model.calculadora.CalculadoraResolver;
 import com.warren.wally.model.calculadora.TipoRentabilidade;
 import com.warren.wally.model.dadosmercado.DMequitiesActor;
-import com.warren.wally.model.investimento.repository.MovimentacaoEntity;
-import com.warren.wally.model.investimento.repository.ProdutoEntity;
-import com.warren.wally.utils.BussinessDaysCalendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.warren.wally.model.investimento.TipoMovimento.VENDA;
-
 @Component
-public class InvestimentoFII extends InvestimentoAbstract {
-
-    @Resource
-    private CalculadoraResolver calculadoraResolver;
-
+public class InvestimentoFII extends InvestimentoRVAbstract {
 
     @Autowired
     private DMequitiesActor dm;
-
-    @Resource
-    private BussinessDaysCalendar bc;
-
 
     @Override
     public TipoInvestimento getTipoInvestimento() {
@@ -36,56 +21,7 @@ public class InvestimentoFII extends InvestimentoAbstract {
     }
 
     @Override
-    public ProdutoVO calc(LocalDate dataRef,
-                          ProdutoEntity entity) {
-
-        List<MovimentacaoEntity> movimentacoes = movimentacaoRepository
-                .findByCodigoAndDataLessThanOrderByData(entity.getCodigo(), dataRef);
-
-        ProdutoRVVO vo = new ProdutoRVVO(entity.getCodigo());
-        vo.setTipoInvestimento(entity.getTipoInvestimento());
-        vo.setDataReferencia(dataRef);
-        vo.setTipoRentabilidade(TipoRentabilidade.FII);
-        vo.setInstituicao(entity.getInstituicao());
-        for (MovimentacaoEntity mov : movimentacoes) {
-
-            if (mov.getTipoMovimento().equals(TipoMovimento.COMPRA)) {
-                vo.setPrecoTotal(vo.getPrecoTotal() + mov.getValorUnitario() * mov.getQuantidade());
-                vo.setQuantidade(vo.getQuantidade() + mov.getQuantidade());
-                vo.setPrecoMedio(vo.getPrecoTotal() / vo.getQuantidade());
-                vo.setUltimaCompra(mov.getData());
-            }
-
-            if (mov.getTipoMovimento().equals(VENDA)) {
-                vo.setQuantidade(vo.getQuantidade() - mov.getQuantidade());
-                if (vo.getQuantidade() == 0) {
-                    vo.setPrecoMedio(0d);
-                }
-                vo.setPrecoTotal(vo.getQuantidade() * vo.getPrecoMedio());
-                vo.setUltimaCompra(mov.getData());
-            }
-
-            if (mov.getTipoMovimento().equals(TipoMovimento.DIVIDENDO)) {
-                DividendoVO dividendoVO = new DividendoVO();
-                dividendoVO.setCodigo(mov.getCodigo());
-                dividendoVO.setData(mov.getData());
-                dividendoVO.setQuantidade(mov.getQuantidade());
-                dividendoVO.setTipo(mov.getTipoMovimento());
-                dividendoVO.setValorUnitario(mov.getValorUnitario());
-                vo.addDividendo(dividendoVO);
-            }
-        }
-
-
-        vo.setCotacao(dm.get(vo.getCodigo(), dataRef));
-        vo.setValorPresente(
-                vo.getCotacao() == 0 ? vo.getPrecoTotal() : vo.getQuantidade() * vo.getCotacao());
-        vo.setResultado(vo.getValorPresente() - vo.getPrecoTotal());
-        vo.setRentabilidadeDividendo(getRentabilidadeDividendo(vo));
-        return vo;
-    }
-
-    private Double getRentabilidadeDividendo(ProdutoRVVO produto) {
+    protected double getRentabilidadeDividendo(ProdutoRVVO produto) {
 
         if (produto.getQuantidade() == 0) {
             return 0d;
@@ -100,8 +36,9 @@ public class InvestimentoFII extends InvestimentoAbstract {
         return Math.pow((1 + rentabilidade), 12.0 / quantidade) - 1;
     }
 
-    public List<MovimentacaoEntity> getExtrato(LocalDate dataPosicao) {
-        return movimentacaoRepository.findByDataBetweenOrderByData(dataPosicao.minusYears(1), dataPosicao);
+    @Override
+    protected TipoRentabilidade getTipoRentabilidade() {
+        return TipoRentabilidade.FII;
     }
 
 }

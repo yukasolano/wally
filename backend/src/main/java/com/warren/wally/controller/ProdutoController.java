@@ -54,14 +54,15 @@ public class ProdutoController {
     @Autowired
     private FileExporterResolver fileExporterResolver;
 
+    /*
     @RequestMapping("")
     public ProdutosVO produtos(Model model) {
-        PortfolioVO portfolio = portfolioActor.run(data);
+        PortfolioVO portfolio = portfolioActor.run(data, null);
         ProdutosVO vo = new ProdutosVO();
         vo.setProdutos(portfolio.getProdutos());
         vo.setExtrato(portfolioActor.getExtrato(data));
         return vo;
-    }
+    }*/
 
     @PostMapping(value = "/renda-fixa")
     public MessageOutDTO criaProdutoRF(@RequestBody ProdutoRFInfoVO produto) {

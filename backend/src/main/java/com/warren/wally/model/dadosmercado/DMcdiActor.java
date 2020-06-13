@@ -43,10 +43,10 @@ public class DMcdiActor {
         LocalDate ultimaData = cdiEntity.isEmpty() ? startDate : cdiEntity.get(0).getData();
 
         //busca dados
-        List<DataValor> cdi = bcbClient.getCDI(ultimaData.plusDays(1), LocalDate.now());
+        List<DataValor> buscaCdi = bcbClient.getCDI(ultimaData.plusDays(1), LocalDate.now());
 
-        //atualzia banco
-        List<CdiEntity> novosDados = cdi.stream().map(it -> {
+        //atualiza banco
+        List<CdiEntity> novosDados = buscaCdi.stream().map(it -> {
             CdiEntity entity = new CdiEntity();
             entity.setData(it.getData());
             entity.setValor(it.getValor());
@@ -59,10 +59,10 @@ public class DMcdiActor {
 
     public SerieVO get() {
         List<CdiEntity> cdiEntity = cdiRepository.findAllByOrderByDataDesc();
-        List<DataValor> cdi = cdiEntity.stream().map(it -> new DataValor(it.getData(), it.getValor())).collect(Collectors.toList());
+        List<DataValor> buscaCdi = cdiEntity.stream().map(it -> new DataValor(it.getData(), it.getValor())).collect(Collectors.toList());
         SerieVO vo = new SerieVO();
         vo.setNome("CDI");
-        vo.setValores(cdi);
+        vo.setValores(buscaCdi);
         return vo;
     }
 
@@ -92,8 +92,4 @@ public class DMcdiActor {
             cdi.add(new DataValor(lastDate, lastValue));
         }
     }
-
-
-
-
 }

@@ -15,6 +15,8 @@ public interface MovimentacaoRepository extends CrudRepository<MovimentacaoEntit
     List<MovimentacaoEntity> findByCodigoAndDataLessThanOrderByData(String codigo,
                                                                     LocalDate data);
 
+    List<MovimentacaoEntity> findByCodigoOrderByData(String codigo);
+
     List<MovimentacaoEntity> findByTipoMovimentoAndDataLessThan(TipoMovimento tipoMovimento,
                                                                 LocalDate data);
 

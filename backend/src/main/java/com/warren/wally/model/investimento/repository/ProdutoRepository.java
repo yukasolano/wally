@@ -11,4 +11,6 @@ public interface ProdutoRepository extends CrudRepository<ProdutoEntity, Long> {
     List<ProdutoEntity> findByTipoInvestimento(TipoInvestimento tipoInvestimento);
 
     List<ProdutoEntity> findByCodigo(String codigo);
+
+    List<ProdutoEntity> findAll();
 }

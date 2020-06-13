@@ -10,4 +10,6 @@ public interface Investimento {
 
 	ProdutoVO calc(LocalDate hoje, ProdutoEntity produto);
 
+	ProdutoVO calcAcum(LocalDate hoje, ProdutoVO produto);
+
 }

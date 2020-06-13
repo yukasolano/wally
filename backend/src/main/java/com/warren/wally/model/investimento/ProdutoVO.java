@@ -2,6 +2,7 @@ package com.warren.wally.model.investimento;
 
 import com.warren.wally.model.calculadora.TipoRentabilidade;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ProdutoVO {
@@ -21,4 +22,6 @@ public interface ProdutoVO {
     Double getValorAplicado();
 
     Double getRentabilidade(ProdutoVO vo);
+
+    LocalDate getDataReferencia();
 }

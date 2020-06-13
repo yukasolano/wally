@@ -38,6 +38,10 @@ create database wally;
 - fluxos de debenture
 - contas apenas para dias uteis <<<<<
 
+- portfolioactor, mutliacotr, usar o getportfolios() de uma ano
+- alterar ajuste diario para intervalo de tempo - evolução do intervalo normaliza para os dias
+
+
 - Adicionar tratamento de venda (ok)
 - Agrupar DIVIDENDO, ATUALIZACAO e JCP  (ok)
 - Refatorar tratamento de produtos.

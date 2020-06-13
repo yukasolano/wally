@@ -1,6 +1,7 @@
 package com.warren.wally.model.investimento;
 
 import com.warren.wally.model.calculadora.TipoRentabilidade;
+import com.warren.wally.model.investimento.repository.MovimentacaoEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,6 +33,8 @@ public class ProdutoRVVO implements ProdutoVO {
     private double resultado;
     private String instituicao = "";
     private String anoVencimento = "Liquidez diária";
+
+    private List<MovimentacaoEntity> movimentacoes = new ArrayList<>();
 
     private LocalDate ultimaCompra = null;
 

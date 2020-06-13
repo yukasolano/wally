@@ -12,6 +12,7 @@ import com.warren.wally.model.investimento.repository.MovimentacaoEntity;
 import com.warren.wally.model.investimento.repository.MovimentacaoRepository;
 import com.warren.wally.model.investimento.repository.ProdutoEntity;
 import com.warren.wally.model.investimento.repository.ProdutoRepository;
+import com.warren.wally.utils.BussinessDaysCalendar;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +44,9 @@ public class TestaPortfolio extends WallyTestCase {
     @Resource
     private MovimentacaoRepository movimentacaoRepository;
 
+    @Resource
+    private BussinessDaysCalendar bc;
+
     @Before
     public void inicializa() {
         dataRef = dateOf("10/12/2018");
@@ -67,13 +71,22 @@ public class TestaPortfolio extends WallyTestCase {
 
     @Test
     public void testAccrual() {
-        PortfolioVO portfolio = portfolioActor.run(dataRef);
+        PortfolioVO portfolio = portfolioActor.run(dataRef, null);
         assertEquals(26378.74, portfolio.getAccrual(), 0.01);
     }
 
     @Test
+    public void testAccrualAcum() {
+        LocalDate nextDay = bc.getNextWorkDay(dataRef.plusDays(1));
+        PortfolioVO portfolio = portfolioActor.run(dataRef, null);
+        PortfolioVO portfolioNextDay = portfolioActor.run(nextDay, null);
+        PortfolioVO portfolioAcumNextDay = portfolioActor.run(nextDay, portfolio);
+        assertEquals(portfolioNextDay.getAccrual(), portfolioAcumNextDay.getAccrual(), 0.01);
+    }
+
+    @Test
     public void testMultiportfolio() {
-        PortfolioVO portfolio = portfolioActor.run(dataRef);
+        PortfolioVO portfolio = portfolioActor.run(dataRef, null);
         VariacaoVO variacao = multiPortfolio.calculaVariacoes(portfolio);
         assertEquals(3132.92, variacao.getAnualAbsoluto(), 0.01);
         assertEquals(174.39, variacao.getMensalAbsoluto(), 0.01);
