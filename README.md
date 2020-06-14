@@ -38,8 +38,10 @@ create database wally;
 - fluxos de debenture
 - contas apenas para dias uteis <<<<<
 
-- portfolioactor, mutliacotr, usar o getportfolios() de uma ano
-- alterar ajuste diario para intervalo de tempo - evolução do intervalo normaliza para os dias
+- arrumar frontend error
+- buscar outras datas está dando erro tb, ver melhor solução...
+- criar teste para caso q compra investimentoo e caso de vencimento... colocar resgato manul ou calculado? e qndo for difernete?
+- testar fii e acao
 
 
 - Adicionar tratamento de venda (ok)

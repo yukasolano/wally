@@ -22,6 +22,7 @@ public class ProdutoRFVO implements ProdutoVO {
     private TipoRentabilidade tipoRentabilidade;
     private Double valorAplicado;
     private double taxa;
+    private double valorBruto;
     private Double valorPresente;
     private double rentabilidadeLiquida;
     private double taxaAnualLiquida;

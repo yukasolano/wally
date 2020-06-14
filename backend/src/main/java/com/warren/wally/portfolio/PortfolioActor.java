@@ -46,7 +46,7 @@ public class PortfolioActor {
     private MovimentacaoRepository movimentacaoRepository;
 
     @Resource
-    private BussinessDaysCalendar bussinessDaysCalendar;
+    private BussinessDaysCalendar bc;
 
     private List<ProdutoEntity> produtosBase;
 
@@ -54,18 +54,18 @@ public class PortfolioActor {
 
     @PostConstruct
     public List<PortfolioVO> calculatePortfoliosForToday() {
-        return getPortfolios(LocalDate.now());
+        return getPortfolios(LocalDate.now(), 2);
     }
 
-    public List<PortfolioVO> getPortfolios(LocalDate dateRef) {
-        LocalDate limitDate = bussinessDaysCalendar.getPreviousWorkDay(dateRef);
-        LocalDate data = bussinessDaysCalendar.getNextWorkDay(limitDate.minusYears(1));
+    public List<PortfolioVO> getPortfolios(LocalDate dateRef, long anos) {
+        LocalDate limitDate = bc.getPreviousWorkDay(dateRef);
+        LocalDate data = bc.getNextWorkDay(limitDate.minusYears(anos));
         List<PortfolioVO> portfolios = new ArrayList<>();
         PortfolioVO vo = null;
         while (data.isBefore(limitDate) || data.isEqual(limitDate)) {
             vo = run(data, vo);
             portfolios.add(vo);
-            data = bussinessDaysCalendar.getNextWorkDay(data.plusDays(1));
+            data = bc.getNextWorkDay(data.plusDays(1));
         }
         return portfolios;
     }

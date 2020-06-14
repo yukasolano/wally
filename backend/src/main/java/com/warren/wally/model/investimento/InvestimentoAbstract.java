@@ -32,6 +32,7 @@ public abstract class InvestimentoAbstract implements Investimento {
 
         double VPBruto = calc.calculaVPBruto(vo.getValorAplicado(), vo.getTaxa(), vo.getDtAplicacao(),
                 vo.getDataReferencia());
+        vo.setValorBruto(VPBruto);
         vo.setValorPresente(getValorPresente(vo, VPBruto));
         vo.setRentabilidadeLiquida(getRentabilidadeLiquida(vo));
         vo.setTaxaAnualLiquida(getTaxaAnualLiquida(vo));
@@ -51,17 +52,34 @@ public abstract class InvestimentoAbstract implements Investimento {
 
         Calculadora calc = calculadoraResolver.resolve(vo.getTipoRentabilidade());
 
-        double VPBruto = calc.calculaVPBruto(voAnterior.getValorPresente(), vo.getTaxa(), voAnterior.getDataReferencia(),
+        double VPBruto = calc.calculaVPBruto(((ProdutoRFVO) voAnterior).getValorBruto(), vo.getTaxa(), voAnterior.getDataReferencia(),
                 vo.getDataReferencia());
+        vo.setValorBruto(VPBruto);
         vo.setValorPresente(getValorPresente(vo, VPBruto));
         vo.setRentabilidadeLiquida(getRentabilidadeLiquida(vo));
         vo.setTaxaAnualLiquida(getTaxaAnualLiquida(vo));
         vo.setTaxaMensalLiquida(getTaxaMensalLiquida(vo));
 
+        if (dataRef.isEqual(vo.getDtVencimento())) {
+            LocalDate nextDay = bc.getNextWorkDay(vo.getDtVencimento().plusDays(1));
+            if (movimentacaoRepository.findByCodigoAndTipoMovimentoAndData(vo.getCodigo(), TipoMovimento.RESGATE, nextDay).isEmpty()) {
+                //cria mov de resgate
+                MovimentacaoEntity movimentacaoVencimento = new MovimentacaoEntity();
+
+                movimentacaoVencimento.setCodigo(vo.getCodigo());
+                movimentacaoVencimento.setData(nextDay);
+                movimentacaoVencimento.setQuantidade(1);
+                movimentacaoVencimento.setTipoMovimento(TipoMovimento.RESGATE);
+                movimentacaoVencimento.setCorretora(vo.getCorretora());
+                movimentacaoVencimento.setValorUnitario(vo.getValorPresente());
+                movimentacaoRepository.save(movimentacaoVencimento);
+            }
+        }
         return vo;
     }
 
-    abstract double getValorPresente(ProdutoRFVO vo, double VPBruto);
+    abstract double getValorPresente(ProdutoRFVO vo,
+                                     double VPBruto);
 
     protected boolean validaData(LocalDate dataRef,
                                  LocalDate dtAplicacao,
@@ -80,9 +98,10 @@ public abstract class InvestimentoAbstract implements Investimento {
 
     protected ProdutoRFVO convertVO(ProdutoEntity entity,
                                     LocalDate dataRef) {
-        List<MovimentacaoEntity> movimentacoes = movimentacaoRepository.findByCodigoAndDataLessThanOrderByData(entity.getCodigo(), dataRef);
+        LocalDate dataRefPlus1 = bc.getNextWorkDay(dataRef.plusDays(1));
+        List<MovimentacaoEntity> movimentacoes = movimentacaoRepository.findByCodigoAndDataLessThanOrderByData(entity.getCodigo(), dataRefPlus1);
 
-        if(movimentacoes.isEmpty()) {
+        if (movimentacoes.isEmpty()) {
             throw new RuntimeException(String.format("Produto sem movimentações em %s", dataRef));
         }
 
@@ -112,7 +131,7 @@ public abstract class InvestimentoAbstract implements Investimento {
     }
 
     protected ProdutoRFVO clone(ProdutoRFVO vo,
-                                    LocalDate dataRef) {
+                                LocalDate dataRef) {
 
         ProdutoRFVO newVO = new ProdutoRFVO();
         newVO.setCorretora(vo.getCorretora());
@@ -128,6 +147,7 @@ public abstract class InvestimentoAbstract implements Investimento {
         newVO.setDataReferencia(dataRef);
         newVO.setDu(bc.getDu(vo.getDtAplicacao(), dataRef));
 
+        validaData(dataRef, newVO.getDtAplicacao(), newVO.getDtVencimento());
         return newVO;
     }
 

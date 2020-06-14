@@ -38,4 +38,6 @@ public interface MovimentacaoRepository extends CrudRepository<MovimentacaoEntit
 
     List<MovimentacaoEntity> findByTipoMovimentoAndData(TipoMovimento tipoMovimento, LocalDate data);
 
+    List<MovimentacaoEntity> findByCodigoAndTipoMovimentoAndData(String codigo, TipoMovimento tipoMovimento, LocalDate data);
+
 }

@@ -42,7 +42,7 @@ public class MultiPortfolio {
     public GraficoMultiDados calculaEvolucao(LocalDate date) {
         GraficoSeries series = new GraficoSeries();
 
-        List<PortfolioVO> portfolios = portfolioActor.getPortfolios(date);
+        List<PortfolioVO> portfolios = portfolioActor.getPortfolios(date, 1);
         for(PortfolioVO portfolio : portfolios) {
             series.addDado("Patrimônio", portfolio.getDataRef().toString(), portfolio.getAccrual());
             series.addDado("Aplicação", portfolio.getDataRef().toString(), portfolio.getValorAplicado());
@@ -56,7 +56,7 @@ public class MultiPortfolio {
         double acumulado = 1d;
         double lastVP = 0d;
 
-        List<PortfolioVO> portfolios = portfolioActor.getPortfolios(date);
+        List<PortfolioVO> portfolios = portfolioActor.getPortfolios(date, 1);
         for(PortfolioVO portfolio : portfolios) {
             double r = lastVP == 0d ? 1d : (portfolio.getAccrual() - lastVP - portfolioActor.ajustePorDia(portfolio.getDataRef()))/ lastVP + 1d;
             lastVP = portfolio.getAccrual();

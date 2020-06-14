@@ -29,6 +29,6 @@ import { Component, OnInit, Input } from '@angular/core';
     }
 
     temDados() {
-        return this.chartData.length > 0;
+        return this.chartData && this.chartData.length > 0;
     }
 }
