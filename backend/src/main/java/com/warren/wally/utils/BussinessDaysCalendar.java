@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.warren.wally.model.dadosmercado.FeriadoActor;
+import com.warren.wally.model.dadosmercado.repository.FeriadoEntity;
 import com.warren.wally.model.dadosmercado.repository.FeriadoRepository;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +18,9 @@ public class BussinessDaysCalendar {
 
 	@Resource
 	private FeriadoRepository feriadoRepository;
+
+	@Resource
+	private FeriadoActor feriadoActor;
 
 	private List<LocalDate> holidays = new ArrayList<>(); 
 
@@ -79,7 +84,13 @@ public class BussinessDaysCalendar {
 
 	private List<LocalDate> getHolidays() {
 		if (holidays.isEmpty()) {
-			feriadoRepository.findAll().forEach(it -> holidays.add(it.getData()));
+
+			List<FeriadoEntity> entities = feriadoRepository.findAll();
+			if(entities.isEmpty()) {
+				feriadoActor.atualiza();
+				entities.addAll(feriadoRepository.findAll());
+			}
+			entities.forEach(it -> holidays.add(it.getData()));
 		}
 		return holidays;
 	}

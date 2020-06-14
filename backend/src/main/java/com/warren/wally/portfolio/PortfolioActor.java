@@ -65,7 +65,7 @@ public class PortfolioActor {
         while (data.isBefore(limitDate) || data.isEqual(limitDate)) {
             vo = run(data, vo);
             portfolios.add(vo);
-            data = bussinessDaysCalendar.getNextWorkDay(data.plusDays(14));
+            data = bussinessDaysCalendar.getNextWorkDay(data.plusDays(1));
         }
         return portfolios;
     }
