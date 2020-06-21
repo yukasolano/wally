@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.warren.wally.model.investimento.TipoMovimento.ATUALIZACAO;
+import static com.warren.wally.model.investimento.TipoMovimento.JCP;
 import static com.warren.wally.model.investimento.TipoMovimento.VENDA;
 
 public abstract class InvestimentoRVAbstract implements Investimento {
@@ -72,10 +74,9 @@ public abstract class InvestimentoRVAbstract implements Investimento {
         vo.setPrecoTotal(voRVAnterior.getPrecoTotal());
         vo.setUltimaCompra(voRVAnterior.getUltimaCompra());
         vo.setDividendos(voRVAnterior.getDividendos());
-        List<MovimentacaoEntity> movimentacoesFiltradas = vo.getMovimentacoes().stream().filter(it -> it.getData().isAfter(voAnterior.getDataReferencia()) &&(it.getData().isBefore(dataRef) || it.getData().isEqual(dataRef))).collect(Collectors.toList());
-        if(movimentacoesFiltradas.isEmpty()) {
-            throw new RuntimeException(String.format("Produto sem movimentações em %s", dataRef));
-        }
+        List<MovimentacaoEntity> movimentacoesFiltradas = vo.getMovimentacoes().stream()
+                .filter(it -> it.getData().isAfter(voAnterior.getDataReferencia()) &&(it.getData().isBefore(dataRef) || it.getData().isEqual(dataRef)))
+                .collect(Collectors.toList());
         for (MovimentacaoEntity mov : movimentacoesFiltradas) {
             atualizaMov(vo, mov);
         }
@@ -98,7 +99,8 @@ public abstract class InvestimentoRVAbstract implements Investimento {
             atualizaMovVenda(vo, mov);
         }
 
-        if (mov.getTipoMovimento().equals(TipoMovimento.DIVIDENDO)) {
+        if (mov.getTipoMovimento().equals(TipoMovimento.DIVIDENDO) || mov.getTipoMovimento().equals(JCP) ||
+                mov.getTipoMovimento().equals(ATUALIZACAO)) {
             atualizaMovDiv(vo, mov);
         }
     }

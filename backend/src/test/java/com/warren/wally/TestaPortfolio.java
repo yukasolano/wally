@@ -4,14 +4,14 @@ import com.warren.wally.db.WallyTestCase;
 import com.warren.wally.model.calculadora.TipoRentabilidade;
 import com.warren.wally.model.investimento.TipoInvestimento;
 import com.warren.wally.model.investimento.TipoMovimento;
-import com.warren.wally.portfolio.MultiPortfolio;
-import com.warren.wally.portfolio.PortfolioActor;
-import com.warren.wally.portfolio.PortfolioVO;
-import com.warren.wally.portfolio.VariacaoVO;
 import com.warren.wally.model.investimento.repository.MovimentacaoEntity;
 import com.warren.wally.model.investimento.repository.MovimentacaoRepository;
 import com.warren.wally.model.investimento.repository.ProdutoEntity;
 import com.warren.wally.model.investimento.repository.ProdutoRepository;
+import com.warren.wally.portfolio.MultiPortfolio;
+import com.warren.wally.portfolio.PortfolioActor;
+import com.warren.wally.portfolio.PortfolioVO;
+import com.warren.wally.portfolio.VariacaoVO;
 import com.warren.wally.utils.BussinessDaysCalendar;
 import org.junit.After;
 import org.junit.Before;
@@ -50,15 +50,15 @@ public class TestaPortfolio extends WallyTestCase {
     @Before
     public void inicializa() {
         dataRef = dateOf("10/12/2018");
+        portfolioActor.limpaMapa();
 
-
-        createProduto("MAXIMA-CDB-PRE", dateOf("31/05/2021"),
+        createProduto("MAXIMA-CDB-PRE", dateOf("31/05/2019"),
                 0.1221, CDB, PRE, 10000d, dateOf("24/06/2016"));
 
-        createProduto("MAXIMA-CDB-CDI", dateOf("31/05/2021"),
+        createProduto("MAXIMA-CDB-CDI", dateOf("31/05/2019"),
                 1.22, CDB, CDI, 10000d, dateOf("24/06/2016"));
 
-        createProduto("MAXIMA-CDB-IPCA", dateOf("15/12/2024"),
+        createProduto("MAXIMA-CDB-IPCA", dateOf("15/12/2019"),
                 0.07, CDB, IPCA, 1000d, dateOf("23/10/2018"));
 
     }
@@ -67,12 +67,29 @@ public class TestaPortfolio extends WallyTestCase {
     @After
     public void clear() {
         produtoRepository.deleteAll();
+        movimentacaoRepository.deleteAll();
     }
 
     @Test
     public void testAccrual() {
         PortfolioVO portfolio = portfolioActor.run(dataRef, null);
         assertEquals(26378.74, portfolio.getAccrual(), 0.01);
+        assertEquals(21000.0, portfolio.getValorAplicado(), 0.01);
+    }
+
+    @Test
+    public void testDepoisVencimento() {
+        LocalDate date = dateOf("01/06/2019");
+        PortfolioVO portfolio = portfolioActor.run(date, null);
+        assertEquals(1052.12, portfolio.getAccrual(), 0.01);
+        assertEquals(1000.0, portfolio.getValorAplicado(), 0.01);
+    }
+
+    @Test
+    public void testAntesCompra() {
+        LocalDate date = dateOf("23/06/2016");
+        PortfolioVO portfolio = portfolioActor.run(date, null);
+        assertEquals(0.0, portfolio.getAccrual(), 0.01);
     }
 
     @Test
@@ -88,8 +105,8 @@ public class TestaPortfolio extends WallyTestCase {
     public void testMultiportfolio() {
         PortfolioVO portfolio = portfolioActor.run(dataRef, null);
         VariacaoVO variacao = multiPortfolio.calculaVariacoes(portfolio);
-        assertEquals(3132.92, variacao.getAnualAbsoluto(), 0.01);
-        assertEquals(174.39, variacao.getMensalAbsoluto(), 0.01);
+        assertEquals(3125.26, variacao.getAnualAbsoluto(), 0.01);
+        assertEquals(165.72, variacao.getMensalAbsoluto(), 0.01);
     }
 
     private void createProduto(String codigo,

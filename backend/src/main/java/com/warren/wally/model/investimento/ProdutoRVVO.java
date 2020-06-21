@@ -28,9 +28,9 @@ public class ProdutoRVVO implements ProdutoVO {
     private double cotacao = 0.0;
     private double rentabilidadeDividendo = 0.0;
     private TipoInvestimento tipoInvestimento;
-    private double precoMedio;
-    private Double valorPresente;
-    private double resultado;
+    private double precoMedio = 0.0;
+    private Double valorPresente = 0.0;
+    private double resultado = 0.0;
     private String instituicao = "";
     private String anoVencimento = "Liquidez diária";
 

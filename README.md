@@ -30,7 +30,6 @@ create database wally;
 - exportar movimentoacaç (ok)
 
 ### CALCULOS
-- melhorar performance (rodar assim q subir...)
 - calculo do imposto de renda
 - calculo do titulo publico
 - tratamento para fundos
@@ -38,10 +37,8 @@ create database wally;
 - fluxos de debenture
 - contas apenas para dias uteis <<<<<
 
-- arrumar frontend error
-- buscar outras datas está dando erro tb, ver melhor solução...
 - criar teste para caso q compra investimentoo e caso de vencimento... colocar resgato manul ou calculado? e qndo for difernete?
-- testar fii e acao
+- ver liquidez calc por produto VP 
 
 
 - Adicionar tratamento de venda (ok)

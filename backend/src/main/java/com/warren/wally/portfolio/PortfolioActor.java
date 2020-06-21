@@ -48,7 +48,7 @@ public class PortfolioActor {
     @Resource
     private BussinessDaysCalendar bc;
 
-    private List<ProdutoEntity> produtosBase;
+    private List<ProdutoEntity> produtosBase = new ArrayList<>();
 
     private Map<LocalDate, PortfolioVO> mapDiaPortfolio = new HashMap<>();
 
@@ -91,6 +91,7 @@ public class PortfolioActor {
     }
 
     public void limpaMapa() {
+        produtosBase.clear();
         mapDiaPortfolio.clear();
     }
 
@@ -103,7 +104,7 @@ public class PortfolioActor {
     }
 
     private List<ProdutoEntity> getProdutosBase() {
-        if(produtosBase == null) {
+        if(produtosBase.isEmpty()) {
             produtosBase = repository.findAll();
         }
         return produtosBase;

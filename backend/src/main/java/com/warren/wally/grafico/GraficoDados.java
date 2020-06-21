@@ -8,20 +8,14 @@ import java.util.List;
 @Getter
 public class GraficoDados {
 
-    private List<String> legendas;
-    private List<Double> valores;
+    private List<String> legendas = new ArrayList<>();
+    private List<Double> valores = new ArrayList<>();
 
     public void addLegenda(String legenda) {
-        if (legendas == null) {
-            legendas = new ArrayList<>();
-        }
         legendas.add(legenda);
     }
 
     public void addValor(Double valor) {
-        if (valores == null) {
-            valores = new ArrayList<>();
-        }
         valores.add(valor);
     }
 

@@ -58,7 +58,6 @@ import { HttpService } from '../services/http.service';
         });
 
         this.httpService.get<any>(`portfolio/rentabilidade?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
-          console.log(resp);
           this.rentabilidade.update(resp.data, resp.labels, resp.series);
         });
 

@@ -43,6 +43,6 @@ import { Component, OnInit, Input } from '@angular/core';
     }
 
     temDados() {
-        return this.barChartData && this.barChartData.length > 0;
+        return this.barChartLabels && this.barChartLabels.length > 0;
     }
 }
