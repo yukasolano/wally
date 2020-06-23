@@ -11,15 +11,14 @@ import com.warren.wally.model.cadastro.ProdutoRFInfoVO;
 import com.warren.wally.model.cadastro.ProdutoRVInfoVO;
 import com.warren.wally.model.investimento.ProdutoRFVO;
 import com.warren.wally.model.investimento.ProdutoRVVO;
-import com.warren.wally.model.investimento.ProdutosVO;
 import com.warren.wally.model.investimento.TipoMovimento;
 import com.warren.wally.portfolio.PortfolioActor;
 import com.warren.wally.portfolio.PortfolioVO;
+import com.warren.wally.utils.BussinessDaysCalendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,8 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.websocket.server.PathParam;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.warren.wally.file.TypeFile.MOVIMENTOS;
 import static com.warren.wally.file.TypeFile.PRODUTOS_RV;
@@ -49,20 +50,24 @@ public class ProdutoController {
     @Resource
     private ExtratoActor extratoActor;
 
-    private LocalDate data = LocalDate.of(2020, 01, 31); // LocalDate.now();
+    @Resource
+    private BussinessDaysCalendar bc;
 
     @Autowired
     private FileExporterResolver fileExporterResolver;
 
-    /*
-    @RequestMapping("")
-    public ProdutosVO produtos(Model model) {
-        PortfolioVO portfolio = portfolioActor.run(data, null);
-        ProdutosVO vo = new ProdutosVO();
-        vo.setProdutos(portfolio.getProdutos());
-        vo.setExtrato(portfolioActor.getExtrato(data));
-        return vo;
-    }*/
+
+    @RequestMapping("/renda-fixa")
+    public List<ProdutoRFVO> produtosRF(@PathParam("date") String date) {
+        PortfolioVO portfolio = portfolioActor.run(bc.getPreviousWorkDay(LocalDate.parse(date)), null);
+        return portfolio.getProdutos().stream().filter(it -> it instanceof ProdutoRFVO).map(it -> (ProdutoRFVO) it).collect(Collectors.toList());
+    }
+
+    @RequestMapping("/renda-variavel")
+    public List<ProdutoRVVO> produtosRV(@PathParam("date") String date) {
+        PortfolioVO portfolio = portfolioActor.run(bc.getPreviousWorkDay(LocalDate.parse(date)), null);
+        return portfolio.getProdutos().stream().filter(it -> it instanceof ProdutoRVVO).map(it -> (ProdutoRVVO) it).collect(Collectors.toList());
+    }
 
     @PostMapping(value = "/renda-fixa")
     public MessageOutDTO criaProdutoRF(@RequestBody ProdutoRFInfoVO produto) {

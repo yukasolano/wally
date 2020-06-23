@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.websocket.server.PathParam;
 import java.time.LocalDate;
-import java.util.List;
 
 
 @RestController
@@ -32,34 +31,29 @@ public class PortfolioController {
     private GraficoTransformador graficoTransformador;
 
     @Resource
-    private BussinessDaysCalendar bussinessDaysCalendar;
+    private BussinessDaysCalendar bc;
 
     @RequestMapping("/liquidez")
     public GraficoDados liquidez(@PathParam("date") String date) {
-        PortfolioVO portfolio = portfolioActor.run(bussinessDaysCalendar.getPreviousWorkDay(LocalDate.parse(date)), null);
+        PortfolioVO portfolio = portfolioActor.run(bc.getPreviousWorkDay(LocalDate.parse(date)), null);
         return graficoTransformador.transforma(portfolio.getLiquidez());
     }
 
     @RequestMapping("/instituicoes")
     public GraficoDados instituicoes(@PathParam("date") String date) {
-        PortfolioVO portfolio = portfolioActor.run(bussinessDaysCalendar.getPreviousWorkDay(LocalDate.parse(date)), null);
+        PortfolioVO portfolio = portfolioActor.run(bc.getPreviousWorkDay(LocalDate.parse(date)), null);
         return graficoTransformador.transforma(portfolio.getPorInstituicoes());
     }
 
     @RequestMapping("/dividendos")
     public GraficoMultiDados dividendos(@PathParam("date") String date) {
-        return portfolioActor.getDividendos(bussinessDaysCalendar.getPreviousWorkDay(LocalDate.parse(date)));
+        return portfolioActor.getDividendos(bc.getPreviousWorkDay(LocalDate.parse(date)));
     }
 
     @RequestMapping("/evolucao")
     public GraficoMultiDados evolucao(@PathParam("date") String date) {
-        return multiportfolio.calculaEvolucao(bussinessDaysCalendar.getPreviousWorkDay(LocalDate.parse(date)));
+        return multiportfolio.calculaEvolucao(bc.getPreviousWorkDay(LocalDate.parse(date)));
     }
-/*
-    @RequestMapping("/portfolios")
-    public List<PortfolioVO> portfolios() {
-        return portfolioActor.getPortfolios();
-    }*/
 
     @RequestMapping("/rentabilidade")
     public GraficoMultiDados rentabilidade(@PathParam("date") String date) {
@@ -68,7 +62,7 @@ public class PortfolioController {
 
     @RequestMapping("/resumo")
     public GraficosVO index(@PathParam("date") String date) {
-        PortfolioVO portfolio = portfolioActor.run(bussinessDaysCalendar.getPreviousWorkDay(LocalDate.parse(date)), null);
+        PortfolioVO portfolio = portfolioActor.run(bc.getPreviousWorkDay(LocalDate.parse(date)), null);
         GraficosVO graficos = new GraficosVO();
         graficos.setPatrimonioTotal(portfolio.getAccrual());
         graficos.setVariacao(multiportfolio.calculaVariacoes(portfolio));

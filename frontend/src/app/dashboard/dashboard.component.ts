@@ -32,8 +32,6 @@ import { HttpService } from '../services/http.service';
     }
 
     ngOnInit() {
-      const offset = this.date.getTimezoneOffset();
-      this.date = new Date(this.date.getTime() + (offset * 60 * 1000));
       this.update();
     }
 
