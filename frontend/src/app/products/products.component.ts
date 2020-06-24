@@ -33,12 +33,11 @@ import { ProdutoRV } from './produtoRV';
 
     update() {
       this.http.get<any>(`${environment.baseUrl}produtos/renda-fixa?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
-        console.log(resp);
-        this.tabelaProdutosRF.updateData(resp);
+        this.tabelaProdutosRF.updateData(resp, this.date.toISOString().split('T')[0]);
       });
 
       this.http.get<any>(`${environment.baseUrl}produtos/renda-variavel?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
-        this.tabelaProdutosRV.updateData(resp);
+        this.tabelaProdutosRV.updateData(resp, this.date.toISOString().split('T')[0]);
       });
     }
 

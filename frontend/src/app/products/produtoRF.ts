@@ -1,6 +1,7 @@
 import { DecimalPipe, DatePipe, PercentPipe } from '@angular/common';
 
 export class ProdutoRF {
+    codigo: string;
     instituicao: string;
     tipoInvestimento: string;
     tipoRentabilidade: string;

@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,7 @@ import javax.annotation.Resource;
 import javax.websocket.server.PathParam;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.warren.wally.file.TypeFile.MOVIMENTOS;
@@ -61,6 +63,17 @@ public class ProdutoController {
     public List<ProdutoRFVO> produtosRF(@PathParam("date") String date) {
         PortfolioVO portfolio = portfolioActor.run(bc.getPreviousWorkDay(LocalDate.parse(date)), null);
         return portfolio.getProdutos().stream().filter(it -> it instanceof ProdutoRFVO).map(it -> (ProdutoRFVO) it).collect(Collectors.toList());
+    }
+
+    @RequestMapping("/renda-fixa/{id}")
+    public ProdutoRFVO produtoRF(@PathParam("date") String date, @PathVariable("id") String id) {
+        PortfolioVO portfolio = portfolioActor.run(bc.getPreviousWorkDay(LocalDate.parse(date)), null);
+
+       Optional<ProdutoRFVO> vo = portfolio.getProdutos().stream().filter(it -> it instanceof ProdutoRFVO && it.getCodigo().equals(id)).map(it -> (ProdutoRFVO) it).findFirst();
+       if(vo.isPresent()) {
+           return vo.get();
+       }
+       throw new RuntimeException("Produto não encontrado");
     }
 
     @RequestMapping("/renda-variavel")

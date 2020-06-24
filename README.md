@@ -38,7 +38,9 @@ create database wally;
 - contas apenas para dias uteis <<<<<
 
 - criar teste para caso q compra investimentoo e caso de vencimento... colocar resgato manul ou calculado? e qndo for difernete?
-- ver liquidez calc por produto VP 
+- ver liquidez calc por produto VP
+- detalhes dos produtos de RF e RV: infos, evolucao patrimnio, rentabilidade, 
+- seprar tabela de dadosde mercado... 
 
 
 - Adicionar tratamento de venda (ok)

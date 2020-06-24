@@ -1,11 +1,11 @@
 import { OnInit, ViewChild, Component, Input } from '@angular/core';
-import { ProdutoRF } from '../produtoRF';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { saveAs } from 'file-saver';
+import { HttpService } from 'src/app/services/http.service';
 
 
 @Component({
@@ -17,23 +17,28 @@ export class TabelaProdutosComponent implements OnInit {
 
   @Input() tableInfo;
   @Input() downloadPath = '';
+  @Input() showDetails;
 
   @Input() set dados(dados: []) {
     this.updateData(dados);
   }
 
+  date = '';
+  infoColumns: string[];
   displayedColumns: string[];
   dataSource = new MatTableDataSource();
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private httpService: HttpService) {}
   ngOnInit() {
-    this.displayedColumns = Object.keys(this.tableInfo);
+    this.infoColumns = Object.keys(this.tableInfo);
+    this.displayedColumns = this.showDetails !== undefined ? this.infoColumns.concat('details') : this.infoColumns;
   }
 
-  updateData(data) {
+  updateData(data, date: string = '') {
+      this.date = date;
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
@@ -49,6 +54,12 @@ export class TabelaProdutosComponent implements OnInit {
         filename = headerName.split('=')[1];
       }
       saveAs(blob, filename);
+    });
+  }
+
+  onDetails(codigo) {
+    this.httpService.get(`produtos/renda-fixa/${codigo}?date=${this.date}`).subscribe( response => {
+      console.log(response);
     });
   }
 
