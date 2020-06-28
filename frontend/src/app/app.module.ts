@@ -32,6 +32,7 @@ import { LineChartComponent } from './dashboard/line-chart/line-chart.component'
 import { DadosMercadoComponent } from './dados-mercado/dados-mercado.component';
 import { LoaderInterceptorService } from './loader/loader-interceptor.service';
 import { LoaderComponent } from './loader/loader.component';
+import { RendaFixaDetailsComponent } from './products/renda-fixa-details/renda-fixa-details.component';
 
 registerLocaleData(localePt, 'pt');
 
@@ -50,7 +51,8 @@ registerLocaleData(localePt, 'pt');
     SummaryComponent,
     LineChartComponent,
     DadosMercadoComponent,
-    LoaderComponent
+    LoaderComponent,
+    RendaFixaDetailsComponent
   ],
   imports: [
     CommonModule,

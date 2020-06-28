@@ -170,6 +170,13 @@ public class PortfolioActor {
         return compra - resgate - dividendos;
     }
 
+    public double ajustePorDia(LocalDate dataRef, String codigo) {
+        double dividendos = movimentacaoRepository.findByCodigoAndTipoMovimentoAndData(codigo, TipoMovimento.DIVIDENDO, dataRef).stream().mapToDouble(it-> it.getValorUnitario()* it.getQuantidade()).sum();
+        double compra = movimentacaoRepository.findByCodigoAndTipoMovimentoAndData(codigo, TipoMovimento.COMPRA, dataRef).stream().mapToDouble(it-> it.getValorUnitario()* it.getQuantidade()).sum();
+        double resgate = movimentacaoRepository.findByCodigoAndTipoMovimentoAndData(codigo, TipoMovimento.RESGATE, dataRef).stream().mapToDouble(it-> it.getValorUnitario()* it.getQuantidade()).sum();
+        return compra - resgate - dividendos;
+    }
+
     public List<MovimentacaoEntity> getExtrato(LocalDate dataRef) {
         return movimentacaoRepository.findByDataBetweenOrderByData(dataRef.minusYears(1), dataRef);
     }

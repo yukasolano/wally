@@ -1,3 +1,11 @@
+.mat-table {
+    width: 100%
+}
+
+tr.mat-row {
+    height: 35px;
+}
+
 .dashboard {
     display: flex;
     margin: 10px 30px;
@@ -15,30 +23,10 @@
     width: calc(30% - 3rem);
 }
 
-.card-renda-variavel {
-    width: calc(40% - 3rem);
-}
-
-.card-liquidez {
-    width:calc(40% - 3rem);
-}
-
-.card-instituicoes {
-    width:calc(60% - 3rem);
-}
-
-.card-dividendos {
-    width:100%;
-}
-
 .card-evolucao {
     width:calc(70% - 3rem);
 }
 
 .card-rentabilidade {
-    width: 100%;
-}
-
-.proporcao {
-    margin-top: 0.5rem;
+    width:100%;
 }

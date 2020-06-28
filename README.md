@@ -39,7 +39,7 @@ create database wally;
 
 - criar teste para caso q compra investimentoo e caso de vencimento... colocar resgato manul ou calculado? e qndo for difernete?
 - ver liquidez calc por produto VP
-- detalhes dos produtos de RF e RV: infos, evolucao patrimnio, rentabilidade, 
+- detalhes dos produtos de RF e RV: infos, evolucao patrimnio, rentabilidade, -> falta mais detalhes e randa variavel
 - seprar tabela de dadosde mercado... 
 
 

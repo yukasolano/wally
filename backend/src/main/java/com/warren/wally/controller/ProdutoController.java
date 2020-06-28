@@ -4,6 +4,7 @@ import com.warren.wally.file.ExportedFile;
 import com.warren.wally.file.FileExporterResolver;
 import com.warren.wally.file.FileUploadResolver;
 import com.warren.wally.file.TypeFile;
+import com.warren.wally.grafico.GraficoMultiDados;
 import com.warren.wally.model.cadastro.CadastroProdutoResolver;
 import com.warren.wally.model.cadastro.ExtratoActor;
 import com.warren.wally.model.cadastro.MovimentoInfoVO;
@@ -12,6 +13,7 @@ import com.warren.wally.model.cadastro.ProdutoRVInfoVO;
 import com.warren.wally.model.investimento.ProdutoRFVO;
 import com.warren.wally.model.investimento.ProdutoRVVO;
 import com.warren.wally.model.investimento.TipoMovimento;
+import com.warren.wally.portfolio.MultiPortfolio;
 import com.warren.wally.portfolio.PortfolioActor;
 import com.warren.wally.portfolio.PortfolioVO;
 import com.warren.wally.utils.BussinessDaysCalendar;
@@ -53,11 +55,23 @@ public class ProdutoController {
     private ExtratoActor extratoActor;
 
     @Resource
+    private MultiPortfolio multiPortfolio;
+
+    @Resource
     private BussinessDaysCalendar bc;
 
     @Autowired
     private FileExporterResolver fileExporterResolver;
 
+    @RequestMapping("/evolucao/{codigo}")
+    public GraficoMultiDados evolucao(@PathVariable("codigo") String codigo, @PathParam("date") String date) {
+        return multiPortfolio.calculaEvolucao(bc.getPreviousWorkDay(LocalDate.parse(date)), codigo);
+    }
+
+    @RequestMapping("/rentabilidade/{codigo}")
+    public GraficoMultiDados rentabilidade(@PathVariable("codigo") String codigo, @PathParam("date") String date) {
+        return multiPortfolio.getRentabilidade(bc.getPreviousWorkDay(LocalDate.parse(date)), codigo);
+    }
 
     @RequestMapping("/renda-fixa")
     public List<ProdutoRFVO> produtosRF(@PathParam("date") String date) {

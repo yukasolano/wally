@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { saveAs } from 'file-saver';
 import { HttpService } from 'src/app/services/http.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -31,7 +32,7 @@ export class TabelaProdutosComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(private http: HttpClient, private httpService: HttpService) {}
+  constructor(private http: HttpClient, private httpService: HttpService, private router: Router) {}
   ngOnInit() {
     this.infoColumns = Object.keys(this.tableInfo);
     this.displayedColumns = this.showDetails !== undefined ? this.infoColumns.concat('details') : this.infoColumns;
@@ -58,9 +59,8 @@ export class TabelaProdutosComponent implements OnInit {
   }
 
   onDetails(codigo) {
-    this.httpService.get(`produtos/renda-fixa/${codigo}?date=${this.date}`).subscribe( response => {
-      console.log(response);
-    });
+      console.log('hey' + codigo);
+      this.router.navigate(['produtcs', 'renda-fixa', codigo, this.date]);
   }
 
 }

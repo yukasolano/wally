@@ -57,7 +57,7 @@ public class PortfolioController {
 
     @RequestMapping("/rentabilidade")
     public GraficoMultiDados rentabilidade(@PathParam("date") String date) {
-        return multiportfolio.getRentabilidade(LocalDate.parse(date));
+        return multiportfolio.getRentabilidade(bc.getPreviousWorkDay(LocalDate.parse(date)));
     }
 
     @RequestMapping("/resumo")

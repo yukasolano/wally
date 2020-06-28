@@ -1,6 +1,7 @@
 package com.warren.wally.portfolio;
 
 import com.warren.wally.grafico.GraficoMultiDados;
+import com.warren.wally.model.investimento.ProdutoVO;
 import com.warren.wally.utils.BussinessDaysCalendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class MultiPortfolio {
@@ -60,6 +62,39 @@ public class MultiPortfolio {
         for(PortfolioVO portfolio : portfolios) {
             double r = lastVP == 0d ? 1d : (portfolio.getAccrual() - lastVP - portfolioActor.ajustePorDia(portfolio.getDataRef()))/ lastVP + 1d;
             lastVP = portfolio.getAccrual();
+            acumulado *= r;
+            series.addDado("Rentabilidade", portfolio.getDataRef().toString(), acumulado);
+        }
+        return series.transforma();
+    }
+
+    public GraficoMultiDados calculaEvolucao(LocalDate date, String codigo) {
+        GraficoSeries series = new GraficoSeries();
+
+        List<PortfolioVO> portfolios = portfolioActor.getPortfolios(date, 1);
+        for(PortfolioVO portfolio : portfolios) {
+            Optional<ProdutoVO> produto = portfolio.getProdutos().stream().filter(it -> it.getCodigo().equals(codigo)).findFirst();
+            double VP = produto.isPresent() ?  produto.get().getValorPresente() : 0d;
+            double VA = produto.isPresent() ?  produto.get().getValorAplicado() : 0d;
+            series.addDado("Patrimônio", portfolio.getDataRef().toString(), VP);
+            series.addDado("Aplicação", portfolio.getDataRef().toString(), VA);
+        }
+
+        return series.transforma();
+    }
+
+    public GraficoMultiDados getRentabilidade(LocalDate date, String codigo) {
+        GraficoSeries series = new GraficoSeries();
+        double acumulado = 1d;
+        double lastVP = 0d;
+
+        List<PortfolioVO> portfolios = portfolioActor.getPortfolios(date, 1);
+        for(PortfolioVO portfolio : portfolios) {
+            Optional<ProdutoVO> produto = portfolio.getProdutos().stream().filter(it -> it.getCodigo().equals(codigo)).findFirst();
+            double VP = produto.isPresent() ?  produto.get().getValorPresente() : 0d;
+
+            double r = lastVP == 0d ? 1d : (VP - lastVP - portfolioActor.ajustePorDia(portfolio.getDataRef(), codigo))/ lastVP + 1d;
+            lastVP = VP;
             acumulado *= r;
             series.addDado("Rentabilidade", portfolio.getDataRef().toString(), acumulado);
         }
