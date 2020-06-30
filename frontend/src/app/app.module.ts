@@ -33,6 +33,7 @@ import { DadosMercadoComponent } from './dados-mercado/dados-mercado.component';
 import { LoaderInterceptorService } from './loader/loader-interceptor.service';
 import { LoaderComponent } from './loader/loader.component';
 import { RendaFixaDetailsComponent } from './products/renda-fixa-details/renda-fixa-details.component';
+import { RendaVariavelDetailsComponent } from './products/renda-variavel-details/renda-variavel-details.component';
 
 registerLocaleData(localePt, 'pt');
 
@@ -52,7 +53,8 @@ registerLocaleData(localePt, 'pt');
     LineChartComponent,
     DadosMercadoComponent,
     LoaderComponent,
-    RendaFixaDetailsComponent
+    RendaFixaDetailsComponent,
+    RendaVariavelDetailsComponent
   ],
   imports: [
     CommonModule,

@@ -96,6 +96,17 @@ public class ProdutoController {
         return portfolio.getProdutos().stream().filter(it -> it instanceof ProdutoRVVO).map(it -> (ProdutoRVVO) it).collect(Collectors.toList());
     }
 
+    @RequestMapping("/renda-variavel/{id}")
+    public ProdutoRVVO produtoRV(@PathParam("date") String date, @PathVariable("id") String id) {
+        PortfolioVO portfolio = portfolioActor.run(bc.getPreviousWorkDay(LocalDate.parse(date)), null);
+
+        Optional<ProdutoRVVO> vo = portfolio.getProdutos().stream().filter(it -> it instanceof ProdutoRVVO && it.getCodigo().equals(id)).map(it -> (ProdutoRVVO) it).findFirst();
+        if(vo.isPresent()) {
+            return vo.get();
+        }
+        throw new RuntimeException("Produto não encontrado");
+    }
+
     @PostMapping(value = "/renda-fixa")
     public MessageOutDTO criaProdutoRF(@RequestBody ProdutoRFInfoVO produto) {
         cadastroProdutoResolver.resolve(produto.getTipoInvestimento(), TipoMovimento.COMPRA).save(produto);

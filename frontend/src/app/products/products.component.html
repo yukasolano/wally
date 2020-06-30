@@ -10,7 +10,7 @@
     <mat-card-title>Produtos de renda fixa</mat-card-title>
     <mat-card-content>
        <app-tabela-produtos #tabelaProdutosRF [tableInfo]="produtoRF.getTableInfo()" 
-       downloadPath="produtos/produtos-renda-fixa/download" showDetails></app-tabela-produtos> 
+       downloadPath="produtos/produtos-renda-fixa/download" pathDetails="renda-fixa"></app-tabela-produtos> 
     </mat-card-content>
 </mat-card>
 
@@ -18,7 +18,7 @@
     <mat-card-title>Produtos de renda variável</mat-card-title>
     <mat-card-content>
        <app-tabela-produtos #tabelaProdutosRV [tableInfo]="produtoRV.getTableInfo()"
-       downloadPath="produtos/produtos-renda-variavel/download" showDetails></app-tabela-produtos> 
+       downloadPath="produtos/produtos-renda-variavel/download" pathDetails="renda-variavel"></app-tabela-produtos> 
     </mat-card-content>
 </mat-card>
 

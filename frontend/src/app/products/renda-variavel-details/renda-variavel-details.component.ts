@@ -1,17 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
+import { ProdutoRV } from '../produtoRV';
+import { LineChartComponent } from 'src/app/dashboard/line-chart/line-chart.component';
 import { ActivatedRoute } from '@angular/router';
 import { HttpService } from 'src/app/services/http.service';
-import { MatTableDataSource } from '@angular/material';
-import { ProdutoRF } from '../produtoRF';
-import { LineChartComponent } from 'src/app/dashboard/line-chart/line-chart.component';
 import { CodigoValor } from '../codigo-valor';
 
-
 @Component({
-    templateUrl: './renda-fixa-details.component.html',
-    styleUrls: ['./renda-fixa-details.component.scss']
+    templateUrl: './renda-variavel-details.component.html',
+    styleUrls: ['./renda-variavel-details.component.scss']
 })
-export class RendaFixaDetailsComponent implements OnInit {
+export class RendaVariavelDetailsComponent implements OnInit {
 
     displayedColumns = ['codigo', 'valor'];
     dataSource = new MatTableDataSource();
@@ -20,7 +19,7 @@ export class RendaFixaDetailsComponent implements OnInit {
     codigo = '';
     data = '';
 
-    produtoRF = new ProdutoRF();
+    produtoRV = new ProdutoRV();
 
     @ViewChild('evolucao', {static: true}) evolucao: LineChartComponent;
     @ViewChild('rentabilidade', {static: true}) rentabilidade: LineChartComponent;
@@ -32,12 +31,12 @@ export class RendaFixaDetailsComponent implements OnInit {
         this.codigo = this.activatedRoute.snapshot.params.codigo;
         this.data = this.activatedRoute.snapshot.params.data;
 
-        this.httpService.get<ProdutoRF>(`produtos/renda-fixa/${this.codigo}?date=${this.data}`).subscribe( response => {
+        this.httpService.get<ProdutoRV>(`produtos/renda-variavel/${this.codigo}?date=${this.data}`).subscribe( response => {
             console.log(response);
 
-            const keys = Object.keys(this.produtoRF.getTableInfo());
+            const keys = Object.keys(this.produtoRV.getTableInfo());
             keys.forEach (it => {
-                this.details.push(new CodigoValor( this.produtoRF.getTableInfo()[it].name, response[it]));
+                this.details.push(new CodigoValor( this.produtoRV.getTableInfo()[it].name, response[it]));
             });
             this.dataSource = new MatTableDataSource(this.details);
 

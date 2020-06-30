@@ -18,7 +18,7 @@ export class TabelaProdutosComponent implements OnInit {
 
   @Input() tableInfo;
   @Input() downloadPath = '';
-  @Input() showDetails;
+  @Input() pathDetails = '';
 
   @Input() set dados(dados: []) {
     this.updateData(dados);
@@ -35,7 +35,7 @@ export class TabelaProdutosComponent implements OnInit {
   constructor(private http: HttpClient, private httpService: HttpService, private router: Router) {}
   ngOnInit() {
     this.infoColumns = Object.keys(this.tableInfo);
-    this.displayedColumns = this.showDetails !== undefined ? this.infoColumns.concat('details') : this.infoColumns;
+    this.displayedColumns = this.hasDetails() ? this.infoColumns.concat('details') : this.infoColumns;
   }
 
   updateData(data, date: string = '') {
@@ -58,9 +58,12 @@ export class TabelaProdutosComponent implements OnInit {
     });
   }
 
+
+  hasDetails() {
+    return this.pathDetails !== '';
+  }
   onDetails(codigo) {
-      console.log('hey' + codigo);
-      this.router.navigate(['produtcs', 'renda-fixa', codigo, this.date]);
+      this.router.navigate(['produtcs', this.pathDetails, codigo, this.date]);
   }
 
 }
