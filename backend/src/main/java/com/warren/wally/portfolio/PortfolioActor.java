@@ -6,6 +6,7 @@ import com.warren.wally.model.investimento.DividendoVO;
 import com.warren.wally.model.investimento.Investimento;
 import com.warren.wally.model.investimento.InvestimentoResolver;
 import com.warren.wally.model.investimento.ProdutoRVActor;
+import com.warren.wally.model.investimento.ProdutoRVVO;
 import com.warren.wally.model.investimento.ProdutoVO;
 import com.warren.wally.model.investimento.TipoMovimento;
 import com.warren.wally.model.investimento.repository.MovimentacaoEntity;
@@ -57,7 +58,8 @@ public class PortfolioActor {
         return getPortfolios(LocalDate.now(), 2);
     }
 
-    public List<PortfolioVO> getPortfolios(LocalDate dateRef, long anos) {
+    public List<PortfolioVO> getPortfolios(LocalDate dateRef,
+                                           long anos) {
         LocalDate limitDate = bc.getPreviousWorkDay(dateRef);
         LocalDate data = bc.getNextWorkDay(limitDate.minusYears(anos));
         List<PortfolioVO> portfolios = new ArrayList<>();
@@ -70,14 +72,15 @@ public class PortfolioActor {
         return portfolios;
     }
 
-    public PortfolioVO run(LocalDate dataRef, PortfolioVO portfolioOntem) {
+    public PortfolioVO run(LocalDate dataRef,
+                           PortfolioVO portfolioOntem) {
         System.out.println(dataRef.toString());
         PortfolioVO portfolioVO = mapDiaPortfolio.get(dataRef);
 
 
         if (portfolioVO == null) {
             List<ProdutoVO> produtos;
-            if(portfolioOntem == null) {
+            if (portfolioOntem == null) {
                 produtos = getProdutos(dataRef);
             } else {
                 produtos = getProdutosAcum(dataRef, portfolioOntem.getProdutos());
@@ -104,7 +107,7 @@ public class PortfolioActor {
     }
 
     private List<ProdutoEntity> getProdutosBase() {
-        if(produtosBase.isEmpty()) {
+        if (produtosBase.isEmpty()) {
             produtosBase = repository.findAll();
         }
         return produtosBase;
@@ -122,12 +125,13 @@ public class PortfolioActor {
             } catch (Exception e) {
                 System.out.println("Erro no produto: " + p + ": " + e.getMessage());
             }
-            System.out.println("Tempo do produto " +  p + ":" + (System.currentTimeMillis()-start));
+            System.out.println("Tempo do produto " + p + ":" + (System.currentTimeMillis() - start));
         });
         return produtos;
     }
 
-    private List<ProdutoVO> getProdutosAcum(LocalDate dataRef, List<ProdutoVO> produtosOntem) {
+    private List<ProdutoVO> getProdutosAcum(LocalDate dataRef,
+                                            List<ProdutoVO> produtosOntem) {
         List<ProdutoVO> produtos = new ArrayList<>();
 
 
@@ -135,8 +139,8 @@ public class PortfolioActor {
             long start = System.currentTimeMillis();
             try {
                 Investimento invest = investimentoResolver.resolve(p.getTipoInvestimento());
-                Optional<ProdutoVO> produtoCalc = produtosOntem.stream().filter(it->it.getCodigo().equals(p.getCodigo())).findFirst();
-                if(produtoCalc.isPresent()) {
+                Optional<ProdutoVO> produtoCalc = produtosOntem.stream().filter(it -> it.getCodigo().equals(p.getCodigo())).findFirst();
+                if (produtoCalc.isPresent()) {
                     produtos.add(invest.calcAcum(dataRef, produtoCalc.get()));
                 } else {
                     produtos.add(invest.calc(dataRef, p));
@@ -144,7 +148,7 @@ public class PortfolioActor {
             } catch (Exception e) {
                 System.out.println("Erro no produto: " + p + ": " + e.getMessage());
             }
-            System.out.println("Tempo do produto " +  p + ":" + (System.currentTimeMillis()-start));
+            System.out.println("Tempo do produto " + p + ":" + (System.currentTimeMillis() - start));
         });
         return produtos;
     }
@@ -163,17 +167,36 @@ public class PortfolioActor {
         return graficoSeries.transforma();
     }
 
+    public GraficoMultiDados getDividendos(LocalDate dataRef,
+                                           String codigo) {
+
+        GraficoSeries graficoSeries = new GraficoSeries();
+        LocalDate anoAnterior = dataRef.minusYears(1);
+        Optional<ProdutoRVVO> produto = run(dataRef, null).getProdutos().stream().filter(it -> it.getCodigo().equals(codigo)).map(it -> (ProdutoRVVO) it).findFirst();
+
+        if (!produto.isPresent()) {
+            throw new RuntimeException(String.format("Produto %s não encontrado", codigo));
+        }
+        List<DividendoVO> dividendos = produto.get().getDividendos().stream().filter(div -> div.getData().isAfter(anoAnterior)).collect(Collectors.toList());
+        for (DividendoVO dividendo : dividendos) {
+            graficoSeries.addDado(produto.get().getCodigo(), YearMonth.from(dividendo.getData()).toString(), dividendo.getValorUnitario());
+        }
+
+        return graficoSeries.transforma();
+    }
+
     public double ajustePorDia(LocalDate dataRef) {
-        double dividendos = movimentacaoRepository.findByTipoMovimentoAndData(TipoMovimento.DIVIDENDO, dataRef).stream().mapToDouble(it-> it.getValorUnitario()* it.getQuantidade()).sum();
-        double compra = movimentacaoRepository.findByTipoMovimentoAndData(TipoMovimento.COMPRA, dataRef).stream().mapToDouble(it-> it.getValorUnitario()* it.getQuantidade()).sum();
-        double resgate = movimentacaoRepository.findByTipoMovimentoAndData(TipoMovimento.RESGATE, dataRef).stream().mapToDouble(it-> it.getValorUnitario()* it.getQuantidade()).sum();
+        double dividendos = movimentacaoRepository.findByTipoMovimentoAndData(TipoMovimento.DIVIDENDO, dataRef).stream().mapToDouble(it -> it.getValorUnitario() * it.getQuantidade()).sum();
+        double compra = movimentacaoRepository.findByTipoMovimentoAndData(TipoMovimento.COMPRA, dataRef).stream().mapToDouble(it -> it.getValorUnitario() * it.getQuantidade()).sum();
+        double resgate = movimentacaoRepository.findByTipoMovimentoAndData(TipoMovimento.RESGATE, dataRef).stream().mapToDouble(it -> it.getValorUnitario() * it.getQuantidade()).sum();
         return compra - resgate - dividendos;
     }
 
-    public double ajustePorDia(LocalDate dataRef, String codigo) {
-        double dividendos = movimentacaoRepository.findByCodigoAndTipoMovimentoAndData(codigo, TipoMovimento.DIVIDENDO, dataRef).stream().mapToDouble(it-> it.getValorUnitario()* it.getQuantidade()).sum();
-        double compra = movimentacaoRepository.findByCodigoAndTipoMovimentoAndData(codigo, TipoMovimento.COMPRA, dataRef).stream().mapToDouble(it-> it.getValorUnitario()* it.getQuantidade()).sum();
-        double resgate = movimentacaoRepository.findByCodigoAndTipoMovimentoAndData(codigo, TipoMovimento.RESGATE, dataRef).stream().mapToDouble(it-> it.getValorUnitario()* it.getQuantidade()).sum();
+    public double ajustePorDia(LocalDate dataRef,
+                               String codigo) {
+        double dividendos = movimentacaoRepository.findByCodigoAndTipoMovimentoAndData(codigo, TipoMovimento.DIVIDENDO, dataRef).stream().mapToDouble(it -> it.getValorUnitario() * it.getQuantidade()).sum();
+        double compra = movimentacaoRepository.findByCodigoAndTipoMovimentoAndData(codigo, TipoMovimento.COMPRA, dataRef).stream().mapToDouble(it -> it.getValorUnitario() * it.getQuantidade()).sum();
+        double resgate = movimentacaoRepository.findByCodigoAndTipoMovimentoAndData(codigo, TipoMovimento.RESGATE, dataRef).stream().mapToDouble(it -> it.getValorUnitario() * it.getQuantidade()).sum();
         return compra - resgate - dividendos;
     }
 

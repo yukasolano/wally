@@ -2,6 +2,7 @@ package com.warren.wally.model.investimento;
 
 import com.warren.wally.model.calculadora.TipoRentabilidade;
 import com.warren.wally.model.dadosmercado.DMequitiesActor;
+import com.warren.wally.model.investimento.repository.MovimentacaoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -32,12 +34,12 @@ public class InvestimentoFII extends InvestimentoRVAbstract {
         LocalDate anoAnterior = produto.getDataReferencia().minusYears(1);
         List<DividendoVO> dividendos = produto.getDividendos().stream()
                 .filter(it -> it.getData().isAfter(anoAnterior) &&
-                        (it.getData().isBefore(produto.getDataReferencia()) || it.getData().isAfter(produto.getDataReferencia())))
+                        (it.getData().isBefore(produto.getDataReferencia()) || it.getData().isEqual(produto.getDataReferencia())))
                 .collect(Collectors.toList());
 
         Map<Integer, Double> map = new HashMap<>();
 
-        for(DividendoVO div : dividendos) {
+        for (DividendoVO div : dividendos) {
             Integer mesAno = div.getData().getYear() * 100 + div.getData().getMonthValue();
             map.merge(mesAno, div.getValorUnitario(), (a, b) -> (a + b) / 2d);
 
@@ -54,5 +56,23 @@ public class InvestimentoFII extends InvestimentoRVAbstract {
     protected TipoRentabilidade getTipoRentabilidade() {
         return TipoRentabilidade.FII;
     }
+
+    @Override
+    protected void atualizaMovDiv(ProdutoRVVO vo,
+                                MovimentacaoEntity mov) {
+        DividendoVO dividendoVO = new DividendoVO();
+        dividendoVO.setCodigo(mov.getCodigo());
+        dividendoVO.setData(mov.getData());
+        dividendoVO.setQuantidade(mov.getQuantidade());
+        dividendoVO.setTipo(mov.getTipoMovimento());
+        dividendoVO.setValorUnitario(mov.getValorUnitario());
+        Optional<DividendoVO> div = vo.getDividendos().stream().filter(it -> it.getData().equals(mov.getData())).findFirst();
+        if (div.isPresent()) {
+            div.get().setQuantidade(div.get().getQuantidade() + mov.getQuantidade());
+        } else {
+            vo.addDividendo(dividendoVO);
+        }
+    }
+
 
 }

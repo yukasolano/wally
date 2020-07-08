@@ -121,7 +121,7 @@ public abstract class InvestimentoRVAbstract implements Investimento {
         vo.setUltimaCompra(mov.getData());
     }
 
-    private void atualizaMovDiv(ProdutoRVVO vo, MovimentacaoEntity mov) {
+    protected void atualizaMovDiv(ProdutoRVVO vo, MovimentacaoEntity mov) {
         DividendoVO dividendoVO = new DividendoVO();
         dividendoVO.setCodigo(mov.getCodigo());
         dividendoVO.setData(mov.getData());

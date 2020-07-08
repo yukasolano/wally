@@ -25,7 +25,7 @@ public class InvestimentoACAO extends InvestimentoRVAbstract {
         LocalDate anoAnterior = produto.getDataReferencia().minusYears(1);
         List<DividendoVO> dividendos = produto.getDividendos().stream()
                 .filter(it -> it.getData().isAfter(anoAnterior) &&
-                        (it.getData().isBefore(produto.getDataReferencia()) || it.getData().isAfter(produto.getDataReferencia())))
+                        (it.getData().isBefore(produto.getDataReferencia()) || it.getData().isEqual(produto.getDataReferencia())))
                 .collect(Collectors.toList());
         double somaDividendos = dividendos.stream().mapToDouble(DividendoVO::getValorUnitario).sum();
         return somaDividendos / produto.getPrecoMedio();

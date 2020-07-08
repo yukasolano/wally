@@ -5,6 +5,7 @@ import { LineChartComponent } from 'src/app/dashboard/line-chart/line-chart.comp
 import { ActivatedRoute } from '@angular/router';
 import { HttpService } from 'src/app/services/http.service';
 import { CodigoValor } from '../codigo-valor';
+import { StackedBarChartComponent } from 'src/app/dashboard/stacked-bar-chart/stacked-bar-chart.component';
 
 @Component({
     templateUrl: './renda-variavel-details.component.html',
@@ -23,6 +24,8 @@ export class RendaVariavelDetailsComponent implements OnInit {
 
     @ViewChild('evolucao', {static: true}) evolucao: LineChartComponent;
     @ViewChild('rentabilidade', {static: true}) rentabilidade: LineChartComponent;
+    @ViewChild('cotacao', {static: true}) cotacao: LineChartComponent;
+    @ViewChild('dividendos', {static: true}) dividendos: StackedBarChartComponent;
 
     constructor(private activatedRoute: ActivatedRoute, private httpService: HttpService) { }
 
@@ -47,13 +50,20 @@ export class RendaVariavelDetailsComponent implements OnInit {
     update() {
 
         this.httpService.get<any>(`produtos/evolucao/${this.codigo}?date=${this.data}`).subscribe( resp => {
-        this.evolucao.update(resp.data, resp.labels, resp.series);
+            this.evolucao.update(resp.data, resp.labels, resp.series);
         });
 
         this.httpService.get<any>(`produtos/rentabilidade/${this.codigo}?date=${this.data}`).subscribe( resp => {
-        this.rentabilidade.update(resp.data, resp.labels, resp.series);
+            this.rentabilidade.update(resp.data, resp.labels, resp.series);
         });
 
+        this.httpService.get<any>(`produtos/cotacao/${this.codigo}?date=${this.data}`).subscribe( resp => {
+            this.cotacao.update(resp.data, resp.labels, resp.series);
+        });
+
+        this.httpService.get<any>(`produtos/dividendos/${this.codigo}?date=${this.data}`).subscribe( resp => {
+            this.dividendos.update(resp.data, resp.labels, resp.series);
+        });
     }
 
 }

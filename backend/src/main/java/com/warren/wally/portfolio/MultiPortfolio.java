@@ -1,6 +1,7 @@
 package com.warren.wally.portfolio;
 
 import com.warren.wally.grafico.GraficoMultiDados;
+import com.warren.wally.model.investimento.ProdutoRVVO;
 import com.warren.wally.model.investimento.ProdutoVO;
 import com.warren.wally.utils.BussinessDaysCalendar;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +99,21 @@ public class MultiPortfolio {
             acumulado *= r;
             series.addDado("Rentabilidade", portfolio.getDataRef().toString(), acumulado);
         }
+        return series.transforma();
+    }
+
+    public GraficoMultiDados getCotacao(LocalDate date,
+                                        String codigo) {
+
+        GraficoSeries series = new GraficoSeries();
+
+        List<PortfolioVO> portfolios = portfolioActor.getPortfolios(date, 1);
+        for(PortfolioVO portfolio : portfolios) {
+            Optional<ProdutoRVVO> produto = portfolio.getProdutos().stream().filter(it -> it.getCodigo().equals(codigo)).map(it -> (ProdutoRVVO)it).findFirst();
+            double cotacao = produto.map(ProdutoRVVO::getCotacao).orElse(0d);
+            series.addDado("Cotação", portfolio.getDataRef().toString(), cotacao);
+        }
+
         return series.transforma();
     }
 }

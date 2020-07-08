@@ -73,6 +73,16 @@ public class ProdutoController {
         return multiPortfolio.getRentabilidade(bc.getPreviousWorkDay(LocalDate.parse(date)), codigo);
     }
 
+    @RequestMapping("/cotacao/{codigo}")
+    public GraficoMultiDados cotacao(@PathVariable("codigo") String codigo, @PathParam("date") String date) {
+        return multiPortfolio.getCotacao(bc.getPreviousWorkDay(LocalDate.parse(date)), codigo);
+    }
+
+    @RequestMapping("/dividendos/{codigo}")
+    public GraficoMultiDados dividendos(@PathVariable("codigo") String codigo, @PathParam("date") String date) {
+        return portfolioActor.getDividendos(bc.getPreviousWorkDay(LocalDate.parse(date)), codigo);
+    }
+
     @RequestMapping("/renda-fixa")
     public List<ProdutoRFVO> produtosRF(@PathParam("date") String date) {
         PortfolioVO portfolio = portfolioActor.run(bc.getPreviousWorkDay(LocalDate.parse(date)), null);
