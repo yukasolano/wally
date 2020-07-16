@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { ProdutoRV } from '../produtoRV';
-import { LineChartComponent } from 'src/app/dashboard/line-chart/line-chart.component';
 import { ActivatedRoute } from '@angular/router';
 import { HttpService } from 'src/app/services/http.service';
 import { CodigoValor } from '../codigo-valor';
-import { StackedBarChartComponent } from 'src/app/dashboard/stacked-bar-chart/stacked-bar-chart.component';
+import { LineChartComponent } from 'src/app/shared/graficos/line-chart/line-chart.component';
+import { StackedBarChartComponent } from 'src/app/shared/graficos/stacked-bar-chart/stacked-bar-chart.component';
 
 @Component({
     templateUrl: './renda-variavel-details.component.html',

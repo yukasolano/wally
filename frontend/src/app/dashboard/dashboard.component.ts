@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { BarChartComponent } from './bar-chart/bar-chart.component';
-import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { SummaryComponent } from './summary/summary.component';
-import { StackedBarChartComponent } from './stacked-bar-chart/stacked-bar-chart.component';
-import { LineChartComponent } from './line-chart/line-chart.component';
 import { HttpService } from '../services/http.service';
+import { PieChartComponent } from '../shared/graficos/pie-chart/pie-chart.component';
+import { BarChartComponent } from '../shared/graficos/bar-chart/bar-chart.component';
+import { StackedBarChartComponent } from '../shared/graficos/stacked-bar-chart/stacked-bar-chart.component';
+import { LineChartComponent } from '../shared/graficos/line-chart/line-chart.component';
 
 @Component({
     selector: 'app-dashboard',

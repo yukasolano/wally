@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpService } from 'src/app/services/http.service';
 import { MatTableDataSource } from '@angular/material';
 import { ProdutoRF } from '../produtoRF';
-import { LineChartComponent } from 'src/app/dashboard/line-chart/line-chart.component';
 import { CodigoValor } from '../codigo-valor';
+import { LineChartComponent } from 'src/app/shared/graficos/line-chart/line-chart.component';
 
 
 @Component({

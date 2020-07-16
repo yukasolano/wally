@@ -9,13 +9,13 @@ import { RendaVariavelDetailsComponent } from './products/renda-variavel-details
 
 
 const routes: Routes = [
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full'},
   { path: 'dashboard', component: DashboardComponent },
   { path: 'produtcs/renda-fixa/:codigo/:data', component: RendaFixaDetailsComponent },
   { path: 'produtcs/renda-variavel/:codigo/:data', component: RendaVariavelDetailsComponent },
   { path: 'produtcs', component: ProductsComponent },
   { path: 'cadastro', component: CadastroComponent },
   { path: 'dados-mercado', component: DadosMercadoComponent },
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full'},
   { path: '**', component: ProductsComponent }
 ];
 

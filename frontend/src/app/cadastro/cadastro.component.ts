@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Extrato } from '../products/extrato';
-import { TabelaProdutosComponent } from '../products/tabela-produtos/tabela-produtos.component';
+
 import { HttpService } from '../services/http.service';
+import { TabelaBasicaComponent } from '../shared/tabela-basica/tabela-basica.component';
+import { Extrato } from './extrato';
 
 @Component({
     selector: 'app-cadastro',
@@ -21,7 +22,7 @@ import { HttpService } from '../services/http.service';
 
     extrato = new Extrato();
 
-    @ViewChild('tabelaExtrato', {static: true}) tabelaExtrato: TabelaProdutosComponent;
+    @ViewChild('tabelaExtrato', {static: true}) tabelaExtrato: TabelaBasicaComponent;
 
     constructor(
       private formBuilder: FormBuilder,

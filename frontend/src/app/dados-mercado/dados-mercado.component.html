@@ -10,7 +10,7 @@
     <mat-card-content>
         <mat-tab-group>
             <mat-tab *ngFor="let serie of dadosMercado.dados" [label]="serie.nome">
-                <app-tabela-produtos [dados]="serie.valores" [tableInfo]="getTableInfo()"></app-tabela-produtos>
+                <app-tabela-basica [dados]="serie.valores" [tableInfo]="getTableInfo()"></app-tabela-basica>
             </mat-tab>
         </mat-tab-group>
     </mat-card-content>

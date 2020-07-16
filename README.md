@@ -22,12 +22,8 @@ create database wally;
 ### FRONTEND:
 - linha com total
 - modularizar frontend
-- mvn com front-end (ok)
-- subir aplicação com frontend	(ok)
-- snackbar com mesnagens (ok)
-- loading bar (ok)
-- tabela de movimentação (ok)
-- exportar movimentoacaç (ok)
+- organizar detalhes... formatação tabela
+- seprar tabela de dadosde mercado... 
 
 ### CALCULOS
 - calculo do imposto de renda
@@ -38,29 +34,16 @@ create database wally;
 - contas apenas para dias uteis <<<<<
 
 - criar teste para caso q compra investimentoo e caso de vencimento... colocar resgato manul ou calculado? e qndo for difernete?
-- organizar detalhes... formatação tabela
-- seprar tabela de dadosde mercado... 
 
+- solução para nao subir portfolio qndo sobe aplicação - complica para testes e para multiusuarios
 
-- Adicionar tratamento de venda (ok)
-- Agrupar DIVIDENDO, ATUALIZACAO e JCP  (ok)
-- Refatorar tratamento de produtos.
-	Juntar renda fixa e renda variável (tudo será movimentação: compra, dividendo, amortização, etc). (ok)
-- Adicionar estrutura de mapa para salvar resultado do portfolio para cada dia  (ok)
-- Refatorar cálculo para FII (ok)
-	Dividend Yield = somatório do valor unitário dos dividendos do último ano dividido pelo preço médio
-- multidata (ok)
 
 ### DADOS DE MERCADO
 - atualizar lista de dividendos passados 
 - nao permitir salvar dados duplicaods <<<<<<
-- atualizar valores de mercado de CDI e IPCA (ok)
-- arrumar calculos usando nova estrutura de dados de mercado (CDI e IPCA) (ok)
-- atualizar feriados (ok)
-- puxar preços tickers (ok)
+- recuperar dividendos de forma automatica
 
 ### GRAFICOS
-- grafico da evolução da rentabilidade (com dividend yield) (ok)
 - adicionar cdi/ipca para comparacao
 
 
