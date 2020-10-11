@@ -24,6 +24,7 @@ create database wally;
 - modularizar frontend
 - organizar detalhes... formatação tabela
 - seprar tabela de dadosde mercado... 
+- seprar visualização dividendos Ação e Fii
 
 ### CALCULOS
 - calculo do imposto de renda
@@ -39,11 +40,9 @@ create database wally;
 
 
 ### DADOS DE MERCADO
-- atualizar lista de dividendos passados 
-- nao permitir salvar dados duplicaods <<<<<<
 - recuperar dividendos de forma automatica
 
 ### GRAFICOS
-- adicionar cdi/ipca para comparacao
+- adicionar cdi/ipca/ibovespa para comparacao
 
 

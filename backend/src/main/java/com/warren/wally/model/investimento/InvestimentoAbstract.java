@@ -10,6 +10,7 @@ import com.warren.wally.utils.BussinessDaysCalendar;
 import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class InvestimentoAbstract implements Investimento {
 
@@ -27,7 +28,8 @@ public abstract class InvestimentoAbstract implements Investimento {
                           ProdutoEntity entity) {
 
         ProdutoRFVO vo = convertVO(entity, dataRef);
-
+        validaData(dataRef, vo.getDtAplicacao(), vo.getDtVencimento());
+        validaDataResgate(dataRef, vo.getMovimentacoes());
         Calculadora calc = calculadoraResolver.resolve(vo.getTipoRentabilidade());
 
         double VPBruto = calc.calculaVPBruto(vo.getValorAplicado(), vo.getTaxa(), vo.getDtAplicacao(),
@@ -48,7 +50,8 @@ public abstract class InvestimentoAbstract implements Investimento {
 
 
         ProdutoRFVO vo = clone((ProdutoRFVO) voAnterior, dataRef);
-
+        validaData(dataRef, vo.getDtAplicacao(), vo.getDtVencimento());
+        validaDataResgate(dataRef, vo.getMovimentacoes());
 
         Calculadora calc = calculadoraResolver.resolve(vo.getTipoRentabilidade());
 
@@ -95,11 +98,20 @@ public abstract class InvestimentoAbstract implements Investimento {
         return true;
     }
 
+    protected boolean validaDataResgate(LocalDate dataRef,
+                                 List<MovimentacaoEntity> movimentacoes) {
+
+        Optional<MovimentacaoEntity> movResgate = movimentacoes.stream().filter(it -> it.getTipoMovimento().equals(TipoMovimento.RESGATE)).findFirst();
+        if (movResgate.isPresent() && (movResgate.get().getData().isBefore(dataRef)||  movResgate.get().getData().isEqual(dataRef))) {
+            throw new RuntimeException(String.format("Produto resgatado. Data de resgate: %s - Data: %s",
+                    movResgate.get().getData(), dataRef));
+        }
+        return true;
+    }
 
     protected ProdutoRFVO convertVO(ProdutoEntity entity,
                                     LocalDate dataRef) {
-        LocalDate dataRefPlus1 = bc.getNextWorkDay(dataRef.plusDays(1));
-        List<MovimentacaoEntity> movimentacoes = movimentacaoRepository.findByCodigoAndDataLessThanOrderByData(entity.getCodigo(), dataRefPlus1);
+        List<MovimentacaoEntity> movimentacoes = movimentacaoRepository.findByCodigoOrderByData(entity.getCodigo());
 
         if (movimentacoes.isEmpty()) {
             throw new RuntimeException(String.format("Produto sem movimentações em %s", dataRef));
@@ -109,8 +121,6 @@ public abstract class InvestimentoAbstract implements Investimento {
         for (MovimentacaoEntity mov : movimentacoes) {
 
             if (mov.getTipoMovimento().equals(TipoMovimento.COMPRA)) {
-
-                validaData(dataRef, mov.getData(), entity.getVencimento());
 
                 vo.setCorretora(mov.getCorretora());
                 vo.setDtAplicacao(mov.getData());
@@ -124,9 +134,9 @@ public abstract class InvestimentoAbstract implements Investimento {
 
                 vo.setDataReferencia(dataRef);
                 vo.setDu(bc.getDu(vo.getDtAplicacao(), dataRef));
+                vo.setMovimentacoes(movimentacoes);
             }
         }
-
         return vo;
     }
 
@@ -144,10 +154,10 @@ public abstract class InvestimentoAbstract implements Investimento {
         newVO.setTipoInvestimento(vo.getTipoInvestimento());
         newVO.setTipoRentabilidade(vo.getTipoRentabilidade());
 
+        newVO.setMovimentacoes(vo.getMovimentacoes());
         newVO.setDataReferencia(dataRef);
         newVO.setDu(bc.getDu(vo.getDtAplicacao(), dataRef));
 
-        validaData(dataRef, newVO.getDtAplicacao(), newVO.getDtVencimento());
         return newVO;
     }
 

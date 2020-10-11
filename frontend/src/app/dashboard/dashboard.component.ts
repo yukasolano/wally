@@ -61,6 +61,12 @@ import { LineChartComponent } from '../shared/graficos/line-chart/line-chart.com
 
         this.httpService.get<any>(`portfolio/resumo?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
           this.summary.update(resp.variacao, resp.patrimonioTotal);
+
+          for (let i = 0; i < resp.proporcao.legendas.length; i++) {
+            const porcentage = resp.proporcao.valores[i] / resp.patrimonioTotal * 100;
+            resp.proporcao.legendas[i] = `${resp.proporcao.legendas[i]}: ${porcentage.toFixed(1)}%`;
+          }
+
           this.proporcao.update(resp.proporcao.valores, resp.proporcao.legendas);
         });
       }
