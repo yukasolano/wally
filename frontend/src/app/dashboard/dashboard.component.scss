@@ -42,3 +42,18 @@
 .proporcao {
     margin-top: 0.5rem;
 }
+
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+}
+
+
+.title-div {
+    display: inline-block;
+}
+
+.form-div {
+    display: inline-block;
+    position: absolute;
+    right: 20px;
+}

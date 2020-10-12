@@ -2,6 +2,7 @@ package com.warren.wally.portfolio;
 
 import com.warren.wally.grafico.GraficoMultiDados;
 import com.warren.wally.model.calculadora.CalculadoraResolver;
+import com.warren.wally.model.calculadora.TipoRentabilidade;
 import com.warren.wally.model.investimento.DividendoVO;
 import com.warren.wally.model.investimento.Investimento;
 import com.warren.wally.model.investimento.InvestimentoResolver;
@@ -27,6 +28,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.warren.wally.model.calculadora.TipoRentabilidade.ACAO;
+import static com.warren.wally.model.calculadora.TipoRentabilidade.FII;
 
 @Component
 public class PortfolioActor {
@@ -153,11 +157,19 @@ public class PortfolioActor {
         return produtos;
     }
 
-    public GraficoMultiDados getDividendos(LocalDate dataRef) {
+    public GraficoMultiDados getDividendos(LocalDate dataRef, TipoRentabilidade tipoRentabilidade) {
 
         GraficoSeries graficoSeries = new GraficoSeries();
         LocalDate anoAnterior = dataRef.minusYears(1);
-        run(dataRef, null).getProdutos().forEach(it -> {
+        List<ProdutoVO> produtos = new ArrayList<>();
+        if(tipoRentabilidade == null ) {
+            produtos = run(dataRef, null).getProdutos();
+        } else if(ACAO.equals(tipoRentabilidade)) {
+            produtos = run(dataRef, null).getProdutos().stream().filter(it -> it.getTipoRentabilidade().equals(ACAO)).collect(Collectors.toList());
+        } else if(FII.equals(tipoRentabilidade)) {
+            produtos = run(dataRef, null).getProdutos().stream().filter(it -> it.getTipoRentabilidade().equals(FII)).collect(Collectors.toList());
+        }
+        produtos.forEach(it -> {
             List<DividendoVO> dividendos = it.getDividendos().stream().filter(div -> div.getData().isAfter(anoAnterior)).collect(Collectors.toList());
             for (DividendoVO dividendo : dividendos) {
                 graficoSeries.addDado(it.getCodigo(), YearMonth.from(dividendo.getData()).toString(), dividendo.getValorUnitario() * dividendo.getQuantidade());

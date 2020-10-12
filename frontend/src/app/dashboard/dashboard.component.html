@@ -33,7 +33,14 @@
     </mat-card>
     
     <mat-card class="card card-dividendos">
-        <mat-card-title>Dividendos</mat-card-title>
+        <mat-card-title class="title-div">Dividendos</mat-card-title>
+        <form [formGroup]="formDividendos" class="form-div">
+            <mat-radio-group aria-label="Select an option" formControlaName="opcao" (change)="onChangeDividendoOption($event)">
+                <mat-radio-button value="TUDO" checked>Tudo</mat-radio-button>
+                <mat-radio-button value="ACAO">Ação</mat-radio-button>
+                <mat-radio-button value="FII">FII</mat-radio-button>
+              </mat-radio-group>
+        </form>
         <app-stacked-bar-chart #dividendos></app-stacked-bar-chart>
     </mat-card>
 

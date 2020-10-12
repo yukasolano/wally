@@ -4,6 +4,7 @@ import com.warren.wally.grafico.GraficoDados;
 import com.warren.wally.grafico.GraficoMultiDados;
 import com.warren.wally.grafico.GraficoTransformador;
 import com.warren.wally.grafico.GraficosVO;
+import com.warren.wally.model.calculadora.TipoRentabilidade;
 import com.warren.wally.portfolio.MultiPortfolio;
 import com.warren.wally.portfolio.PortfolioActor;
 import com.warren.wally.portfolio.PortfolioVO;
@@ -46,8 +47,8 @@ public class PortfolioController {
     }
 
     @RequestMapping("/dividendos")
-    public GraficoMultiDados dividendos(@PathParam("date") String date) {
-        return portfolioActor.getDividendos(bc.getPreviousWorkDay(LocalDate.parse(date)));
+    public GraficoMultiDados dividendos(@PathParam("date") String date, @PathParam("tipo") TipoRentabilidade tipo) {
+        return portfolioActor.getDividendos(bc.getPreviousWorkDay(LocalDate.parse(date)), tipo);
     }
 
     @RequestMapping("/evolucao")

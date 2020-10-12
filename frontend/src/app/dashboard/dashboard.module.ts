@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DemoMaterialModule } from '../material-module';
 
 import { SummaryComponent } from './summary/summary.component';
@@ -16,6 +16,7 @@ import { GraficosModule } from '../shared/graficos/graficos.module';
     imports: [
         CommonModule,
         DemoMaterialModule,
+        ReactiveFormsModule,
         FormsModule,
         PipesModule,
         GraficosModule,

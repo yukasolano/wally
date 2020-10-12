@@ -5,6 +5,8 @@ import { PieChartComponent } from '../shared/graficos/pie-chart/pie-chart.compon
 import { BarChartComponent } from '../shared/graficos/bar-chart/bar-chart.component';
 import { StackedBarChartComponent } from '../shared/graficos/stacked-bar-chart/stacked-bar-chart.component';
 import { LineChartComponent } from '../shared/graficos/line-chart/line-chart.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatRadioChange } from '@angular/material';
 
 @Component({
     selector: 'app-dashboard',
@@ -13,9 +15,10 @@ import { LineChartComponent } from '../shared/graficos/line-chart/line-chart.com
   })
   export class DashboardComponent implements OnInit {
 
-    constructor(private httpService: HttpService) { }
+    constructor(private httpService: HttpService, private fb: FormBuilder) { }
 
     date = new Date();
+    formDividendos: FormGroup;
 
     @ViewChild('summary', {static: true}) summary: SummaryComponent;
     @ViewChild('proporcao', {static: true}) proporcao: PieChartComponent;
@@ -32,9 +35,22 @@ import { LineChartComponent } from '../shared/graficos/line-chart/line-chart.com
     }
 
     ngOnInit() {
+      this.formDividendos = this.fb.group({
+        option: ['TUDO'],
+      });
       this.update();
     }
 
+    onChangeDividendoOption($event: MatRadioChange) {
+      const tipo = $event.value;
+      let url = `portfolio/dividendos?date=${this.date.toISOString().split('T')[0]}`;
+      if (tipo !== 'TUDO') {
+        url = url + `&tipo=${tipo}`;
+      }
+      this.httpService.get<any>(url).subscribe( resp => {
+        this.dividendos.update(resp.data, resp.labels, resp.series);
+      });
+    }
 
     update() {
       if (this.date) {
