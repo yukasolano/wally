@@ -57,11 +57,6 @@ public class PortfolioActor {
 
     private Map<LocalDate, PortfolioVO> mapDiaPortfolio = new HashMap<>();
 
-    @PostConstruct
-    public List<PortfolioVO> calculatePortfoliosForToday() {
-        return getPortfolios(LocalDate.now(), 2);
-    }
-
     public List<PortfolioVO> getPortfolios(LocalDate dateRef,
                                            long anos) {
         LocalDate limitDate = bc.getPreviousWorkDay(dateRef);
@@ -129,7 +124,6 @@ public class PortfolioActor {
             } catch (Exception e) {
                 System.out.println("Erro no produto: " + p + ": " + e.getMessage());
             }
-            System.out.println("Tempo do produto " + p + ":" + (System.currentTimeMillis() - start));
         });
         return produtos;
     }
@@ -152,7 +146,6 @@ public class PortfolioActor {
             } catch (Exception e) {
                 System.out.println("Erro no produto: " + p + ": " + e.getMessage());
             }
-            System.out.println("Tempo do produto " + p + ":" + (System.currentTimeMillis() - start));
         });
         return produtos;
     }

@@ -23,8 +23,7 @@ create database wally;
 - linha com total
 - modularizar frontend
 - organizar detalhes... formatação tabela
-- seprar tabela de dadosde mercado... 
-- seprar visualização dividendos Ação e Fii
+- separar tabela de dadosde mercado... 
 
 ### CALCULOS
 - calculo do imposto de renda
@@ -33,11 +32,10 @@ create database wally;
 - usar cache para nao precisar recalcular toda vez
 - fluxos de debenture
 - contas apenas para dias uteis <<<<<
+- aplicação  - dividendos
+- rentabilidade sem aplicação
 
 - criar teste para caso q compra investimentoo e caso de vencimento... colocar resgato manul ou calculado? e qndo for difernete?
-
-- solução para nao subir portfolio qndo sobe aplicação - complica para testes e para multiusuarios
-
 
 ### DADOS DE MERCADO
 - recuperar dividendos de forma automatica

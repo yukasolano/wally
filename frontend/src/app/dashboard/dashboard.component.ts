@@ -55,35 +55,33 @@ import { MatRadioChange } from '@angular/material';
     update() {
       if (this.date) {
 
-        this.httpService.get<any>(`portfolio/liquidez?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
-          this.liquidez.update(resp.valores, resp.legendas);
-        });
-
-        this.httpService.get<any>(`portfolio/instituicoes?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
-          this.instituicoes.update(resp.valores, resp.legendas);
-        });
-
-        this.httpService.get<any>(`portfolio/dividendos?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
-          this.dividendos.update(resp.data, resp.labels, resp.series);
-        });
 
         this.httpService.get<any>(`portfolio/evolucao?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
           this.evolucao.update(resp.data, resp.labels, resp.series);
-        });
+          this.httpService.get<any>(`portfolio/rentabilidade?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
+            this.rentabilidade.update(resp.data, resp.labels, resp.series);
+          });
+          this.httpService.get<any>(`portfolio/liquidez?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
+            this.liquidez.update(resp.valores, resp.legendas);
+          });
 
-        this.httpService.get<any>(`portfolio/rentabilidade?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
-          this.rentabilidade.update(resp.data, resp.labels, resp.series);
-        });
+          this.httpService.get<any>(`portfolio/instituicoes?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
+            this.instituicoes.update(resp.valores, resp.legendas);
+          });
 
-        this.httpService.get<any>(`portfolio/resumo?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
-          this.summary.update(resp.variacao, resp.patrimonioTotal);
+          this.httpService.get<any>(`portfolio/dividendos?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
+            this.dividendos.update(resp.data, resp.labels, resp.series);
+          });
+          this.httpService.get<any>(`portfolio/resumo?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
+            this.summary.update(resp.variacao, resp.patrimonioTotal);
 
-          for (let i = 0; i < resp.proporcao.legendas.length; i++) {
-            const porcentage = resp.proporcao.valores[i] / resp.patrimonioTotal * 100;
-            resp.proporcao.legendas[i] = `${resp.proporcao.legendas[i]}: ${porcentage.toFixed(1)}%`;
-          }
+            for (let i = 0; i < resp.proporcao.legendas.length; i++) {
+              const porcentage = resp.proporcao.valores[i] / resp.patrimonioTotal * 100;
+              resp.proporcao.legendas[i] = `${resp.proporcao.legendas[i]}: ${porcentage.toFixed(1)}%`;
+            }
 
-          this.proporcao.update(resp.proporcao.valores, resp.proporcao.legendas);
+            this.proporcao.update(resp.proporcao.valores, resp.proporcao.legendas);
+          });
         });
       }
     }
