@@ -7,11 +7,13 @@ import { SummaryComponent } from './summary/summary.component';
 import { DashboardComponent } from './dashboard.component';
 import { PipesModule } from '../shared/pipes/pipes.module';
 import { GraficosModule } from '../shared/graficos/graficos.module';
+import { ProporcaoComponent } from './proporcao/proporcao.component';
 
 @NgModule({
     declarations: [
         SummaryComponent,
-        DashboardComponent
+        DashboardComponent,
+        ProporcaoComponent
     ],
     imports: [
         CommonModule,

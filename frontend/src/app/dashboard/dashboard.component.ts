@@ -7,6 +7,7 @@ import { StackedBarChartComponent } from '../shared/graficos/stacked-bar-chart/s
 import { LineChartComponent } from '../shared/graficos/line-chart/line-chart.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatRadioChange } from '@angular/material';
+import { ProporcaoComponent } from './proporcao/proporcao.component';
 
 @Component({
     selector: 'app-dashboard',
@@ -28,6 +29,7 @@ import { MatRadioChange } from '@angular/material';
     @ViewChild('dividendos', {static: true}) dividendos: StackedBarChartComponent;
     @ViewChild('evolucao', {static: true}) evolucao: LineChartComponent;
     @ViewChild('rentabilidade', {static: true}) rentabilidade: LineChartComponent;
+    @ViewChild('proporcoes', {static: true}) proporcoes: ProporcaoComponent;
 
 
     dateChanged() {
@@ -79,8 +81,8 @@ import { MatRadioChange } from '@angular/material';
               const porcentage = resp.proporcao.valores[i] / resp.patrimonioTotal * 100;
               resp.proporcao.legendas[i] = `${resp.proporcao.legendas[i]}: ${porcentage.toFixed(1)}%`;
             }
-
             this.proporcao.update(resp.proporcao.valores, resp.proporcao.legendas);
+            this.proporcoes.update(resp.proporcoes);
           });
         });
       }

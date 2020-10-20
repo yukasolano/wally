@@ -3,9 +3,11 @@ package com.warren.wally.portfolio;
 import com.warren.wally.grafico.GraficoMultiDados;
 import com.warren.wally.model.calculadora.CalculadoraResolver;
 import com.warren.wally.model.calculadora.TipoRentabilidade;
+import com.warren.wally.model.dadosmercado.RendaVariavelInfo;
 import com.warren.wally.model.investimento.DividendoVO;
 import com.warren.wally.model.investimento.Investimento;
 import com.warren.wally.model.investimento.InvestimentoResolver;
+import com.warren.wally.model.investimento.ProdutoRFVO;
 import com.warren.wally.model.investimento.ProdutoRVActor;
 import com.warren.wally.model.investimento.ProdutoRVVO;
 import com.warren.wally.model.investimento.ProdutoVO;
@@ -18,7 +20,6 @@ import com.warren.wally.utils.BussinessDaysCalendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -114,10 +115,7 @@ public class PortfolioActor {
 
     private List<ProdutoVO> getProdutos(LocalDate dataRef) {
         List<ProdutoVO> produtos = new ArrayList<>();
-
-
         getProdutosBase().forEach(p -> {
-            long start = System.currentTimeMillis();
             try {
                 Investimento invest = investimentoResolver.resolve(p.getTipoInvestimento());
                 produtos.add(invest.calc(dataRef, p));
@@ -134,7 +132,6 @@ public class PortfolioActor {
 
 
         getProdutosBase().forEach(p -> {
-            long start = System.currentTimeMillis();
             try {
                 Investimento invest = investimentoResolver.resolve(p.getTipoInvestimento());
                 Optional<ProdutoVO> produtoCalc = produtosOntem.stream().filter(it -> it.getCodigo().equals(p.getCodigo())).findFirst();
@@ -150,16 +147,17 @@ public class PortfolioActor {
         return produtos;
     }
 
-    public GraficoMultiDados getDividendos(LocalDate dataRef, TipoRentabilidade tipoRentabilidade) {
+    public GraficoMultiDados getDividendos(LocalDate dataRef,
+                                           TipoRentabilidade tipoRentabilidade) {
 
         GraficoSeries graficoSeries = new GraficoSeries();
         LocalDate anoAnterior = dataRef.minusYears(1);
         List<ProdutoVO> produtos = new ArrayList<>();
-        if(tipoRentabilidade == null ) {
+        if (tipoRentabilidade == null) {
             produtos = run(dataRef, null).getProdutos();
-        } else if(ACAO.equals(tipoRentabilidade)) {
+        } else if (ACAO.equals(tipoRentabilidade)) {
             produtos = run(dataRef, null).getProdutos().stream().filter(it -> it.getTipoRentabilidade().equals(ACAO)).collect(Collectors.toList());
-        } else if(FII.equals(tipoRentabilidade)) {
+        } else if (FII.equals(tipoRentabilidade)) {
             produtos = run(dataRef, null).getProdutos().stream().filter(it -> it.getTipoRentabilidade().equals(FII)).collect(Collectors.toList());
         }
         produtos.forEach(it -> {
@@ -207,6 +205,54 @@ public class PortfolioActor {
 
     public List<MovimentacaoEntity> getExtrato(LocalDate dataRef) {
         return movimentacaoRepository.findByDataBetweenOrderByData(dataRef.minusYears(1), dataRef);
+    }
+
+    public List<ProporcaoVO> getProporcoes(PortfolioVO portfolioVO) {
+
+        List<ProporcaoVO> proporcoes = new ArrayList<>();
+
+        List<ProdutoVO> produtosRF = portfolioVO.getProdutos().stream().filter(it -> it instanceof ProdutoRFVO).collect(Collectors.toList());
+        proporcoes.add(getProporcaoRFVO(portfolioVO, produtosRF));
+
+        List<ProdutoVO> produtosACAO = portfolioVO.getProdutos().stream().filter(it -> it.getTipoRentabilidade().equals(TipoRentabilidade.ACAO)).collect(Collectors.toList());
+        proporcoes.add(getProporcaoRVVO("Ação", portfolioVO, produtosACAO));
+
+        List<ProdutoVO> produtosFII = portfolioVO.getProdutos().stream().filter(it -> it.getTipoRentabilidade().equals(TipoRentabilidade.FII)).collect(Collectors.toList());
+        proporcoes.add(getProporcaoRVVO("FII", portfolioVO, produtosFII));
+
+        return proporcoes;
+    }
+
+    private ProporcaoVO getProporcaoRFVO(PortfolioVO portfolioVO,
+                                         List<ProdutoVO> produtos) {
+        ProporcaoVO proporcaoVO = new ProporcaoVO("Renda fixa", produtos.stream().mapToDouble(ProdutoVO::getValorPresente).sum(), portfolioVO.getAccrual());
+
+        Map<String, Double> propMap = produtos.stream()
+                .collect(Collectors.groupingBy(produto -> produto.getTipoRentabilidade().toString(),
+                        Collectors.reducing(0.0, ProdutoVO::getValorPresente, Double::sum)));
+
+        for (Map.Entry<String, Double> entry : propMap.entrySet()) {
+            proporcaoVO.addCategoria(new ProporcaoVO(entry.getKey(), entry.getValue(), proporcaoVO.getValor()));
+        }
+        return proporcaoVO;
+    }
+
+    private ProporcaoVO getProporcaoRVVO(String nome,
+                                         PortfolioVO portfolioVO,
+                                         List<ProdutoVO> produtos) {
+        ProporcaoVO proporcaoVO = new ProporcaoVO(nome, produtos.stream().mapToDouble(ProdutoVO::getValorPresente).sum(), portfolioVO.getAccrual());
+
+        Map<String, Double> mapaCategorias = produtos.stream()
+                .collect(Collectors.groupingBy(produto -> {
+                            RendaVariavelInfo info = RendaVariavelInfo.find(produto.getCodigo());
+                            return info != null ? info.getCategoria() : "Desconhecido";
+                        },
+                        Collectors.reducing(0.0, ProdutoVO::getValorPresente, Double::sum)));
+
+        for (Map.Entry<String, Double> entry : mapaCategorias.entrySet()) {
+            proporcaoVO.addCategoria(new ProporcaoVO(entry.getKey(), entry.getValue(), proporcaoVO.getValor()));
+        }
+        return proporcaoVO;
     }
 
 }

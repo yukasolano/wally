@@ -68,6 +68,7 @@ public class PortfolioController {
         graficos.setPatrimonioTotal(portfolio.getAccrual());
         graficos.setVariacao(multiportfolio.calculaVariacoes(portfolio));
         graficos.setProporcao(graficoTransformador.transforma(portfolio.getProporcoes()));
+        graficos.setProporcoes(portfolioActor.getProporcoes(portfolio));
         return graficos;
     }
 }
