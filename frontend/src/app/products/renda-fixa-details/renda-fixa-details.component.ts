@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material';
 import { ProdutoRF } from '../produtoRF';
 import { CodigoValor } from '../codigo-valor';
 import { LineChartComponent } from 'src/app/shared/graficos/line-chart/line-chart.component';
+import { DecimalPipe, PercentPipe, DatePipe } from '@angular/common';
 
 
 @Component({
@@ -37,7 +38,8 @@ export class RendaFixaDetailsComponent implements OnInit {
 
             const keys = Object.keys(this.produtoRF.getTableInfo());
             keys.forEach (it => {
-                this.details.push(new CodigoValor( this.produtoRF.getTableInfo()[it].name, response[it]));
+                this.details.push(new CodigoValor( this.produtoRF.getTableInfo()[it].name, response[it],
+                this.produtoRF.getTableInfo()[it].pipe, this.produtoRF.getTableInfo()[it].args));
             });
             this.dataSource = new MatTableDataSource(this.details);
 

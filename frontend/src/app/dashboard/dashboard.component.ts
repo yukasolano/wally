@@ -57,9 +57,8 @@ import { ProporcaoComponent } from './proporcao/proporcao.component';
     update() {
       if (this.date) {
 
-
-        this.httpService.get<any>(`portfolio/evolucao?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
-          this.evolucao.update(resp.data, resp.labels, resp.series);
+        this.httpService.get<any>(`portfolio/evolucao?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp2 => {
+          this.evolucao.update(resp2.data, resp2.labels, resp2.series);
           this.httpService.get<any>(`portfolio/rentabilidade?date=${this.date.toISOString().split('T')[0]}`).subscribe( resp => {
             this.rentabilidade.update(resp.data, resp.labels, resp.series);
           });

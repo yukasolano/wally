@@ -12,53 +12,12 @@ export class ProporcaoComponent {
 
     @Input() data = [];
 
-
     temDados() {
         return this.data && this.data.length > 0;
     }
 
     update(data: []) {
-this.data = data;
+        this.data = data;
     }
-    /*
-    data = [
-        {
-            nome: 'Renda Fixa',
-            valor: 10000.10,
-            porcentagem: 0.18,
-            categorias: [
-                {
-                    nome: 'CDI',
-                    valor: 10.10,
-                    porcentagem: 0.18
-                },
-                {
-                    nome: 'IPCA',
-                    valor: 10.10,
-                    porcentagem: 0.18
-                }
-            ]
-        },
-        {
-            nome: 'Ação',
-            valor: 1000.10,
-            porcentagem: 0.05,
-            categorias: [
-                {
-                    nome: 'Seguro',
-                    valor: 10.10,
-                    porcentagem: 0.18
-                },
-                {
-                    nome: 'Energia',
-                    valor: 10.10,
-                    porcentagem: 0.18
-                }
-            ]
-        }
-    ];
-    */
-
-
 
 }

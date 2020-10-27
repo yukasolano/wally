@@ -39,7 +39,8 @@ export class RendaVariavelDetailsComponent implements OnInit {
 
             const keys = Object.keys(this.produtoRV.getTableInfo());
             keys.forEach (it => {
-                this.details.push(new CodigoValor( this.produtoRV.getTableInfo()[it].name, response[it]));
+                this.details.push(new CodigoValor( this.produtoRV.getTableInfo()[it].name, response[it],
+                this.produtoRV.getTableInfo()[it].pipe, this.produtoRV.getTableInfo()[it].args));
             });
             this.dataSource = new MatTableDataSource(this.details);
 

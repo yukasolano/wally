@@ -1,11 +1,8 @@
 .example-action-buttons {
     padding-bottom: 20px;
   }
-  
 
-  .example-headers-align {
-      margin-top: 0.5rem;
-  }
+
  .example-headers-align .mat-expansion-panel-header,
  .example-headers-align .mat-expansion-panel-header-description,
  .categoria {
@@ -17,7 +14,12 @@
   .categoria {
    color:  rgba(0,0,0,.54);
   }
-  
+
+  .mat-expansion-panel-header-title,
+  .categoria p {
+    width: 30%;
+  }
+
   .categoria p {
       margin: .5rem 0 ;
   }
