@@ -17,6 +17,9 @@ create database wally;
 ```
 
 ## TODO
+ng test --no-watch --no-progress --browsers=ChromeHeadlessCI
+ng e2e --protractor-config=e2e/protractor-ci.conf.js
+Note: Right now, you'll also want to include the --disable-gpu flag if you're running on Windows. See crbug.com/737678.
 
 
 ### FRONTEND:
