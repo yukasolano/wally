@@ -1,4 +1,4 @@
-import { registerLocaleData, DecimalPipe, DatePipe, PercentPipe } from '@angular/common';
+import { registerLocaleData, DecimalPipe, DatePipe, PercentPipe, APP_BASE_HREF } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -48,6 +48,7 @@ registerLocaleData(localePt, 'pt');
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
     },
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+    {provide: APP_BASE_HREF, useValue : '/' }
   ],
   bootstrap: [AppComponent]
 })

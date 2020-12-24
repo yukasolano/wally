@@ -5,7 +5,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { saveAs } from 'file-saver';
-import { HttpService } from 'src/app/services/http.service';
 import { Router } from '@angular/router';
 
 
@@ -32,7 +31,7 @@ export class TabelaBasicaComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(private http: HttpClient, private httpService: HttpService, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {}
   ngOnInit() {
     this.infoColumns = Object.keys(this.tableInfo);
     this.displayedColumns = this.hasDetails() ? this.infoColumns.concat('details') : this.infoColumns;

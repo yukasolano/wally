@@ -6,6 +6,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { ProductsModule } from './products/products.module';
 import { CadastroModule } from './cadastro/cadastro.module';
 import { DadosMercadoModule } from './dados-mercado/dados-mercado.module';
+import { APP_BASE_HREF } from '@angular/common';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -21,6 +22,9 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+      providers: [
+        { provide: APP_BASE_HREF, useValue : '/' }
+      ]
     }).compileComponents();
   }));
 
