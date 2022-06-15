@@ -32,3 +32,4 @@ create database wally;
 - atualizar lista de dividendos passados
 - atualizar valores de mercado de CDI e IPCA (ok até junho)
 - patrimonio total está mudando de valor quando muda a tela.
+- testando
