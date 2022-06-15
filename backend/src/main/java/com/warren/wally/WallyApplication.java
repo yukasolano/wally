@@ -19,29 +19,7 @@ import java.util.Properties;
 @ComponentScan(basePackages = {"com.warren.wally.*"})
 @EntityScan("com.warren.wally.*")
 public class WallyApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(WallyApplication.class, args);
-    }
-
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
-        LocalContainerEntityManagerFactoryBean factoryBean =
-                new LocalContainerEntityManagerFactoryBean();
-
-        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        factoryBean.setJpaVendorAdapter(vendorAdapter);
-        factoryBean.setDataSource(dataSource);
-        factoryBean.setJpaProperties(aditionalProperties());
-        factoryBean.setPackagesToScan("com.warren.wally");
-        return factoryBean;
-    }
-
-    private Properties aditionalProperties() {
-        Properties props = new Properties();
-        // Setar a property "hibernate.dialect" se/quando tivermos um WallyAplicationH2, por exemplo.
-        props.setProperty("hibernate.show_sql", "false");
-        props.setProperty("hibernate.hbm2ddl.auto", "update");
-        return props;
     }
 }
