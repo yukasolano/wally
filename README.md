@@ -47,4 +47,18 @@ Note: Right now, you'll also want to include the --disable-gpu flag if you're ru
 ### GRAFICOS
 - adicionar cdi/ipca/ibovespa para comparacao
 
+Install MySQL on Mac:
+Install MySQL Community Server
 
+TO start the server: System Preferences -> MySQL -> Start MySQL Server
+Add to Path:
+echo $PATH
+export PATH=$PATH:/usr/local/mysql/bin
+mysql --version
+mysql -u root -p
+update mysql-connector-java to your mysql version
+Start applicaiton
+
+mvn clean install
+Start WallyApplication
+Open browser: localhost:8080

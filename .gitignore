@@ -24,6 +24,6 @@
 /nbdist/
 /.nb-gradle/
 
-
+.DS_Store
 target/
 node_modules/
