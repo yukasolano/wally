@@ -2,6 +2,7 @@
 Sistema para controle de investimentos
 
 Ferramentas utilizadas: Spring, MySQL5.7, Bootstrap
+MySQL Community 
 
 Antes de rodar a aplicação, atualize o application.properties com as configurações do seu banco de dados.
 ```
@@ -32,3 +33,20 @@ create database wally;
 - atualizar lista de dividendos passados
 - atualizar valores de mercado de CDI e IPCA (ok até junho)
 - patrimonio total está mudando de valor quando muda a tela.
+
+
+Install MySQL on Mac:
+Install MySQL Community Server
+
+TO start the server: System Preferences -> MySQL -> Start MySQL Server
+Add to Path:
+echo $PATH
+export PATH=$PATH:/usr/local/mysql/bin
+mysql --version
+mysql -u root -p 
+update mysql-connector-java to your mysql version
+Start applicaiton
+
+mvn clean install
+
+
