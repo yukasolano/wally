@@ -1,0 +1,22 @@
+<mat-accordion class="example-headers-align" multi *ngIf="temDados()">
+
+  <mat-expansion-panel *ngFor ="let proporcao of data">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <p>{{proporcao.nome}}</p>
+      </mat-panel-title>
+      <mat-panel-description>
+        <p>{{proporcao.valor | number:'1.2-2'}}</p>
+        <p>{{proporcao.porcentagem | percent:'1.2-2'}}</p>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div class="categoria" *ngFor ="let categoria of proporcao.categorias">
+        <p> {{categoria.nome}}</p>
+        <p>{{categoria.valor | number:'1.2-2'}}</p>
+        <p>{{categoria.porcentagem | percent:'1.2-2'}}</p>
+    </div>
+
+  </mat-expansion-panel>
+
+</mat-accordion>

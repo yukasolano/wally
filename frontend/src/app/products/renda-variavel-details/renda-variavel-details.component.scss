@@ -1,0 +1,40 @@
+.mat-table {
+    width: 100%
+}
+
+tr.mat-row {
+    height: 35px;
+}
+
+.dashboard {
+    display: flex;
+    margin: 10px 30px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.card {
+    margin-right: 1rem;
+    margin-bottom: 10px;
+    margin-left: 0px;
+}
+
+.card-resumo {
+    width: calc(30% - 3rem);
+}
+
+.card-evolucao {
+    width:calc(70% - 3rem);
+}
+
+.card-rentabilidade {
+    width:100%;
+}
+
+.card-cotacao {
+    width:calc(50% - 3rem);
+}
+
+.card-dividendos {
+    width:calc(50% - 3rem);
+}

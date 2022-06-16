@@ -1,0 +1,48 @@
+<div class="dashboard">
+    <mat-card class="card card-resumo">
+        <mat-form-field>
+            <mat-label>Selecione a data</mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="date" (dateChange)="dateChanged()">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <app-summary #summary titulo="Resumo"></app-summary>
+        <div class="proporcao">
+            <app-pie-chart #proporcao></app-pie-chart>
+        </div>
+        <app-proporcao #proporcoes></app-proporcao>
+    </mat-card>
+    
+    <mat-card class="card card-evolucao">
+        <mat-card-title>Evolução do patrimônio</mat-card-title>
+        <app-line-chart #evolucao></app-line-chart>
+    </mat-card>
+
+    <mat-card class="card card-rentabilidade">
+        <mat-card-title>Rentabilidade</mat-card-title>
+        <app-line-chart #rentabilidade></app-line-chart>
+    </mat-card>
+    
+    <mat-card class="card card-instituicoes">
+        <mat-card-title>Instituições de renda fixa</mat-card-title>
+        <app-bar-chart #instituicoes titulo="Instituições" direction="vertical"></app-bar-chart>
+    </mat-card>
+    
+    <mat-card class="card card-liquidez">
+        <mat-card-title>Liquidez</mat-card-title>
+        <app-bar-chart #liquidez direction="vertical"></app-bar-chart>
+    </mat-card>
+    
+    <mat-card class="card card-dividendos">
+        <mat-card-title class="title-div">Dividendos</mat-card-title>
+        <form [formGroup]="formDividendos" class="form-div">
+            <mat-radio-group aria-label="Select an option" formControlaName="opcao" (change)="onChangeDividendoOption($event)">
+                <mat-radio-button value="TUDO" checked>Tudo</mat-radio-button>
+                <mat-radio-button value="ACAO">Ação</mat-radio-button>
+                <mat-radio-button value="FII">FII</mat-radio-button>
+              </mat-radio-group>
+        </form>
+        <app-stacked-bar-chart #dividendos></app-stacked-bar-chart>
+    </mat-card>
+
+</div>

@@ -1,0 +1,59 @@
+.dashboard {
+    display: flex;
+    margin: 10px 30px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.card {
+    margin-right: 1rem;
+    margin-bottom: 10px;
+    margin-left: 0px;
+}
+
+.card-resumo {
+    width: calc(30% - 3rem);
+}
+
+.card-renda-variavel {
+    width: calc(40% - 3rem);
+}
+
+.card-liquidez {
+    width:calc(40% - 3rem);
+}
+
+.card-instituicoes {
+    width:calc(60% - 3rem);
+}
+
+.card-dividendos {
+    width:100%;
+}
+
+.card-evolucao {
+    width:calc(70% - 3rem);
+}
+
+.card-rentabilidade {
+    width: 100%;
+}
+
+.proporcao {
+    margin: 0.5rem 0;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+}
+
+
+.title-div {
+    display: inline-block;
+}
+
+.form-div {
+    display: inline-block;
+    position: absolute;
+    right: 20px;
+}

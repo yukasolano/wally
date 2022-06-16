@@ -1,0 +1,25 @@
+<mat-card class="card card-resumo">
+    <mat-form-field>
+        <mat-label>Selecione a data</mat-label>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="date" (dateChange)="dateChanged()">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+</mat-card>
+<mat-card>
+    <mat-card-title>Produtos de renda fixa</mat-card-title>
+    <mat-card-content>
+       <app-tabela-produtos #tabelaProdutosRF [tableInfo]="produtoRF.getTableInfo()" 
+       downloadPath="produtos/produtos-renda-fixa/download" pathDetails="renda-fixa"></app-tabela-produtos> 
+    </mat-card-content>
+</mat-card>
+
+<mat-card>
+    <mat-card-title>Produtos de renda variável</mat-card-title>
+    <mat-card-content>
+       <app-tabela-produtos #tabelaProdutosRV [tableInfo]="produtoRV.getTableInfo()"
+       downloadPath="produtos/produtos-renda-variavel/download" pathDetails="renda-variavel"></app-tabela-produtos> 
+    </mat-card-content>
+</mat-card>
+
+          
