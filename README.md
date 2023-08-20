@@ -62,3 +62,8 @@ Start applicaiton
 mvn clean install
 Start WallyApplication
 Open browser: localhost:8080
+
+
+Não calculou valores das açoes/fii
+Valores negativos de HGCR e ABCB4
+Separar Renda Fixa, Acao/FII e internacional na importação
